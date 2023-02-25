@@ -1,0 +1,214 @@
+@InBook{Garavan2012CollectiveLearning,
+	author    = {Garavan, Thomas N. and Carbery, Ronan},
+	editor    = {Seel, Norbert M.},
+	pages     = {646--649},
+	publisher = {Springer US},
+	title     = {Collective Learning},
+	year      = {2012},
+	address   = {Boston, MA},
+	isbn      = {978-1-4419-1428-6},
+	booktitle = {Encyclopedia of the Sciences of Learning},
+	doi       = {10.1007/978-1-4419-1428-6_136},
+	url       = {https://doi.org/10.1007/978-1-4419-1428-6_136},
+}
+
+@article{krizhevsky2012imagenet,
+  title={Imagenet classification with deep convolutional neural networks},
+  author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  journal={Advances in neural information processing systems},
+  volume={25},
+  pages={1097--1105},
+  year={2012}
+}
+
+@inproceedings{real2019regularized,
+  title={Regularized evolution for image classifier architecture search},
+  author={Real, Esteban and Aggarwal, Alok and Huang, Yanping and Le, Quoc V},
+  booktitle={Proceedings of the aaai conference on artificial intelligence},
+  volume={33},
+  number={01},
+  pages={4780--4789},
+  year={2019}
+}
+
+@article{zhou2020hulk,
+	title={HULK: An Energy Efficiency Benchmark Platform for Responsible Natural Language Processing},
+	author={Zhou, Xiyou and Chen, Zhiyu and Jin, Xiaoyong and Wang, William Yang},
+	journal={arXiv preprint arXiv:2002.05829},
+	year={2020}
+}
+
+@article{garcia2019estimation,
+	title={Estimation of energy consumption in machine learning},
+	author={Garc{\'\i}a-Mart{\'\i}n, Eva and Rodrigues, Crefeda Faviola and Riley, Graham and Grahn, H{\aa}kan},
+	journal={Journal of Parallel and Distributed Computing},
+	volume={134},
+	pages={75--88},
+	year={2019},
+	publisher={Elsevier}
+}
+
+@misc{schwartz2019green,
+	title={Green AI},
+	author={Roy Schwartz and Jesse Dodge and Noah A. Smith and Oren Etzioni},
+	year={2019},
+	eprint={1907.10597},
+	archivePrefix={arXiv},
+	primaryClass={cs.CY}
+}
+
+@article{vinuesa2020role,
+	title={The role of artificial intelligence in achieving the {S}ustainable {D}evelopment {G}oals},
+	author={Vinuesa, Ricardo and Azizpour, Hossein and Leite, Iolanda and Balaam, Madeline and Dignum, Virginia and Domisch, Sami and Fell{\"a}nder, Anna and Langhans, Simone Daniela and Tegmark, Max and Nerini, Francesco Fuso},
+	journal={Nature Communications},
+	volume={11},
+	number={1},
+	pages={1--10},
+	year={2020},
+	publisher={Nature Publishing Group}
+}
+
+@inproceedings{Dalgren2019GreenMLA,
+	title={GreenML : A methodology for fair evaluation of machine learning algorithms with respect to resource consumption},
+	author={Anton Dalgren and Ylva Lundeg{\aa}rd},
+	year={2019}
+}
+
+@InProceedings{Strubell2019EnergyAP,
+  author    = {Emma Strubell and Ananya Ganesh and Andrew McCallum},
+  booktitle = {ACL},
+  title     = {Energy and Policy Considerations for Deep Learning in {NLP}},
+  year      = {2019},
+}
+
+% News articles
+
+@article{kelly_2019,
+	title={{AI}: not so benevolent after all}, url={https://ftalphaville.ft.com/2019/06/20/1561003239000/AI--not-so-benevolent-after-all-/}, journal={FT Alphaville}, publisher={Finantial Times}, author={Kelly, Jemina}, year={2019}, month={Jun}
+}
+
+@article{hao_2019,
+	title={Training a single AI model can emit as much carbon as five cars in their lifetimes}, journal={MIT Technology Review}, author={Hao, Karen}, year={2019}, month={Jun}
+}
+
+@misc{kaminska_2014,
+	title={The dark side of data centres}, url={https://ftalphaville.ft.com/2014/09/09/1960891/the-dark-side-of-data-centres/}, journal={FT Alphaville}, author={Kaminska, Izabella}
+}
+
+@misc{knight_2020,
+	title     = {AI Can Do Great Things-if It Doesn't Burn the Planet},
+	url       = {https://www.wired.com/story/ai-great-things-burn-planet/},
+	journal   = {Wired},
+	publisher = {Conde Nast},
+	author    = {Knight, Will},
+	year      = {2020},
+	month     = {Jan}
+}
+
+@misc{talwalkar_2020,
+	title={AI in the 2020s Must Get Greener—and Here’s How}, url={https://spectrum.ieee.org/energywise/artificial-intelligence/machine-learning/energy-efficient-green-ai-strategies}, journal={IEEE Spectrum}, author={Talwalkar, Ameet}, year={2020}, month={Feb}
+}
+
+@misc{statista_ir_cobot_share,
+	title={Share of traditional and collaborative robot unit sales worldwide from 2018 to 2022}, url={https://www.statista.com/statistics/1018935/traditional-and-collaborative-robotics-share-worldwide/}, author={Statista}, year={2020}
+}
+
+@misc{ekin_2019,
+	title={AI can help us fight climate change. But it has an energy problem, too}, url={https://horizon-magazine.eu/article/ai-can-help-us-fight-climate-change-it-has-energy-problem-too.html}, journal={Horizon Magazine}, author={Ekin, Annette}
+}
+
+
+
+@InProceedings{barnett_2017,
+	author     = {Nate Barnett and Dave Costenaro and Ingrid Rohmund},
+	title      = {Direct and Indirect Impacts of Robots on Future Electricity Load},
+	year       = {2017},
+	maintitle  = {Advancing Industrial Energy Efficiency through Collaboration},
+	eventtitle = {2017 {ACEEE} Summer Study on Energy Efficiency in Industry},
+	eventdate  = {2017-08-15/2017-08-18},
+	venue      = {Denver, CO {USA}},
+}
+
+@Misc{aerus_2016,
+  howpublished = {\url{https://cordis.europa.eu/project/id/609391}},
+  note         = {Accessed: 2020-03-24},
+  title        = {Automation and Robotics for {EU}ropean Sustainabile manufacturing},
+}
+
+@misc{schroder2014,
+	author  = {S. Schr\"oder},
+	title   = {Optimized Movements: Ballet of the Bots},
+	month   = {October},
+	year    = {2014},
+	note = {Retrieved March 8, 2016 from: \url{http://goo.gl/0Ir231}},
+} 
+
+@misc{chalmers2015,
+	author  = {{\relax Chalmers University of Technology}},
+	title   = {Smooth robot movements reduce energy consumption by up to 40 percent},
+	month   = {August},
+	year    = {2015},
+	note = {Retrieved March 8, 2016 from: \url{www.sciencedaily.com/releases/2015/08/150824064923.htm}},
+}
+
+@article{mohammed2014,
+	author  = {Abdullah Mohammed and Bernard Schmidt and Lihui Wang and Liang Gao},
+	title   = {Minimizing Energy Consumption for Robot Arm Movement},
+	journal = {Procedia CIRP},
+	volume  = {25},
+	year    = {2014},
+	pages   = {400--405},
+}
+
+@INPROCEEDINGS{chemnitz2011,
+	author={M. Chemnitz and G. Schreck and J. Krüger},
+	booktitle={Emerging Technologies Factory Automation (ETFA), 2011 IEEE 16th Conference on},
+	title={Analyzing energy consumption of industrial robots},
+	year={2011},
+	pages={1-4},
+	keywords={energy conservation;energy consumption;industrial robots;power measurement;sustainable development;time series;energy conservation;energy consumption;industrial robot;power time series;selected motion pattern;slow motion;Acceleration;Energy consumption;Joints;Power demand;Power measurement;Service robots},
+	doi={10.1109/ETFA.2011.6059221},
+	ISSN={1946-0740},
+	month={Sept},} 
+
+@misc{aerus2014,
+	author  = {{\relax AERUS}},
+	title   = {Automation and Robotics for EUropean Sustainable Manufacturing ({EU} Framework 7 Project)},
+	year    = {2014},
+	note = {Retrieved March 8, 2016 from: \url{http://www.areus-project.eu/}},
+}
+
+@misc{statista2015,
+	author  = {{\relax Statista}},
+	title   = {Estimated annual industrial robot shipments in selected regions worldwide from 2010 to 2018, by region (in 1,000 units)},
+	year    = {2016},
+	note = {Retrieved March 8, 2016 from: \url{http://goo.gl/W4TR3T}},
+}
+
+@misc{brenner2015,
+	author  = {B. Brenner},
+	title   = {Japan Unleashes a Robot Revolution},
+	month   = {May},
+	year    = {2015},
+	note = {Retrieved March 8, 2016, from: \url{http://www.bloomberg.com/news/articles/2015-05-28/japan-unleashes-a-robot-revolution}},
+}
+
+@misc{knight2015,
+	author  = {W. Knight},
+	title   = {China Wants to Replace Millions of Workers with Robots},
+	month   = {December},
+	year    = {2015},
+	note = {Retrieved March 8, 2016 from: \url{https://www.technologyreview.com/s/545056/5-robot-trends-to-watch-for-in-2016/}},
+}
+
+@misc{IFR_1_2016,
+	author  = {{\relax International Federation of Robotics}},
+	title   = {China enforces historic Robot Boom},
+	year    = {2016},
+	note = {Retrieved March 8, 2016 from: \url{http://www.ifr.org/news/ifr-press-release/china-enforces-historic-robot-boom-776/}},
+}
+
+@book{IFR2014,
+	author    = {{\relax International Federation of Robotics}}, 
+	title     = {World Robotics 2014 Industrial Robots},
+	publisher = {IFR Stati
