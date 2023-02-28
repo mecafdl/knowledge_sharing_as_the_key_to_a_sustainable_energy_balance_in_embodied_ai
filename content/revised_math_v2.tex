@@ -62,6 +62,12 @@ Similarly, the total time $T_{\mathcal{S}}$ is simply
 \end{equation}
 % ---
 % ===================================================================================================
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.9\columnwidth]{fig/skill_similarity.pdf}
+	\caption{Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$.}
+	\label{fig:skill_similarity}
+\end{figure}
 \subsection{Similarity and knowledge}
 %---
 \begin{tcolorbox}
@@ -69,15 +75,15 @@ Similarly, the total time $T_{\mathcal{S}}$ is simply
 		\end{assumption}
 \end{tcolorbox}
 % ---
-Following Asm.~\ref{assumption:skill_clustering}, let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ skills that share high similarity; i.e. a \emph{cluster} of skills. Furthermore, consider another set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes already learned skills from $\mathcal{Z}_k$. Asm.~\ref{assumption:skill_clustering} implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. This implies that the more skills enter $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ will remain to be learned.
+Following Asm.~\ref{assumption:skill_clustering}, let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ skills that share high similarity; i.e. a \emph{cluster} of skills, see Fig.~\ref{fig:skill_similarity}. Furthermore, consider another set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes already learned skills from $\mathcal{Z}_k$. Asm.~\ref{assumption:skill_clustering} implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. This implies that the more skills enter $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ will remain to be learned.
 
-Now, we introduce a function \hl{$\bar{\sigma}_{j,k}\left(\cdot\right)\in [0,1]$ that expresses the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k$ that \textbf{is not} contained in $\mathcal{\zeta}_k$; i.e. $s_{j,k} \notin \mathcal{\zeta}_k$}. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies:
+Now, we introduce a function \hl{$\bar{\sigma}_{j,k}\left(n\right)\in [0,1]$ that expresses the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k$ that \textbf{is not} contained in $\mathcal{\zeta}_k$; i.e. $s_{j,k} \notin \mathcal{\zeta}_k$}. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies:
 % ---
 \begin{itemize}
-	\item $\bar{\sigma}_{j,k}\left(\cdot\right) = 1$, if $\mathcal{\zeta}_k=\emptyset$ or if it does not contain knowledge about the skill $s_{j,k}$
-	\item $\bar{\sigma}_{j,k}\left(\cdot\right) = 0$, if \emph{all} the knowledge about skill $s_{j,k}$ is contained in $\mathcal{Z}_k$
+	\item $\bar{\sigma}_{j,k}\left(n\right) = 1$, if $\mathcal{\zeta}_k=\emptyset$ or if it does not contain knowledge about the skill $s_{j,k}$
+	\item $\bar{\sigma}_{j,k}\left(n\right) = 0$, if \emph{all} the knowledge about skill $s_{j,k}$ is contained in $\mathcal{Z}_k$
 \end{itemize} 
-\textcolor{red}{Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowledge that remains to be learned \hl{about the $k$-th cluster}.}
+\textcolor{red}{Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.}
 % ---
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Leveraging the acquired knowledge}}
@@ -87,8 +93,13 @@ To simplify the analysis, we introduce a fundamental complexity
 \end{assumption}
 \end{tcolorbox}
 % ---
-If, in learning a skill $ s_{j,k} $, a robot uses the knowledge contained in $\mathcal{\zeta}_k$ about $s_{j,k}$; then, its associated complexity $ c_{j,k} $ is necessarily smaller than the fundamental complexity $c_{0}$; i.e. $c_{j,k} < c_0~\forall j>1$.
-This implies that the complexity scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$.%, as exemplified in Fig.~\ref{fig:complexity_per_cardinality}. 
+If, in learning a skill $ s_{j,k} $, a robot uses the knowledge contained in $\mathcal{\zeta}_k$; then, two effects take place:
+\begin{enumerate}
+	\item There is less remaining knowledge and this is reflected in the initial value; i.e. $\bar{\sigma}_{j,k}(0) < 1$
+	\item Knowledge is acquisition is expedited 
+\end{enumerate}
+%associated complexity $ c_{j,k} $ is necessarily smaller than the fundamental complexity $c_{0}$; i.e. $c_{j,k} < c_0~\forall j>1$.
+This implies that the remaining knowledge scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$.%, as exemplified in Fig.~\ref{fig:complexity_per_cardinality}. 
 
 %Furthermore, consider the following assumptions
 %% ---
@@ -104,29 +115,44 @@ This implies that the complexity scales down as a function of the number of lear
 \end{tcolorbox} 
 % ---
 \noindent
-%Consequently,
-%% ---
-%\begin{equation}\label{eq:knowledge_limit}
-%	\lim_{N_{\zeta_k}\to N_{\mathcal{Z}_k}} \bar{\sigma}_ {j,k} = \epsilon \implies \lim_{N_{\zeta_k}\to N_{\mathcal{Z}_k}} c_{j,k} = \varepsilon.
-%\end{equation}
-% ---
 An idealization of the behavior described in Asm.~\ref{assumption:exponential_decrease} can be modeled via the linear homogeneous differential equation
 % ---
+%\begin{subequations}\label{eq:simple_knowledge_dynamics}
+%	\begin{alignat}{2}
+%		\dot{\bar{\sigma}}_{j,k}\left(n\right) &= -\alpha r f\left(N_{\zeta_k}\right) \bar{\sigma}_{j,k}\left(n\right)\\
+%		\bar{\sigma}_{j,k}(0) &= g\left(N_{\zeta_k}\right)
+%	\end{alignat}
+%\end{subequations}
 \begin{subequations}\label{eq:simple_knowledge_dynamics}
 	\begin{alignat}{2}
-		\dot{\bar{\sigma}}_{j,k}\left(n\right) &= -\alpha r \left(N_{\zeta_k} + 1\right) \bar{\sigma}_{j,k}\left(n\right)\\
-		\bar{\sigma}_{j,k}\left(0\right) &= 1,
+		\dot{\bar{\sigma}}_{j,k}\left(n\right) &= -\alpha f\left(N_{\zeta_k},r\right) \bar{\sigma}_{j,k}\left(n\right)\\
+		\bar{\sigma}_{j,k}(0) &= g\left(N_{\zeta_k},r\right)
 	\end{alignat}
 \end{subequations}
+
 % ---
-which is a function of the trial episodes $n$ and is parameterized by the number of already learned skills $N_{\zeta_k}$, the factor $ 0<\alpha<<1$ that models how effectively the knowledge contained in $\mathcal{\zeta}_k$ is shared with $s_{j,k}$ and \textcolor{red}{the number $r$ of \textbf{robots exchanging knowledge} about concurrently learned skills}. The solution to \eqref{eq:simple_knowledge_dynamics} is given by
+which is a function of the trial episodes $n$ and is parameterized by the number of already learned skills $N_{\zeta_k}$, the factor $ \alpha>0$ that models the rate at which a robot in isolation learns any given skill and \textcolor{red}{the number $r$ of \textbf{robots exchanging knowledge} about concurrently learned skills}. The solution to \eqref{eq:simple_knowledge_dynamics} is given by
 % ---
+%\begin{equation}\label{eq:knowledge_exponential_form}
+%     \boxed{\bar{\sigma}_{j,k}(n) = g\left(N_{\zeta_k}\right) \left[ \left(e^{-\alpha n}\right) ^{f\left(N_{\zeta_k}\right)}\right]^r \in (0,1]}
+%\end{equation}
 \begin{equation}\label{eq:knowledge_exponential_form}
-     \boxed{\bar{\sigma}_{j,k}(n) = e^{-\alpha  r \left(N_{\zeta_k}+1\right) n} = \left[ \left(e^{-\alpha n}\right) ^{\left(N_{\zeta_k}+1\right)}\right]^r \in (0,1]}
+	\boxed{\bar{\sigma}_{j,k}(n) = g\left(N_{\zeta_k}, r\right) \left(e^{- \alpha  n}\right) ^{f\left(N_{\zeta_k}, r\right) n} \in (0,1]}
 \end{equation}
 % ---
-and meets the desired behavior, see Fig.~\ref{fig:knowledge_idealization}.
+and meets the desired behavior, see Fig.~\ref{fig:knowledge_idealization}. The function $f\left(N_{\zeta_k}\right)$ expresses the form in which the learned skills affect the original rate $\alpha$. A possible realization is to make this effect proportional; i.e.
+% ---
+\begin{equation}\label{eq:f_function}
+	f\left(N_{\zeta_k},r\right) = \frac{1}{(1 - \beta_k)}\left( \eta r N_{\zeta_k} + 1 \right),
+\end{equation}
+% ---
+where $\eta$ represents how efficient is the exchange of knowledge from $\zeta_k$ to $s_{j,k}$. Similarly, $g\left(N_{\zeta_k}\right)$ models the change in the initial remaining knowledge that results from $\zeta_k$. Although many potential models might be used, we envision the effect to be of exponential nature; i.e.
+% ---
+\begin{equation}\label{eq:g_function}
+	g\left(N_{\zeta_k},r\right) = (1-\beta_k) e^{-\delta r N_{\zeta_k}},
+\end{equation}
 %---
+again with a term $\delta$ controlling the rate at which the exponential converges as a function of the number of seen skills $N_{\zeta_k}$. In both \eqref{eq:f_function} and \eqref{eq:g_function},   $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{fig/knowledge_idealization.pdf}
@@ -151,7 +177,7 @@ The following assumptions are analogous to average behavior and imply that a sui
 % % ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:cluster_size}
-		Every cluster $Z_k$ contains the same number $N_k $ of skills.
+		Every cluster $\mathcal{Z}_{k}$ contains the same number $N_{\mathcal{Z}} $ of skills.
 	\end{assumption}
 \end{tcolorbox}
 % ---
@@ -165,14 +191,14 @@ The following assumptions are analogous to average behavior and imply that a sui
 % ---
  \begin{align}
      \begin{split}
-       E^{(Iso)}_{\mathcal{Z}_k} &= \sum_{j=1}^{N_{\mathcal{Z}_k}} E^{(Iso)}_j= N_{\mathcal{Z}_k}  e_{0} \cancelto{c_{0}}{c_{j,k}} = N_{\mathcal{Z}_k} e_{0}  c_0
+       E^{(Iso)}_{\mathcal{Z}_k} &= \sum_{j=1}^{N_{\mathcal{Z}}} E^{(Iso)}_j= N_{\mathcal{Z}_k}  e_{0} \cancelto{c_{0}}{c_{j,k}} = N_{\mathcal{Z}} e_{0}  c_0
      \end{split}
  \end{align}
 %-- 
 If $\mathcal{S}$ is divided into $\left\lbrace \mathcal{Z}_k \right\rbrace^{N_\mathcal{K}}_{k=1} $ clusters, the total energy to learn the universe of skills is simply
 % ---
 \begin{equation}
-	E^{(Iso)}_{\mathcal{S}} = N_\mathcal{K} N_{\mathcal{Z}_k} e_{0}  c_0.
+	E^{(Iso)}_{\mathcal{S}} = N_\mathcal{K} N_{\mathcal{Z}} e_{0}  c_0.
 \end{equation}
 % ---
 Notice that using a batch of $m$ robots to learn the same number of skills in parallel does not bring about any energy reductions since
@@ -194,9 +220,9 @@ Notice that using a batch of $m$ robots to learn the same number of skills in pa
 % ---
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=0.9\columnwidth]{fig/skill_similarity.pdf}
+	\includegraphics[width=0.9\columnwidth]{fig/intra_skill_learning.pdf}
 	\caption{Incremental learning benefits from the high similarity of skills belonging to the same cluster.}
-	\label{fig:incremental_transfer_similarity}
+	\label{fig:intra_skill_learning}
 \end{figure}
 % ---
 % ---
@@ -214,95 +240,110 @@ Notice that using a batch of $m$ robots to learn the same number of skills in pa
 % ---
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Incremental learning (I)}}
-%Referring back to Asm.~\ref{assumption:skill_clustering}, any two skills belonging to different clusters profit negligibly from incremental learning algorithms in virtue of their relatively low similarity, see Fig.~\ref{fig:incremental_transfer_similarity}. \textcolor{red}{Furthermore, in this paradigm the agent has access only to its previously collected knowledge, implying that $r = 1$ in \eqref{eq:incremental_knowledge}}. Therefore, the scaling effect that incremental learning has on the skill complexity $c_{j,k}$ for the skills contained in the $k$-th cluster is
-Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their high similarity, see Fig.~\ref{fig:incremental_transfer_similarity}. In incremental learning a robot has access to the knowledge of the skills it has previously learned, resulting in the expression
+\textcolor{red}{\textbf{INTRA cluster}}
+Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their high similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $alpha$ ---the self loops--- but also passes the acquired knowledge to the subsequent skills, via the exchange factors $(\eta,\delta)$. Therefore, in incremental learning the knowledge about every new skill gets gradually increased by leveraging previous knowledge, resulting in the expression
 % ---
-\begin{equation*}\label{eq:complexity_IL}
-	\bar{\sigma}^{(I)}_{i,j}(n) = e^{-\alpha \left(N_{\zeta_k}+1\right) n},
+\begin{equation*}\label{eq:remaining_knowledge__IL}
+	\bar{\sigma}^{(I)}_{i,j}(n) = e^{-\alpha  \left(\eta N_{\zeta_k}+1\right) n} e^{-\delta N_{\zeta_k}},
 \end{equation*}
 % ---
-which is equivalent to \eqref{eq:knowledge_exponential_form} with $r=1$ since no inter-agent exchange of knowledge occurs. As the complexity $c_{j,k}$ of a skill can also be interpreted as the number of trial episodes such that the remaining knowledge goes below a threshold $\epsilon$; i.e.
+which is equivalent to \eqref{eq:knowledge_exponential_form} with $r=1$ since no inter-agent exchange of knowledge occurs and $\beta_k = 0$,¸ as knowledge from other cluster cannot be used. As the complexity $c_{j,k}$ of a skill can also be interpreted as the number of trial episodes such that the remaining knowledge goes below a threshold $\epsilon$; i.e.
 % ---
 \begin{equation*}
 	\bar{\sigma}^{(I)}_{i,j}(n) \rvert_{n \ge c_{j,k}} \leq \epsilon,
 \end{equation*}
 % ---
 then under this scheme the complexity $c_{j,k}$ to learn a new is skill in the cluster results in
+%\begin{equation}\label{eq:complexity_IL}
+%	c^{(I)}_{j,k} = -\frac{\text{log}(\epsilon)}{\alpha \eta (N_{\zeta_k}+ 1)}.
+%\end{equation}
 \begin{equation}\label{eq:complexity_IL}
-	c^{(I)}_{j,k} = -\frac{\text{log}(\epsilon)}{\alpha (N_{\zeta_k}+ 1)}.
+	c^{(I)}_{j,k} = -\frac{\text{log}(\epsilon) - \text{log}(\bar{\sigma}^{(I)}_{j,k}(0))}{\alpha (\eta N_{\zeta_k}+ 1)} = -\frac{\text{log}(\epsilon) + \delta N_{\zeta_k}}{\alpha (\eta N_{\zeta_k}+ 1)}  .
 \end{equation}
 % ---
 The total number of trial episodes $ C_k $ that an agent following an incremental learning strategy needs to learn the $N_{\mathcal{Z}_k}$ skills in a cluster $ \mathcal{Z}_k $ is given by
 % ---
 \begin{align}\label{eq:total_episodes_incremental}
 	\begin{split}
-		C^{(I)}_k &= \sum^{N_{\mathcal{Z}_k}}_{j=1} c^{(I)}_{j,k}.
+		C^{(I)}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(I)}_{j,k}.
 	\end{split}
 \end{align}
 If $m$ robots are used in parallel to divide the load of learning the tasks then
 % ---
 \begin{align}
 	\begin{split}
-		{}^{\lvert \rvert}C^{(I)}_k &= m\sum^{\frac{N_{\mathcal{Z}_k}}{m}}_{j=1} c^{(I)}_{j,k}.
+		{}^{\lvert \rvert}C^{(I)}_k &= m\sum^{\frac{N_{\mathcal{Z}}}{m}}_{j=1} c^{(I)}_{j,k}.
 	\end{split}
 \end{align}
 In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems without adding any additional benefit to the rate at which knowledge is acquired. 
 
 \subsubsection{\textbf{Transfer learning (TL)}}
-Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{Z}}_{k=1}$ to be the set of all available skill clusters (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer}), TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$, see Fig.~\ref{fig:incremental_transfer_similarity}. In general, the effect that TL has on the skills of another cluster is the reduction of the total remaining knowledge to be learned. Referring to \eqref{eq:simple_knowledge_dynamics}, it means that its initial condition $\bar{\sigma}_{j,k}(0)$ will be reduced (Fig.~\ref{fig:effect_transfer_learning}). The TL effect can be modeled as follows
+\textcolor{red}{\textbf{INTER cluster}}
+Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer}), TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$. Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the initial collection rate for all the skills in the cluster via the parameter $\beta_c$ in \eqref{eq:knowledge_exponential_form}, 
+%Referring to \eqref{eq:simple_knowledge_dynamics}, it means that its initial condition $\bar{\sigma}_{j,k}(0)$ will be reduced (Fig.~\ref{fig:effect_transfer_learning}). The TL effect can be modeled as follows
+%% ---
+%\begin{equation}\label{eq:tl_initial_condition}
+%	\bar{\sigma}^{(T)}_{j,k}(0) = 1 - \sum\limits_{c = 1}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right),~\bar{\sigma}_{c=0} = 1
+%\end{equation}
+%% ---
+%Implying that the remaining knowledge under transfer learning is
+%% ---
+%\begin{align}
+%	\begin{split}
+%		\bar{\sigma}^{(T)}_{j,k} 
+%		&= \underbrace{\left[1- \sum\limits_{c = 0}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right)\right]}_{\text{Transferred knowledge}} e^{-\alpha \left(N_{\zeta_k}+1\right) n}
+%	\end{split}
+%\end{align}
+%% ---
+where $0<\beta_{c} < 1$ is the transfer coefficient from the different origin clusters $\mathcal{Z}_{c}$ to the target cluster $\mathcal{Z}_{k}$\footnote{\textcolor{red}{Once again, since there is no inter-agent exchange of knowledge, $ r = 1 $ in this case.}}. Asm.~\ref{assumption:cluster_transferability} implies that
 % ---
-\begin{equation}\label{eq:tl_initial_condition}
-	\bar{\sigma}^{(T)}_{j,k}(0) = 1 - \sum\limits_{c = 1}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right),~\bar{\sigma}_{c=0} = 1
-\end{equation}
-% ---
-Implying that the remaining knowledge under transfer learning is
-% ---
-\begin{align}
-	\begin{split}
-		\bar{\sigma}^{(T)}_{j,k} 
-		&= \underbrace{\left[1- \sum\limits_{c = 0}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right)\right]}_{\text{Transferred knowledge}} e^{-\alpha \left(N_{\zeta_k}+1\right) n}
-	\end{split}
-\end{align}
-% ---
-where $0<\beta_{c} < 1$ is the transfer coefficient from the different origin clusters $\mathcal{Z}_{c}$ to the target cluster $\mathcal{Z}_{k}$\footnote{\textcolor{red}{Once again, since there is no inter-agent exchange of knowledge, $ r = 1 $ in this case.}}. Assuming that the origin clusters have unique knowledge contributions to the destination cluster implies that
-% ---
+%\begin{equation}
+%	\sum\limits_{c=0}^{k-1}\beta_{c} \leq 1;
+%\end{equation}
 \begin{equation}
-	\sum\limits_{c=0}^{k-1}\beta_{c} \leq 1;
+	\sum\limits_{k=1}^{N_\mathcal{K}}\beta_{k} \leq 1
 \end{equation}
 % ---
-i.e. no redundant knowledge. Furthermore, considering Assumptions~\ref{assumption:cluster_size} and \ref{assumption:cluster_transferability},
+and
 % ---
 % \begin{equation}
 	%     \beta_{k_O} = \frac{1}{\text{max}\left(\left\lvert \mathcal{K} \setminus k_{T} \right\rvert,1\right)}
 	% \end{equation}
+%\begin{equation}
+%	\beta_{c}=
+%	\begin{cases}
+%		1, & \text{if $\mathcal{O}  = \emptyset$}.\\
+%		\frac{c}{N_\mathcal{Z}}, & \text{otherwise}.
+%	\end{cases}
+%\end{equation}
 \begin{equation}
-	\beta_{c}=
-	\begin{cases}
-		1, & \text{if $\mathcal{O}  = \emptyset$}.\\
-		\frac{c}{N_\mathcal{Z}}, & \text{otherwise}.
-	\end{cases}
+	\beta_{k}= \frac{k-1}{N_\mathcal{K}}.
 \end{equation}
 % ---
-The term $ 1 - \bar{\sigma}_{c}$ represents the knowledge available from each of the different origin clusters (i.e. after their corresponding skills were learned).
-
+Notice that this choice of $\beta_k$ requires that all the skills from the origin clusters were learned. The remaining knowledge when transfer and incremental learning are used in conjunction is
+% ---
+\begin{equation*}\label{eq:remaining_knowledge__ITL}
+	\bar{\sigma}^{(I)}_{k,k}(n) = \left(1- \beta_k\right) e^{-\alpha  \left[\frac{ \left(\eta N_{\zeta_k}+1\right)}{1 - \beta_k}\right] n} e^{-\delta N_{\zeta_k}},
+\end{equation*}
+% ---
 Similar to incremental learning the complexity to learn a skill in transfer learning is
 \begin{equation}\label{eq:skill_complexity_TL}
-	c^{(T)}_{j,k} = -\frac{\text{log}(\epsilon) - \text{log}(\bar{\sigma}^{(T)}_{j,k}(0))}{\alpha (N_{\zeta_k}+ 1)}.
+	c^{(IT)}_{j,k} = -\frac{1 - \beta_{k}}{\alpha (\eta N_{\zeta_k}+ 1)}\left[\text{log}(\epsilon) + \delta N_{\zeta_k} - \text{log}(1 - \beta_{k})\right].
 \end{equation}
 % ---
 
 Similar to incremental learning the total number of episodes  $ C_k $ that an agent requires to learn the $N_{\mathcal{Z}_k}$ skills in	 merely their sum
 % ---
-\begin{align}\label{eq:total_episodes_incremental}
+\begin{align}\label{eq:total_episodes_transfer}
 	\begin{split}
-		C^{(T)}_k &= \sum^{N_{\mathcal{Z}_k}}_{j=1} c^{(T)}_{j,k}.
+		C^{(IT)}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(T)}_{j,k}.
 	\end{split}
 \end{align}
 If $m$ robots are used in parallel to divide the load of learning the tasks then
 % ---
 \begin{align}
 	\begin{split}
-		{}^{\lvert \rvert}C^{(I)}_k &= m\sum^{\frac{N_{\mathcal{Z}_k}}{m}}_{j=1} c^{(I)}_{j,k}.
+		{}^{\lvert \rvert}C^{(IT)}_k &= m\sum^{\frac{N_{\mathcal{Z}}}{m}}_{j=1} c^{(IT)}_{j,k}.
 	\end{split}
 \end{align}
 % ---
@@ -310,395 +351,112 @@ The effect of this having m robots learning in parallel is depicted on Fig.~\ref
 
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Collective learning (C)}}
-
-The key aspect in collective learning is that the exchange of knowledge between a number $r$ of robots is now enabled. Fig.~\ref{fig:cl_example_figure} illustrates the concept, the self loop represents the dynamics of a single robot learning, expressed by \eqref{eq:simple_knowledge_dynamics}. The exchange of knowledge is represented via the cross-couplings weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange. Similar to transfer learning, if two robots exchange knowledge about skills with low similarity (i.e. skills in different clusters), then $\gamma$ is scaled by the inter-cluster transferability  parameter $\beta$. To account for the couplings \eqref{eq:simple_knowledge_dynamics} is extended to
 % ---
-\begin{subequations}\label{eq:collective_knowledge_dynamics}
-	\begin{alignat}{2}
-		\dot{\bar{\bm{\sigma}}}_{j,k}\left(n\right) &= -\bm{A} r \left(N_{\zeta_k} + 1\right) \bar{\bm{\sigma}}_{j,k}\left(n\right)\\
-		\bar{\bm{\sigma}}^{(T)}_{j,k}(0) &= 1 - \sum\limits_{c = 1}^{k-1}\beta_{c} \left( 1 - \bar{\bm{\sigma}}_{c} \right),~\bar{\bm{\sigma}}_{c=0} = 1,
-	\end{alignat}
-\end{subequations}
-% ---
-with $\bm{A} \in \mathbb{R}^{r \times r}$ defined as
-% ---
-\begin{equation}
-	\bm{A} = \begin{bmatrix} 
-		\alpha_1 & (\beta)\gamma_1  & \dots   & \gamma_{r-1}\\
-		(\beta)\gamma_1 & \alpha_2  &         &  \\
- 		\vdots &         & \ddots  & \vdots\\
-		\gamma_{r-1} & \dots   &         & \alpha_r 
-	\end{bmatrix}.
-\end{equation}
-% ---
-The coupling terms $\gamma_i < \alpha_i$ model the knowledge exchange rate between robots. For simplicity we let $\alpha_1=\dots=\alpha_r=\alpha$ and $\gamma_1=\dots=\gamma_{r-1}=\gamma$.
-% ---
-\begin{figure}[!t]
+\begin{figure}[!th]
 	\centering
 	\includegraphics[width=0.7\columnwidth]{fig/cl_example_figure.pdf}
 	\caption{Exchange of knowledge between robots enables collective learning.}
 	\label{fig:cl_example_figure}
 \end{figure}
 % ---
+The key aspect in collective learning is that the exchange of knowledge between a batch of robots $\left \lbrace r_i \right \rbrace^m_{1}$ is now enabled. Fig.~\ref{fig:cl_example_figure} illustrates the concept, the self loop represents the dynamics of a single robot learning, expressed by \eqref{eq:simple_knowledge_dynamics}. The exchange of knowledge is represented via the cross-couplings weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange. Similar to transfer learning, if two robots exchange knowledge about skills with low similarity (i.e. skills in different clusters), then $\gamma$ is scaled by the inter-cluster transferability  parameter $\beta$. To account for the couplings \eqref{eq:simple_knowledge_dynamics} is extended to 
+% ---
+%\begin{subequations}\label{eq:collective_knowledge_dynamics}
+%	\begin{alignat}{2}
+%		\dot{\bar{\bm{\sigma}}}_{j,k}\left(n\right) &= -\bm{A} r \left(N_{\zeta_k} + 1\right) \bar{\bm{\sigma}}_{j,k}\left(n\right)\\
+%		\bar{\bm{\sigma}}^{(T)}_{j,k}(0) &= 1 - \sum\limits_{c = 1}^{k-1}\beta_{c} \left( 1 - \bar{\bm{\sigma}}_{c} \right),~\bar{\bm{\sigma}}_{c=0} = 1,
+%	\end{alignat}
+%\end{subequations}
+
+
+\begin{subequations}\label{eq:collective_knowledge_dynamics}
+	\begin{alignat}{2}
+		\dot{\bar{\bm{\sigma}}}^{(C)}_{j,k}\left(n\right) &= \left[-\alpha  f\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B}  \right] \bar{\bm{\sigma}}_{j,k}\left(n\right)\\
+		\bar{\bm{\sigma}}^{}_{j,k}(0) &= g\left( N_{\zeta_k}, r\right) \bm{I},
+	\end{alignat}
+\end{subequations}
+with $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ and $\bm{A} \in \mathbb{R}^{r \times r}$ being the zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $i$ exchanges knowledge with robot $j$ an $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Furthermore, since robots may learn skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, 1/N_\mathcal{K} \right \rbrace$, scale down the knowledge contributions between robots from different clusters.
+
+Given the dynamics matrix of the collective system
+% ---
+\begin{equation}
+	\bar{\bm{A}}\left(N_{\zeta_k}\right) =-\alpha  f\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B} 
+\end{equation} 
+% ---
+it can be proven that there is a coupling strength $\gamma$ that ensures that the remaining knowledge for all skills converges asymptotically to zero. Notice that \eqref{eq:collective_knowledge_dynamics} is a skill-varying system by virtue of the dependence of $\bar{\bm{A}}$ on the number of seen skills $N_{\zeta_k}$.
+
+\TODO \textcolor{red}{is there an approximation of the convergence rate of all the skills?}
+
+
+% The term $a$ is defined as
+%\begin{equation}
+%			\dot{\bar{\sigma}}_{j,k}\left(n\right) = -\alpha r f\left(N_{\zeta_k},r\right) \bar{\sigma}_{j,k}\left(n\right) = a\left(N_{\zeta_k}\right)\bar{\sigma}_{j,k}\left(n\right)\\
+%\end{equation} 
+
+
+%For the system \eqref{eq:collective_knowledge_dynamics} to be \emph{connectively stable}\cite{Pirani2014Stabilitydynamicalsystems}, the coupling parameter $\gamma$ needs to fulfill the following condition
+%% ---
+%\begin{equation}
+%	\gamma\left( N_{\zeta_k}\right)  < - \frac{1}{\lambda_{\text{max}}\left(\bm{A}\right)} a\left( N_{\zeta_k}\right)
+%\end{equation}
+%% ---
+%\important{Is this condition true?´^}
+%\begin{subequations}\label{eq:collective_knowledge_dynamics}
+%	\begin{alignat}{2}
+%		\dot{\bar{\bm{\sigma}}}^{(C)}_{j,k}\left(n\right) &= -\bm{A}(\alpha,  \beta, \gamma) r f\left(N_{\zeta_k}; \beta, \eta \right) \bar{\bm{\sigma}}_{j,k}\left(n\right)\\
+%		\bar{\bm{\sigma}}^{}_{j,k}(0) &= g\left( N_{\zeta_k}; \beta, \delta \right),
+%	\end{alignat}
+%\end{subequations}
+% ---
+%with $\bm{A} \in \mathbb{R}^{r \times r}$ defined as
+%% ---
+%\begin{equation}
+%	\bm{A} = \begin{bmatrix} 
+%		\alpha_1 & (\beta)\gamma_1  & \dots   & \gamma_{r-1}\\
+%		(\beta)\gamma_1 & \alpha_2  &         &  \\
+% 		\vdots &         & \ddots  & \vdots\\
+%		\gamma_{r-1} & \dots   &         & \alpha_r 
+%	\end{bmatrix}.
+%\end{equation}
+%% ---
+%The coupling terms $\gamma_i < \alpha_i$ model the knowledge exchange rate between robots. For simplicity we let $\alpha_1=\dots=\alpha_r=\alpha$ and $\gamma_1=\dots=\gamma_{r-1}=\gamma$.
+% ---
+
 
 % ===================================================================================================
 \subsection{The effects of the different paradigms}
-To show what is the effect of the different learning paradigms consider a situation in with $N_\mathcal{S}$ = 30 divided into $K=3$ clusters of $N_Z = 8$ skills.
-\begin{figure}[!h]
+To show what is the effect of the different learning paradigms consider a scenario in which the skill fundamental complexity is $c_0=100$ episodes with $N_\mathcal{S}= 512$  skills are divided into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. Additionally, we consider that $m=32$ robots are available to learn the skills and that a skill is considered learn once the remaining knowledge goes below $\epsilon = 0.01$. In this scenario the robots are used to learn in parallel the skills of each cluster in succession. The remaining parameters are selected as follows;
+\begin{itemize}
+	\item $\alpha =  0.0461$
+	\item $\delta =  0.0360$
+	\item $\eta= 0.1$
+\end{itemize} 
+The skills learned per robot are shown in Fig.~\ref{fig:collective_learning}, notices that as expected, since incremental learning does not benefit from knowledge from other clusters the robot needs to start accumulating knowledge from the beginning every time it moves to a different cluster. This is not the case in transfer learning, as the more cluster the robot has visited the faster a new skill is learned. The speed of knowledge collection is exponentiated with collective learning thanks to the exchange of knowledge among robots. 
+%---
+\begin{figure*}[!t]
 	\centering
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/dynamics_incremental_learning.pdf} \label{fig:dynamics_incremental_learning}}  
+	\subfloat[]{\includegraphics[width= 0.95\textwidth]{fig/dynamics_incremental_learning.pdf} \label{fig:dynamics_incremental_learning}}  
 	\hspace*{\fill}
 	\\
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/dynamics_incremental_transfer_learning.pdf} \label{fig:dynamics_incremental_transfer_learning}}  
+	\subfloat[]{\includegraphics[width= 0.95\textwidth]{fig/dynamics_incremental_transfer_learning.pdf} \label{fig:dynamics_incremental_transfer_learning}}  
 	\hspace*{\fill}
 	\\
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/dynamics_collective_learning.pdf} \label{fig:dynamics_collective_learning}}
+	\subfloat[]{\includegraphics[width= 0.95\textwidth]{fig/dynamics_collective_learning.pdf} \label{fig:dynamics_collective_learning}}
 	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning} Collective learning.}
-\end{figure}
-% #############################################################################################################################################################
-\clearpage
-% Therefore, the scaling effect that incremental learning has on the skill complexity $c_{j,k}$ for the skills contained in the $k$-th cluster is
-%% ---
-%\begin{equation}\label{eq:complexity_IL}
-%	c^{(I)}_{j,k}(n) =c_0 \bar{\sigma}^{(I)}_{j,k}(n)= c_0  e^{-\alpha N_{\zeta_k} n},
-%\end{equation}
-%% ---
-%with $r = 1$ in \eqref{eq:incremental_knowledge} since the agent has access to its own knowledge only. Eq.~\eqref{eq:complexity_IL}  is precisely the effect shown in Fig.~\ref{fig:complexity_per_cardinality} ---displayed for $n=1$---, which obeys Asm.~\ref{assumption:fundamental_complexity} and \ref{assumption:exponential_decrease}.
-%Let, for simplicity, $\epsilon= e^{-5}$ then
-%% ---
-%\begin{equation}\label{eq:complexity_IL}
-%	c^{(I)}_{j,k} = 5 \tau,
-%\end{equation}
-%% ---
-%where $\tau = \left( \alpha (N_{\zeta_k}+ 1)\right)^{-1}.$. 
-The total number of trial episodes $ C_k $ that an agent following an incremental learning strategy needs to learn the $N_{\mathcal{Z}_k}$ skills in a cluster $ \mathcal{Z}_k $ is given by
-% ---
-%\begin{align}
-%	\begin{split}
-%		C^{(I)}_k &= \sum^{N_\mathcal{S}/N_\mathcal{K}}_{j=1} c_0 \cdot e^{-\alpha \cdot {^kN_{j}}} = \sum^{N_\mathcal{S}/N_\mathcal{K}}_{j=1}c_0 \cdot e^{-\alpha {^{k}\cancelto{j-1}{N_{j}}}}\\
-%		&= c_0 \sum^{N_\mathcal{S}/N_\mathcal{K}}_{j=1} e^{-\alpha (j-1)}.
-%	\end{split}
-%\end{align}
-\begin{align}\label{eq:total_episodes_incremental}
-	\begin{split}
-		C^{(I)}_k &= \sum^{N_{\mathcal{Z}_k}}_{j=1} c^{(I)}_{j,k}  \\
-		&= \sum^{{\mathcal{Z}_k}}_{j=1} c_0 \cdot  \bar{\sigma}_{j,k}  = \sum^{{\mathcal{Z}_k}}_{j=1} c_0 e^{-\alpha {\cancelto{j-1}{N_{j,k}}}}\\
-		&= c_0 \sum^{{\mathcal{Z}_k}}_{j=1} e^{-\alpha (j-1)}=c_0 \frac{1 - e^{-\alpha N_k}}{1 - e^{-\alpha}}.
-	\end{split}
-\end{align}
-% ---
-Eq.~\eqref{eq:total_episodes_incremental} is the closed form of a geometric series, where the equality $N_{j.k} = j-1$ comes from the fact that when learning the $j$-th skill in the cluster, $j-1$ skills have already been learned and their knowledge is contained in $\mathcal{\zeta}_k$. Likewise, the total number of episodes to learn the skills in all the $ N_\mathcal{Z} $ clusters is
-%\begin{align}\label{eq:complexity_incremental_single}
-%	\begin{split}
-%	C^{(I)} &= N_\mathcal{K} \cdot c_0 \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{N_\mathcal{K}}}}{1 - e^{-\alpha}}\\
-%&= N_\mathcal{K} \cdot c_0 \frac{1 - \bar{\sigma}^{(I)}}{1 - e^{-\alpha}}.
-%	\end{split}
-%
-%\end{align}
-%\begin{align}\label{eq:complexity_incremental_single}
-%	\begin{split}
-%		C_\mathcal{S}^{(I)} &= N_\mathcal{K} \cdot c_0 \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{N_\mathcal{K}}}}{1 - e^{-\alpha}}\\ 
-%		&= N_\mathcal{K} \cdot c_0 \frac{1 - \bar{\sigma}_k^{(I)}}{1 - e^{-\alpha}}.
-%	\end{split}
-%\end{align}
-\begin{align}\label{eq:complexity_incremental_single}
-	\begin{split}
-		C_\mathcal{S}^{(I)} &= \sum_{k=1}^{N_\mathcal{Z}} C^{(I)}_k\\
-		&= N_\mathcal{Z} \cdot c_0 \frac{1 - e^{-\alpha N_k}}{1 - e^{-\alpha}}\\ 
-		&= N_\mathcal{Z} \cdot c_0 \frac{1 - \bar{\sigma}_k^{(I)}}{1 - e^{-\alpha}}.
-	\end{split}
-\end{align}
-% ---
-with $ \overbrace{\bar{\sigma}^{(I)}_k = e^{- \alpha\lvert  \mathcal{Z}_k \rvert} = e^{-\alpha N_k}}^{\text{isn't this supposed to be 0?}} $ representing the knowledge remaining after learning all the skills in a cluster. If $ m $ robots are available, the learning load is distributed, with each robot taking care of learning $ \frac{N_k}{m} $ skills in parallel with the rest. Under such conditions, the total number of episodes is simply
-% ---
-\begin{align}\label{eq:complexity_incremental_parallel}
-	\begin{split}
-		{}^{\lvert \rvert}C_\mathcal{S}^{(I)} &= m \left( N_\mathcal{Z} \cdot c_0 \frac{1 - e^{-\alpha \frac{N_k}{m}}}{1 - e^{-\alpha}}\right) \\&= m \left( N_\mathcal{Z} \cdot c_0 \frac{1 - \left(\bar{\sigma}^{(I)}_k\right)^{\frac{1}{m}} }{1 - e^{-\alpha}} \right) \\
-		&= m \cdot N_\mathcal{Z} \cdot c_0 \frac{1 - \bar{\sigma}^{(I)}_m}{1 - e^{-\alpha}} 	
-	\end{split}	
-\end{align}
-%---
-\begin{table*}[htbp!]
-	\begin{center}
-		\captionof{table}{The total complexity of the different learning schemes.} \label{tab:method_comparison}
-		\begin{tabular}{|c|c|c|c| } 
-			\multicolumn{4}{c}{\cellcolor{black!25} $c_{j,k_\mathcal{T}}=c_0\left[1- \sum\limits_{k \in \mathcal{K} \setminus k_\mathcal{T}}\beta_k \left( 1 - \bar{\sigma}_{j,k} \right)\right] \left(e^{-\alpha N_{j,k_\mathcal{T}}} \right)^r$}\\
-			\hline
-			\cellcolor{black!25} & \textbf{Incremental} & \textbf{Transfer} & \textbf{Collective}\\
-			\cellcolor{black!25} & $r=1, \quad \beta_k=0$ & $r=1$ & $r=m, \quad \mathcal{K} \setminus k_\mathcal{T}=\emptyset, \quad N_{j,k_\mathcal{K}} = N_j$\\
-			\hline 
-			Single & $ C_\mathcal{S}^{(I)} = N_\mathcal{K} \cdot c_0 \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{N_\mathcal{K}}}}{1 - e^{-\alpha}}  $ 
-			& $C_\mathcal{S}^{(T)}= \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta \left(1-\bar{\sigma}\right)\right] C_\mathcal{S}^{(I)}$& \multirow{2}{*}{${^{\vert \lvert}}C_\mathcal{S}^{(C)} = m \cdot c_0 \frac{1 - e^{-\alpha N_\mathcal{S}}}{1 - e^{-\alpha m}}$}\\
-			%\hline
-			Parallel & $ {^{\vert \lvert}}C_\mathcal{S}^{(I)} = m \cdot N_\mathcal{K} \cdot c_0 \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{m \cdot N_\mathcal{K}}}}{1 - e^{-\alpha}}  $ 
-			& ${^{\vert \lvert}}C_\mathcal{S}^{(T)} = \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta \left(1-\bar{\sigma}_m\right)\right] {^{\vert \lvert}}C_\mathcal{S}^{(I)}$ & \\
-			\hline
-		\end{tabular}
-	\end{center}
-	%\label{tab:method_comparison}
-\end{table*}
-% ---------------------------------------------------------------------------------------------------
-\subsubsection{\textbf{Transfer learning (TL)}}
-
-%\begin{figure}[!h]
-%	\centering
-%	\includegraphics[width=0.9\columnwidth]{fig/effect_transfer_learning.pdf}
-%	\caption{The effect of transfer learning.}
-%	\label{fig:effect_transfer_learning}
-%\end{figure}
-%---
-%TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O}$ to the skills that will be learned in a \emph{target} cluster $\mathcal{T}$, see Fig.~\ref{fig:incremental_transfer_similarity}. In general, the effect that TL has on the skills of another cluster is the reduction of the total remaining knowledge to be learned. Referring to \eqref{eq:differential_incremental_knowledge} and \eqref{eq:incremental_knowledge}, it means that its initial condition when $N_{j,k} = 0$ will be reduced (Fig.~\ref{fig:effect_transfer_learning}). Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{Z}}_{k=1}$ to be the set of all available clusters of knowledge (see Fig.~\ref{fig:cluster_knowledge_transfer}), the TL effect can be modeled as follows
-Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{Z}}_{k=1}$ to be the set of all available skill clusters (see Fig.~\ref{fig:cluster_knowledge_transfer}), TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$, see Fig.~\ref{fig:incremental_transfer_similarity}. In general, the effect that TL has on the skills of another cluster is the reduction of the total remaining knowledge to be learned. Referring to \eqref{eq:differential_incremental_knowledge} and \eqref{eq:incremental_knowledge}, it means that its initial condition when $N_{j,k} = 0$ will be reduced (Fig.~\ref{fig:effect_transfer_learning}). The TL effect can be modeled as follows
-% ---
-\begin{subequations}\label{eq:joint_cartesian_acceleration}
-	\begin{equation}\label{eq:joint_cartesian_acceleration_child}
-		\dot{\bar{\sigma}}^{(T)}_{j,k} = -\alpha  \cdot N_{j,k}
-	\end{equation}    
-	\begin{equation}\label{eq:joint_cartesian_acceleration_parent}
-		\bar{\sigma}^{(T)}_{j,k}(0) = 1 - \sum\limits_{c = 1}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right),~\bar{\sigma}_{c=0} = 1
-	\end{equation}
-\end{subequations}
-% ---
-Implying that the remaining knowledge under transfer learning is
-% ---
-\begin{align}
-	\begin{split}
-		\bar{\sigma}^{(T)}_{j,k} 
-		&= \underbrace{\left[1- \sum\limits_{c = 0}^{k-1}\beta_{c} \left( 1 - \bar{\sigma}_{c} \right)\right]}_{\text{Transferred knowledge}} e^{-\alpha N_{j,k}}
-	\end{split}
-\end{align}
-% ---
-where $0<\beta_{c} < 1$ is the transfer coefficient from the different origin clusters $\mathcal{Z}_{c}$ to the target cluster $\mathcal{Z}_{k}$\footnote{\textcolor{red}{Once again, since there is no inter-agent exchange of knowledge, $ r = 1 $ in this case.}}. Assuming that the origin clusters have unique knowledge contributions to the destination cluster implies that
-% ---
-\begin{equation}
-	\sum\limits_{c=0}^{k-1}\beta_{c} \leq 1;
-\end{equation}
-% ---
-i.e. no redundant knowledge. Furthermore, considering Assumptions~\ref{assumption:cluster_size} and \ref{assumption:cluster_transferability},
-% ---
-% \begin{equation}
-	%     \beta_{k_O} = \frac{1}{\text{max}\left(\left\lvert \mathcal{K} \setminus k_{T} \right\rvert,1\right)}
-	% \end{equation}
-\begin{equation}
-	\beta_{c}=
-	\begin{cases}
-		1, & \text{if $\mathcal{O}  = \emptyset$}.\\
-		\frac{1}{k - 1}, & \text{otherwise}.
-	\end{cases}
-\end{equation}
-% ---
-The term $ 1 - \bar{\sigma}_{c}$ represents the knowledge available from each of the different origin clusters (i.e. after their corresponding skills were learned).
-% ---
-% \begin{align}
-% 	\begin{split}
-% 		\bar{\sigma}^{(T)}_{j,k_\mathcal{T}} &= \left\{ e^{-\alpha \left(N_{j,k_\mathcal{T}} - \frac{1}{\alpha \cdot r}  \log\left[ 1- \sum\limits_{k\in \mathcal{K} \setminus k_\mathcal{T}}\beta_k(1 - \bar{\sigma}_{j,k}) \right] \right)}\right\}^r\\
-% 		&= \left(e^{-\alpha {N_{j,k_\mathcal{T}}}} \right)^r e^{  \log\left( 1-\sum\limits_{k_\mathcal{O} \in \mathcal{K} \setminus k_\mathcal{T}}\beta_k(1 - \bar{\sigma}_{j,k_{\mathcal{O}}}) \right) }\\
-% 		&= \underbrace{\left[1- \sum\limits_{k \in \mathcal{K} \setminus k_\mathcal{T}}\beta_k \left( 1 - \bar{\sigma}_{j,k} \right)\right]}_{\text{Transfer}} \left(e^{-\alpha N_{j,k_\mathcal{T}}} \right)^r ,
-% 	\end{split}
-% \end{align}
-
-
-% \begin{align}
-% 	\begin{split}
-% 		\bar{\sigma}^{(T)}_{j,k_T} &= \left\{ e^{-\alpha \left(N_{j,k_T} - \frac{1}{\alpha \cdot r}  \log\left[ 1- \sum\limits_{k_O\in \mathcal{K} \setminus k_T}\beta_{k_O}\left(1 - \bar{\sigma}_{j,k_O}\right) \right] \right)}\right\}^r\\
-% 		&= \left(e^{-\alpha {N_{j,k_T}}} \right)^r e^{ \log\left( 1-\sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O}\left(1 - \bar{\sigma}_{j,k_O}\right) \right) }\\
-% 		&= \underbrace{\left[1- \sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O} \left( 1 - \bar{\sigma}_{j,k_O} \right)\right]}_{\text{Transfer}} \left(e^{-\alpha N_{j,k_T}} \right)^r ,
-% 	\end{split}
-% \end{align}
-
-\begin{align}
-	\begin{split}
-		\bar{\sigma}^{(T)}_{j,k_T} &= \left\{ e^{-\alpha \left(N_{j,k_T} - \frac{1}{\alpha \cdot r}  \log\left[ 1- \sum\limits_{k_O\in \mathcal{K} \setminus k_T}\beta_{k_O}\left(1 - \bar{\sigma}_{k_O}\right) \right] \right)}\right\}^r\\
-		&= \left(e^{-\alpha {N_{j,k_T}}} \right)^r e^{ \log\left( 1-\sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O}\left(1 - \bar{\sigma}_{k_O}\right) \right) }\\
-		&= \underbrace{\left[1- \sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O} \left( 1 - \bar{\sigma}_{k_O} \right)\right]}_{\text{Transfer}} \left(e^{-\alpha N_{j,k_T}} \right)^r ,
-	\end{split}
-\end{align}
-% ---
-\begin{align}
-	\begin{split}
-		\bar{\sigma}^{(T)}_{j,k} 
-		&= \underbrace{\left[1- \sum\limits_{O = 0}^{k-1}\beta_{O} \left( 1 - \bar{\sigma}_{O} \right)\right]}_{\text{Transfer}} \left(e^{-\alpha N_{j,k}} \right)
-	\end{split}
-\end{align}
-
-\begin{align}
-	\begin{split}
-		^{\lvert \lvert}\bar{\sigma}^{(T)}_{j,k} 
-		&= \underbrace{\left[1- \sum\limits_{O = 0}^{k-1}\beta_{O} \left( 1 - \bar{\sigma}_{O} \right)\right]}_{\text{Transfer}} \left(e^{-\alpha N_{j,k}/} \right)
-	\end{split}
-\end{align}
-
-% and $ \bar{\sigma}_{j,k} = \bar{\sigma}_m $. Where $ \bar{\sigma}_m $ represents the knowledge collected from the other clusters; i.e.
-% % ---
-% \begin{equation}
-% 	\bar{\sigma}_m = e^{-\alpha \frac{N_\mathcal{S}}{m N_\mathcal{K}}}.
-% \end{equation}
-%---
-% \begin{figure}[!h]
-% 	\centering
-% 	\includegraphics[width=0.99\columnwidth]{tex/fig/single_transfer_knowledge.pdf}
-% 	\caption{Knowledge sharing in transfer learning. A single agent leverages previously acquired knowledge from other learned skills in the current and previously learned clusters.}
-% 	\label{fig:single_transfer_knowledge}
-% \end{figure}
-% ---
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.99\columnwidth]{fig/single_transfer_complexity.pdf}
-	\caption{Skill complexity is reduced further by the effect of transfer learning as more clusters are visited.}
-	\label{fig:single_transfer_complexity}
-\end{figure}
-% ---
-In TL, the skill complexity in the destination cluster $\mathcal{Z}_k$ is then given by
-% ---
-\begin{equation}
-    c^{(T)}_{j,k} = c_0 \cdot \bar{\sigma}^{(T)}_{j,k},
-\end{equation}
-% ---
-see Fig.~\ref{fig:single_transfer_complexity}. Notice that as the number of seen clusters increases, the starting complexity for the skills in the target cluster is reduced even further. Consequently, similar to incremental learning, the number of trial episodes to learn the skills in the $\mathcal{Z}_k$ cluster is
-% ---
-\begin{align}\label{eq:complexity_transfer_single}
-	C_{k}^{(T)} &= \left[1 - \sum_{c=0}^{k-1}\beta_{c} \left(1-\bar{\sigma}^{(I)}_{c}\right)\right]  \cdot  c_0 \frac{1 - e^{-\alpha N_k}}{1 - e^{-\alpha}}
-\end{align}
-% ---
-
-and the total number of trial episodes required to learn all the skills in the $N_\mathcal{Z}$ clusters is\footnote{This corresponds to an arithmetic series.¸}
-% ---
-\begin{align}\label{eq:complexity_transfer_single}
-	C_\mathcal{S}^{(T)} &= \sum_{k=1}^{N_\mathcal{Z}} C_{k}^{(T)}\\
-	&= \left[1 - \frac{\left(1+N_\mathcal{Z}\right)}{2}\beta_c \left(1-\bar{\sigma}^{(I)}_k\right)\right] N_\mathcal{Z} \cdot  c_0 \frac{1 - e^{-\alpha N_k}}{1 - e^{-\alpha}}\\
-	&= \left[1 - \frac{\left(1+N_\mathcal{Z}\right)}{2}\beta_c \left(1-\bar{\sigma}^{(I)}_k\right)\right] N_\mathcal{Z} \cdot  c_0 \frac{1 - \bar{\sigma}^{(I)}_k}{1 - e^{-\alpha}}	
-\end{align}
-% ---
-Furthermore, if $ m $ robots can be used in parallel to learn the skills in the clusters; then
-% ---
-\begin{equation}\label{eq:complexity_transfer_parallel}
-	{}^{\lvert \lvert}C_\mathcal{S}^{(T)} = \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta_c \left(1-\bar{\sigma}_m\right)\right] m \cdot N_\mathcal{K}  \cdot c_0 \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{m \cdot N_\mathcal{K}}}}{1 - e^{-\alpha}},
-\end{equation}
-
-\begin{tcolorbox}
-\begin{align}
-	e^{-\gamma \cdot N_j \cdot m}  &= \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta \left(1-\bar{\sigma}_m\right)\right]  \cdot m \cdot \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{m \cdot N_\mathcal{K}}}}{1 - e^{-\alpha}}\\
-	\gamma &= -\frac{1}{N_j my}\text{log} \left( \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta \left(1-\bar{\sigma}_m\right)\right]  \cdot m \cdot \frac{1 - e^{-\alpha \frac{N_\mathcal{S}}{m \cdot N_\mathcal{K}}}}{1 - e^{-\alpha}}\right)
-\end{align}
-\end{tcolorbox}
-% ---
-% ---------------------------------------------------------------------------------------------------
-\subsubsection{\textbf{Collective learning (CL)}}
-Finally, in collective learning the notion of cluster is redefined to be formed by all the skills learning concurrently by $m$ robots. In this setting, exchange of knowledge is possible which means that at every trial episode $n$ there is 
-
-Finally, in collective learning the notion of cluster is not necessarily applicable anymore, thus 
-$\mathcal{K} = k_\mathcal{T}$ which corresponds to the existence of only one big cluster.
-% ---
-\begin{align}
-	\begin{split}
-		\bar{\sigma}_j^{(C)} &=   \cancelto{1}{ \left[1- \sum_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O} \left( 1 - \bar{\sigma}_{k_O} \right)\right]} \left(e^{-\alpha {N_{j,k_T}}} \right)^r \\
-		&= \left(e^{-\alpha N_{j,k_T}} \right)^r  = \left(e^{-\alpha N_{j}}\right)^r 
-	\end{split}
-\end{align}
-
-Furthermore, now $m$ robots are learning (potentially) $m$ different skills in parallel while exchanging knowledge.
-% ---
-\begin{align}\label{eq:collective_knowledge}
-\begin{split}
-    \bar{\sigma}_i^{(C)} &= \left({e^{-\alpha \cdot N_i}}\right)^{r}\\
-    &= \left({e^{-\alpha \cdot N_i}}\right)^{m}.
-\end{split}
-\end{align}
-% ---
-The mapping for the $i$-th skill in the universe relative to the $j$-th skill in the $k$-th cluster is
-\begin{equation}
-    i = (k-1)\frac{N_\mathcal{S}}{N_\mathcal{K}} + j,k
-\end{equation}
-
-%where $\alpha$ was replaced by $ 0<\gamma<<1$, which models a more effective knowledge transfer among the $m$ agents.}
-Based on \eqref{eq:collective_knowledge} the scaled down skill complexity in CL is 
-% ---
-\begin{align}\label{eq:collective_knowledge}
-\begin{split}
-    ^{||}c_j^{(C)} &= c_o \cdot \left({e^{-\alpha \cdot N_j}}\right)^{m}.
-\end{split}
-\end{align}
-% ---
-The total number episodes when using collective learning is given by
-% ---
-\begin{eqnarray}
-	^{||}C_\mathcal{S}^{(C)} = m \cdot C_0 \frac{1 - e^{-\alpha N_\mathcal{S}}}{1 - e^{-\alpha m}}
-\end{eqnarray}
-% ---
-% ===================================================================================================
-\subsection{Comparison}
-The general skill complexity scaling based on knowledge sharing is given by the following expression
-\begin{tcolorbox}
-	\begin{align}\label{eq:general_complexity}
-		c_{j,k_T} &= c_0\left[1- \sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O} \left( 1 - \bar{\sigma}_{k_O} \right)\right] \left(e^{-\alpha N_{j,k_T}} \right)^r
-	\end{align}
-\end{tcolorbox}
-Expression \ref{eq:general_complexity} can be re written to show the contribution of the different learning schemes as
-% ---
-\begin{align}
-	c_{j,k_T} &= c_0\underbrace{\left[1- \sum\limits_{k_O \in \mathcal{K} \setminus k_T}\beta_{k_O} \left( 1 - \bar{\sigma}^{(I)}_{k_O} \right)\right]}_{TL}\overbrace{ \left(\bar{\sigma}^{(I)}_{j,k_T} \right)^{r-1}}^{CL}\underbrace{ \left(\bar{\sigma}^{(I)}_{j,k_T} \right)}_{IL}
-\end{align}
-% ---
-with
-\begin{align}
-    \bar{\sigma}^{(I)}_{j,k_T}&= e^{-\alpha N_{j,k_T}},
-\end{align}
- where according to \eqref{eq:learning_combinations}, the effects of the different learning schemes are reflected.
- % ---
- \begin{equation}
-	 c_j =
-	     \begin{cases} 
-		       \text{Incremental} & \alpha\neq 0, \beta=0,  r=1 \\
-		       \text{Transfer} & \alpha\neq 0, \beta \neq 0, r = 1 \\
-		       \text{Collective} & \alpha\neq 0, \beta = 0, r=m 
-		   \end{cases}
-	   \label{eq:learning_combinations}
-\end{equation}
-From \eqref{eq:complexity_incremental_parallel} and \eqref{eq:complexity_transfer_parallel} it is clear that they differ only by the factor $ \left[1 - \frac{\left(1+N_\mathcal{K}\right)}{2}\beta \left(1-\bar{\sigma}_m\right)\right] \leq 1$, showing that TL is a scaled down version of IL. Table~\ref{tab:method_comparison} shows the comparison between the total number of trial episodes required by the three learning schemes.
-
-% ---
-The total energy and time consumption in the different learning paradigms is
-% ---
-\begin{align}
-	\begin{split}
-		E^{(\star)}_{\mathcal{S}} &= e_{0} \cdot {}^{\lvert \lvert}C_\mathcal{S}^{(\star)}\\
-		T^{(\star)}_{\mathcal{S}} &= \frac{\Delta t}{m} \cdot {}^{\lvert \lvert}C_\mathcal{S}^{(\star)},
-	\end{split}
-\end{align}
-% -----
-with $ \star $ representing the total complexity corresponding the considered learning scheme. Fig.~\ref{fig:energy_time_learning_paradigms} shows the effect in the energy and time demand from the three different learning paradigms as a function of the number of robots learning, considering $c_0 = 100$, $P_0  = \unit[100]{W}$, $ \Delta t = \unit[300]{s}$ and $ N_\mathcal{S} = 10^6 $. In the upper panel of Fig.~\ref{fig:energy_time_learning_paradigms}, it can be seen that the transfer learning paradigm consumes less energy than the incremental one for all cluster size variations. Furthermore, there is a clear upper bound on the energy consumption for learning all skills in $\mathcal{S}$ with the increase of the number of agents $m$. This effect is due to the division of skills among the agents within a cluster; leading to agents accumulating less knowledge before moving to a new cluster. This upper bound is proportional to $c_0$. Additionally, the figure shows the performance of the robots under the collective learning paradigm to be far more efficient than the other IL and TL. On the lower pane  of Fig.~\ref{fig:energy_time_learning_paradigms}, the amount of time required by each agent to learn all skills is shown. Since the amount of time for each trial episode is fixed, we can say that the values are then proportional to the wall-clock time to learn all skills. We can see that, for all paradigms, the more agents we use the faster all skills will be learned, up to a stable point where there is no apparent performance increase by having more agents. Similar to the energy plot, TL is also more efficient than IL, but both are much less efficient than CL. We can further observe that in the collective paradigm there is a quicker saturation of the efficiency, denoting that, even with a relative small number of agents, it should be possible to learn all skills using the same wall-clock time than with a bigger number of agents. This hints at the existence of an optimal trade-off between the number of agents and the time required to learn a given number of skills.
-% ---
-% \begin{figure*}[!htb]
-% 	\centering
-% 	\hspace*{\fill}
-% 	\subfloat[]{\includegraphics[width= 0.99\textwidth]{fig/energy_time_learning_paradigms.jpg}}  
-% 	\hspace*{\fill}
-% 	\caption[] {\label{fig:energy_time_learning_paradigms} The total energy and time demands for the different learning paradigms, considering $ N_\mathcal{S} = 10^6 $.}
-% \end{figure*}
-% ---
-%---
-\begin{figure*}[!htb]
-	\centering
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.30\textwidth]{fig/complexity_incremental.pdf} \label{fig:complexity_incremental}}  
-	\hfill
-	\subfloat[]{\includegraphics[width= 0.30\textwidth]{fig/single_transfer_complexity.pdf} \label{fig:single_transfer_complexity}}  
-	\hfill	
-	\subfloat[]{\includegraphics[width= 0.30\textwidth]{fig/collective_complexity.pdf} \label{fig:collective_complexity}}
-	\hspace*{\fill}
-	\caption[] {\label{fig:energy_time_learning_paradigms} Transfer learning. \subref{fig:effect_transfer_learning} The total \subref{fig:parallel_total_energy} energy and \subref{fig:parallel_total_time} time demands for the different learning paradigms, considering $ N_\mathcal{S} = 10^6 $.}
+	\caption[] {\label{fig:collective_learning} Scenario 1: the skills of each cluster are learned by the $ m$ robots in succession.  \subref{fig:dynamics_incremental_learning} incremental learning,  \subref{fig:dynamics_incremental_transfer_learning} incremental + transfer learning, \subref{fig:dynamics_collective_learning} collective learning.}
 \end{figure*}
 % ---
-\begin{figure*}[!htb]
+To assess how the number of robots affects the total number of trial episodes required to learn all the $N_\mathcal{S}$ skills we use the same parameters as before but vary the number of robots in $m \in \left \lbrace 2,4,8,16,32,64\right \rbrace$. Additionally we considered an additional collective learning scenario in which, unlike the previous case, the total number of available robots is distributed equally among the clusters to benefit from transfer learning at an earlier time during learning. The results are shown in Fig.~\ref{fig:total_episodes_per_n_robots}. 
+\begin{figure}[!th]
 	\centering
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/parallel_total_energy.pdf} \label{fig:parallel_total_energy}}  
-	\hfill
-	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/parallel_total_time.pdf} \label{fig:parallel_total_time}}
-	\hspace*{\fill}
-	\caption[] {\label{fig:energy_time_learning_paradigms} Transfer learning. \subref{fig:effect_transfer_learning} The total \subref{fig:parallel_total_energy} energy and \subref{fig:parallel_total_time} time demands for the different learning paradigms, considering $ N_\mathcal{S} = 10^6 $.}
-\end{figure*}
+	\includegraphics[width=0.9\columnwidth]{fig/total_episodes_per_n_robots.pdf}
+	\caption{Total number of episodes to learn the universe of skills as a function of the available robots.}
+	\label{fig:total_episodes_per_n_robots}
+\end{figure}
+
+
+
+
