@@ -263,7 +263,13 @@ where $\eta$ represents the efficiency of knowledge exchange from $\zeta_k$ to $
 	g_{j,k}\left(N_{\zeta_k}\right) = e^{-\delta N_{\zeta_k}},
 \end{equation}
 %---
-again with a term $\delta$ controlling the rate at which the exponential converges. Via the exchange factors $(\eta,\delta)$, in incremental learning the knowledge about every new skill gets gradually increased by leveraging previous knowledge, resulting in
+again with a term $\delta$ controlling the rate at which the exponential converges. Similar to $\alpha$, $\delta>0$, from Asm.~\ref{assumption:cluster_size} it can be defined as 
+% ---
+\begin{equation}\label{eq:delta}
+	\delta = -\frac{1}{N_\mathcal{Z}}\text{log}(\epsilon).
+\end{equation}
+% ---
+Essentially, such choice of $\delta$ implies that the remaining knowledge in a cluster after seeing all its skills is negligible. Via the exchange factors $(\eta,\delta)$, in incremental learning the knowledge about every new skill gets gradually increased by leveraging previous knowledge, resulting in
 % ---
 \begin{equation*}\label{eq:remaining_knowledge__IL}
 	\bar{\sigma}^{(I)}_{i,j}(n) = e^{-\alpha  \left(\eta N_{\zeta_k}+1\right) n} e^{-\delta N_{\zeta_k}},
@@ -387,10 +393,10 @@ Fig.~\ref{fig:cl_example_figure} illustrates the CL concept, where the self loop
 	\end{alignat}
 \end{subequations}
 % ---
-where $r=m$ is the number of robots that exchange knowledge among them. This implies that now $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ is a vector that represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $i$ exchanges knowledge with robot $j$ an $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Furthermore, since robots may learn skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, 1/N_\mathcal{K} \right \rbrace$, scale down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ f(\cdot)$ and $g(\cdot)$ are now
+where $r=m$ is the number of robots that exchange knowledge among them. This implies that now $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ is a vector that represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $i$ exchanges knowledge with robot $j$ an $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Furthermore, since there may be robots learning skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, \beta_{k} \right \rbrace$ (with $\beta_{k} = 1/N_\mathcal{K}$), scale down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ f(\cdot)$ and $g(\cdot)$ are now also dependent on the number of robots that exchange knowledge, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle; i.e.
 % ---
 \begin{equation}\label{eq:f_function_collective}
-	f_{j,k}\left(N_{\zeta_k},r\right) = \frac{-\alpha}{(1 - \beta_k)}\left( \eta r N_{\zeta_k} + 1 \right),
+	f_{j,k}\left(N_{\zeta_k},r\right) = -\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right),
 \end{equation}
 % ---
 and
@@ -406,7 +412,7 @@ Given the dynamics matrix of the collective system
 	\bar{\bm{A}}\left(N_{\zeta_k}\right) = f\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B} 
 \end{equation} 
 % ---
-it can be proven that there is a coupling strength $\gamma$ that ensures that the remaining knowledge for all skills converges asymptotically to zero. Notice that \eqref{eq:collective_knowledge_dynamics} exhibits a dependency of $\bar{\bm{A}}$ on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective.
+it can be proven that there is a coupling strength $\gamma$ that ensures that the remaining knowledge for all skills converges asymptotically to zero. Notice that because of \eqref{eq:f_function_collective}, $\bar{\bm{A}}$ exhibits a dependency of  on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective.
 
 \TODO \textcolor{red}{is there an approximation of the convergence rate of all the skills?}
 
@@ -453,7 +459,7 @@ To show the effect that the different learning paradigms have on energy consumpt
 % ---
 \begin{itemize}
 	\item $\alpha =  0.0461$ (in accordance to \eqref{eq:isolated_learning_rate})
-	\item $\delta =  0.0360$
+	\item $\delta =  0.0360$ (see \eqref{eq:delta})
 	\item $\eta= 0.1$
 \end{itemize} 
 % ---
