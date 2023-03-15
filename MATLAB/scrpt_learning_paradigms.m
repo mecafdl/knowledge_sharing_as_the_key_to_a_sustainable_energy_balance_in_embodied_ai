@@ -33,22 +33,24 @@ m = 32;
 % end
 
 %% ************************************************************************
-% Dynamics of ISOLATED learning 
+% Dynamics of ISOLATED LEARNING 
 % *************************************************************************
-
 clc
 close all
 
 clear c_jk_iso_episodes
-iter = 0;
-for m=32%[2,4,8,16,32,64]
+entry = 1;
+% Loop over robots
+for m = [2,4,8,16,32,64]
     fig       = figure('color','w');
-    iter      = iter+1; 
-    % kappa = zeros(1,N_Z+1);
-    c_jk_l   = zeros(N_Z/m, N_K);
-    beta_k = 0;
+    % Transfer learning factor
+    beta_k   = 0;
+    c_jk_iso = zeros(N_Z, N_K);
+    % Loop over clusters
     for k = 1:N_K
+        disp(['Cluster ',num2str(k),' -------------------------'])
         subplot(1,N_K,k)
+        % Loop over skills
         for N_zeta = 0:(N_Z/m)-1
             j        = N_zeta+1;
             bsigma_0 = ones(m,1);
@@ -57,15 +59,14 @@ for m=32%[2,4,8,16,32,64]
             bsigma   = ode4(@(n,bsigma) F*bsigma, n, bsigma_0);
             semilogy(n,bsigma,'LineWidth',2)
             hold on
-            %kappa(N_zeta + 1)  = sum(bsigma);
-            c_jk_iso(j, k) = -(log(epsilon) + delta*N_zeta)/(alpha*f(eta, N_zeta));
+            c_jk_iso(j, k) = -log(epsilon)/alpha;
         end
         
         p = area(n,  epsilon*ones(numel(n),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
         plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
         title(['$(r_i,\mathcal{Z}_{',num2str(k),'})$'],'FontSize',25,'Interpreter','latex')
         xlabel('n','FontSize',25)
-        ylabel(['$\bar{\boldmath{\sigma}}^{(Iso)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+        ylabel(['$\bar{\boldmath{\sigma}}^{(IsL)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
         xlim([0 n(end)])
         ylim([1E-3 1E0])
         xticks([0 50 100])
@@ -81,7 +82,8 @@ for m=32%[2,4,8,16,32,64]
     fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
     pause(1)
     tightfig(fig);
-    c_jk_iso_episodes(iter,:) = [sum(c_jk_iso,1), sum(c_jk_iso,'all')] ;
+    c_jk_iso_episodes(entry,:) = [sum(c_jk_iso,1), sum(c_jk_iso,'all')] ;
+    entry      = entry+1; 
 end
 %%
 
@@ -93,23 +95,25 @@ fig.PaperUnits = 'centimeters';   % set pdf printing paper units to cm
 fig.PaperSize = fig.Position(3:4);  % assign to the pdf printing paper the size of the figure
 print(fig,'-dpdf','-r600','-painters',fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_isolated_learning'));
 disp('Printing done!')
-%% ************************************************************************
-% Dynamics of incremental learning 
+%% **************************************************************************
+% Dynamics of INCREMENTAL LEARNING 
 % *************************************************************************
-
 clc
 close all
 
 clear c_jk_il_episodes
-iter = 0;
-for m=32%[2,4,8,16,32,64]
-    fig       = figure('color','w');
-    iter      = iter+1; 
-    % kappa = zeros(1,N_Z+1);
-    c_jk_l   = zeros(N_Z/m, N_K);
-    beta_k = 0;
+entry = 1;
+% Loop over robots
+for m = [2,4,8,16,32,64]
+    fig     = figure('color','w');
+    % Transfer learning factor
+    beta_k  = 0;
+    c_jk_il = zeros(N_Z,N_K);
+    % Loop over clusters
     for k = 1:N_K
+        disp(['Cluster ',num2str(k),' -------------------------'])
         subplot(1,N_K,k)
+        % Loop over skills
         for N_zeta = 0:(N_Z/m)-1
             j        = N_zeta+1;
             bsigma_0 = (1- beta_k)*g(delta, N_zeta).*ones(m,1);
@@ -118,15 +122,14 @@ for m=32%[2,4,8,16,32,64]
             bsigma   = ode4(@(n,bsigma) F*bsigma, n, bsigma_0);
             semilogy(n,bsigma,'LineWidth',2)
             hold on
-            %kappa(N_zeta + 1)  = sum(bsigma);
             c_jk_il(j, k) = -(log(epsilon) + delta*N_zeta)/(alpha*f(eta, N_zeta));
         end
-        
+        disp(['Skills seen:' num2str(j)]);
         p = area(n,  epsilon*ones(numel(n),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
         plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
         title(['$(r_i,\mathcal{Z}_{',num2str(k),'})$'],'FontSize',25,'Interpreter','latex')
         xlabel('n','FontSize',25)
-        ylabel(['$\bar{\boldmath{\sigma}}^{(I)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+        ylabel(['$\bar{\boldmath{\sigma}}^{(IL)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
         xlim([0 n(end)])
         ylim([1E-3 1E0])
         xticks([0 50 100])
@@ -142,7 +145,8 @@ for m=32%[2,4,8,16,32,64]
     fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
     pause(1)
     tightfig(fig);
-    c_jk_il_episodes(iter,:) = [sum(c_jk_il,1), sum(c_jk_il,'all')] ;
+    c_jk_il_episodes(entry,:) = [sum(c_jk_il,1), sum(c_jk_il,'all')];
+    entry = entry + 1;
 end
 %%
 
@@ -154,22 +158,25 @@ fig.PaperUnits = 'centimeters';   % set pdf printing paper units to cm
 fig.PaperSize = fig.Position(3:4);  % assign to the pdf printing paper the size of the figure
 print(fig,'-dpdf','-r600','-painters',fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_incremental_learning'));
 disp('Printing done!')
-%% ************************************************************************
-% Dynamics of transfer + incremental learning 
+%% **************************************************************************
+% Dynamics of TRANSFER + INCREMENTAL LEARNING
 % *************************************************************************
 clc
 close all
 
-
 clear c_jk_itl_episodes
-iter = 0;
-for m=32%[2,4,8,16,32,64]
+entry = 1;
+% Loop over robots
+for m = [2,4,8,16,32,64]
     fig       = figure('color','w');
-    iter      = iter+1; 
-    c_jk_itl  = zeros(N_Z/m, N_K);
+    c_jk_itl  = zeros(N_Z, N_K);
+    % Loop over clusters
     for k = 1:N_K
+        disp(['Cluster ',num2str(k),' -------------------------'])
         subplot(1,N_K,k)
+        % Transfer learning factor
         beta_k = (k-1)/N_K;
+        % Loop over skills
         for N_zeta = 0:(N_Z/m)-1
             j        = N_zeta+1;
             bsigma_0 = (1- beta_k)*g(delta, N_zeta).*ones(m,1);
@@ -179,15 +186,13 @@ for m=32%[2,4,8,16,32,64]
             semilogy(n,bsigma,'LineWidth',2)
             ylim([-0.1 1.1])
             hold on
-            %kappa(N_zeta + 1)  = sum(bsigma);
-            %c_jk(j, k) = -(log(epsilon) - log(bsigma_0))/(alpha*(N_zeta+1));
             c_jk_itl(j, k) = -(log(epsilon*(1- beta_k)^(-1)) + delta*N_zeta)/(alpha*(1- beta_k)^(-1)*f(eta, N_zeta));
         end
         p = area(n,  epsilon*ones(numel(n),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
         plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
         title(['$(r_i,\mathcal{Z}_{',num2str(k),'})$'],'FontSize',25,'Interpreter','latex')
         xlabel('n','FontSize',25)
-        ylabel(['$\bar{\boldmath{\sigma}}^{(IT)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+        ylabel(['$\bar{\boldmath{\sigma}}^{(TIL)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
         xlim([0 n(end)])
         ylim([1E-3 1E0])
         xticks([0 50 100])
@@ -202,7 +207,8 @@ for m=32%[2,4,8,16,32,64]
     fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
     pause(1)
     tightfig(fig);
-    c_jk_itl_episodes(iter,:) = [sum(c_jk_itl,1), sum(c_jk_itl,'all')] ;
+    c_jk_itl_episodes(entry,:) = [sum(c_jk_itl,1), sum(c_jk_itl,'all')] ;
+    entry                      = entry + 1; 
 end
 %%
 fig = gcf;           % generate a figure
@@ -214,35 +220,31 @@ fig.PaperSize = fig.Position(3:4);  % assign to the pdf printing paper the size 
 print(fig,'-dpdf','-r600','-painters',fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_incremental_transfer_learning'));
 disp('Printing done!')
 %% **************************************************************************
-% Dynamics of collective learning 
+% Dynamics of COLLECTIVE LEARNING
 % *************************************************************************
 % * NOTE: all m robots placed in one cluster at a time concurrently 
 %         exchanging knowledge
-
 clc
 close all
 
-
-% Coupling (adjacency) matrix
-
-
-
 clear c_jk_cl_episodes
-iter = 0;
-for m=32%[2,4,8,16,32,64]
-    iter = iter+1; 
-    c_jk_cl  = zeros(N_Z/m, N_K);
-    A_full= ones(m) - eye(m);
-    A     = A_full;
-    fig = figure('color','w');
+entry = 1;
+% Loop over robots
+for m = [2,4,8,16,32,64]   
+    A_full  = ones(m) - eye(m);
+    A       = A_full;
+    fig     = figure('color','w');
     % Coupling
-% gamma = 1*0.005;
-    gamma = -1*0.01;
-    r     = double(gamma==0) + double(gamma~=0)*m;
+    % gamma = 1*0.005;
+    gamma   = -1*0.01;
+    r       = double(gamma==0) + double(gamma~=0)*m;
+    c_jk_cl = zeros(N_Z, N_K);
+    % Loop over clusters
     for k = 1:N_K
         disp(['Cluster ',num2str(k),' -------------------------'])
         subplot(1,N_K,k)
         beta_k = (k-1)/N_K;
+        % Loop over skills
         for N_zeta = 0:N_Z/m-1    
             j        = N_zeta+1;
             bsigma_0 = (1- beta_k)*g(delta, r*N_zeta).*ones(m,1);
@@ -278,64 +280,68 @@ for m=32%[2,4,8,16,32,64]
     fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
     pause(1)
     tightfig(fig);
-    c_jk_cl_episodes(iter,:) = [sum(c_jk_cl,1), sum(c_jk_cl,'all')] ;
+    c_jk_cl_episodes(entry,:) = [sum(c_jk_cl,1), sum(c_jk_cl,'all')] ;
+    entry                     = entry + 1; 
 end
 %% Alternative robot distribution: EQUAL robots per cluster
 close all
 clear c_jk_cl_dist_episodes
-iter = 0;
+entry = 1;
+% Loop over robots
 for m=[4,8,16,32,64]
     iter = iter+1; 
     A_full= ones(m) - eye(m);
     A     = A_full;
-% Inter cluster scaling matrix
-beta_k = 1/N_K;
-B      = beta_k*A;
+    % Inter cluster scaling matrix
+    beta_k = 1/N_K;
+    B      = beta_k*A;
+    
+    % Robots concurrently exchanging knowledge
+    r = m;
+    
+    clc
 
-% Robots concurrently exchanging knowledge
-r = m;
-
-clc
-for i=1:N_K
-   B((m/N_K)*(i-1) + 1:(m/N_K)*i,(m/N_K)*(i-1) + 1:(m/N_K)*i) = ones(m/N_K) - eye(m/N_K);
-end
-B = triu(B) + transpose(triu(B));
-
-fig = figure('color','w');
-c_jk_cl_dist  = zeros(N_S/m, 1);%zeros(N_Z, N_K);
-gamma    = -0.01;%*(-(a)/max(eig(abs(A))));
-r        = double(gamma==0) + double(gamma~=0)*m;
-for k = 1:(N_S/m)  
-    disp(['Batch ',num2str(k),' -------------------------'])
-%     subplot(2,N_K,k)        
-    N_zeta   = k-1;
-    bsigma_0 = (1- beta_k)*g(delta, r*N_zeta).*ones(m,1);
-    a        = -alpha*f(eta, r*N_zeta);%*(1- beta_k)^(-1);
-    F        = a*eye(m) + gamma*A.*B;
-    lambda_F = eig(F);
-    bsigma   = transpose(ode4(@(n,bsigma) F*bsigma, n, bsigma_0));
-    c_jk_cl_dist(k) = n(min(find(bsigma(1,:)<epsilon)));
-    disp(lambda_F)        
-    semilogy(n,bsigma,'LineWidth',2)
-    xlim([0 n(end)])
-    ylim([1E-3 1E0])
-    xticks([0 50 100])
-    xticklabels({'0','', '$c_0$'})
-    yticks([1E-50 1E-2 1E-1 1E0])
-    yticklabels({'','$\epsilon$', '', '1'})
-    set(gca,'TickLabelInterpreter','latex')
-    hold on
-end
-
-p = area(n,  epsilon*ones(numel(n),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
-plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
-% title(['$\mathcal{Z}_{',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
-xlabel('n','FontSize',25)
-ylabel(['$\bar{\boldmath{\sigma}}^{(C)}_{j,k}$'],'FontSize',25,'Interpreter','latex')
-fcn_scrpt_prepare_graph_science_std(fig, gca, [], [], [], 18/2, 3, 1)
-pause(1)
-tightfig(fig);
-c_jk_cl_dist_episodes(iter) = sum(c_jk_cl_dist);
+    for i=1:N_K
+       B((m/N_K)*(i-1) + 1:(m/N_K)*i,(m/N_K)*(i-1) + 1:(m/N_K)*i) = ones(m/N_K) - eye(m/N_K);
+    end
+    B = triu(B) + transpose(triu(B));
+    
+    fig = figure('color','w');
+    c_jk_cl_dist  = zeros(N_S/m, 1);%zeros(N_Z, N_K);
+    gamma    = -0.01;%*(-(a)/max(eig(abs(A))));
+    r        = double(gamma==0) + double(gamma~=0)*m;
+    
+    for k = 1:(N_S/m)  
+        disp(['Batch ',num2str(k),' -------------------------'])
+    %     subplot(2,N_K,k)        
+        N_zeta   = k-1;
+        bsigma_0 = (1- beta_k)*g(delta, r*N_zeta).*ones(m,1);
+        a        = -alpha*f(eta, r*N_zeta);%*(1- beta_k)^(-1);
+        F        = a*eye(m) + gamma*A.*B;
+        lambda_F = eig(F);
+        bsigma   = transpose(ode4(@(n,bsigma) F*bsigma, n, bsigma_0));
+        c_jk_cl_dist(k) = n(min(find(bsigma(1,:)<epsilon)));
+        disp(lambda_F)        
+        semilogy(n,bsigma,'LineWidth',2)
+        xlim([0 n(end)])
+        ylim([1E-3 1E0])
+        xticks([0 50 100])
+        xticklabels({'0','', '$c_0$'})
+        yticks([1E-50 1E-2 1E-1 1E0])
+        yticklabels({'','$\epsilon$', '', '1'})
+        set(gca,'TickLabelInterpreter','latex')
+        hold on
+    end
+    
+    p = area(n,  epsilon*ones(numel(n),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
+    plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
+    % title(['$\mathcal{Z}_{',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+    xlabel('n','FontSize',25)
+    ylabel(['$\bar{\boldmath{\sigma}}^{(C)}_{j,k}$'],'FontSize',25,'Interpreter','latex')
+    fcn_scrpt_prepare_graph_science_std(fig, gca, [], [], [], 18/2, 3, 1)
+    pause(1)
+    tightfig(fig);
+    c_jk_cl_dist_episodes(iter) = sum(c_jk_cl_dist);
 end
 % % Inter cluster scaling matrix
 % beta_k = 1/N_K;
@@ -377,19 +383,24 @@ end
 %%
 close all
 fig = figure('color','w');
-p1 = semilogy([2,4,8,16,32,64],c_jk_il_episodes(:,end),'o-');
+p0 = semilogy([2,4,8,16,32,64],c_jk_iso_episodes(:,end),'o-');
 hold on
+p1 = plot([2,4,8,16,32,64],c_jk_il_episodes(:,end),'o-');
 p2 = plot([2,4,8,16,32,64],c_jk_itl_episodes(:,end),'o-');
 p3 = plot([2,4,8,16,32,64],c_jk_cl_episodes(:,end),'o-');
 p4 = plot([4,8,16,32,64],c_jk_cl_dist_episodes,'o-');
+plot(32*ones(size(1E1:100:1E5)),1E1:100:1E5,'k--','LineWidth',3)
 xticks([2,4,8,16,32,64])
 xlabel('Number of robots','FontSize',25)
 ylabel('Total episodes','FontSize',25,'Interpreter','latex')
-leg = legend('IL','ITL','CL-1','CL-2');
-fcn_scrpt_prepare_graph_science_std(fig, gca, [p1, p2, p3, p4], leg, [], 18/2, 3, 1)
+leg = legend('IsL','IL','TIL','CL','CL2');
+fcn_scrpt_prepare_graph_science_std(fig, gca, [p0, p1, p2, p3, p4], leg, [], 18/2, 3, 1)
+leg.Location = 'northeast';
+leg.Box = 'on';
 fig = gcf;           % generate a figure
 tightfig(fig);
 pause(1)
+%%
 fig.Units = 'centimeters';        % set figure units to cm
 % f.Position = [1203 646 478 174];
 fig.PaperUnits = 'centimeters';   % set pdf printing paper units to cm
