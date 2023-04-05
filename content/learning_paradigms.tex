@@ -277,7 +277,7 @@ Suppose that a batch of $m$ robots is used to learn the same number of skills in
 % ---
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Incremental Learning (IL)}}
-\textcolor{red}{It corresponds to the continuous aggregation and exchange of knowledge from \textbf{INTRA-cluster} skills.} Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$ ---the self loops--- but also passes the acquired knowledge to the subsequent skills. The effect of incremental learning on the knowledge collection rate can be modeled to be directly proportional to the number of learned skills as
+It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$ ---the self loops--- but also passes the acquired knowledge to the subsequent skills. The effect of incremental learning on the knowledge collection rate can be modeled to be directly proportional to the number of learned skills as
 % ---
 \begin{equation}\label{eq:f_function_incremental}
 	f_{j,k}\left(N_{\zeta_k}\right) = -\alpha\left(\eta N_{\zeta_k} + 1 \right), 
@@ -336,7 +336,7 @@ If $m$ robots are used in parallel to divide the load of learning the tasks then
 In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems without adding any additional benefit to the rate at which knowledge is acquired. 
 
 \subsubsection{\textbf{Transfer + Incremental Learning (TIL)}}
-\textcolor{red}{Transfer learning (TL) alone refers to the one-time \textbf{INTER-cluster} exchange of knowledge}. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$; i.e.
+Transfer learning (TL) alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$; i.e.
 % ---
 \begin{equation}\label{eq:f_function_transfer}
 	f_{j,k}\left(N_{\zeta_k}\right) = -\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right),
@@ -471,65 +471,6 @@ Some considerations need to be taken when selecting the value of $\gamma$ given 
 exhibits a dependency of  on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective. Yet, it can be proven that there is a coupling strength $\gamma$ for a given connectivity $\bm{A}$ that ensures that the remaining knowledge for all skills converges asymptotically to zero.
 
 \TODO \textcolor{red}{is there an approximation of the convergence rate of all the skills?}
-
-% ===================================================================================================
-
-%\subsection{Summary}
-%
-%The equation for incremental learning is equivalent to \eqref{eq:knowledge_exponential_form} with $r=1$ since no inter-agent exchange of knowledge occurs and $\beta_k = 0$,¸ as knowledge from other cluster cannot be used.
-% ---
-%\begin{figure*}[!th]
-%	\centering
-%	\includegraphics[width=0.95\textwidth]{fig/cluster_learning_sequence.pdf}
-%	\caption{The sequence followed to learn the clusters.}
-%	\label{fig:cluster_learning_sequence}
-%\end{figure*}
-% ---
-%---
-\begin{figure*}[!t]
-	\centering
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.99\columnwidth]{fig/cluster_learning_sequence.pdf} \label{fig:cluster_learning_sequence}}
-	\hspace*{\fill}
-	\\	
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.99\columnwidth]{fig/dynamics_isolated_learning.pdf} \label{fig:dynamics_isolated_learning}}  
-	\hspace*{\fill}
-	\\	
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.99\columnwidth]{fig/dynamics_incremental_learning.pdf} \label{fig:dynamics_incremental_learning}}  
-	\hspace*{\fill}	
-	\\
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.99\columnwidth]{fig/dynamics_incremental_transfer_learning.pdf} \label{fig:dynamics_incremental_transfer_learning}}  
-	\hspace*{\fill}
-	\\
-	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.99\columnwidth]{fig/dynamics_collective_learning.pdf} \label{fig:dynamics_collective_learning}}
-	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning} Scenario 1: \subref{fig:cluster_learning_sequence} the skills of each cluster are learned by the $ m$ robots in succession, \subref{fig:dynamics_isolated_learning} isolated learning,  \subref{fig:dynamics_incremental_learning} incremental learning,  \subref{fig:dynamics_incremental_transfer_learning} incremental + transfer learning, \subref{fig:dynamics_collective_learning} collective learning.}
-\end{figure*}
-% ---
-\subsection{The effects of the different paradigms}
-To show the effect that the different learning paradigms has on energy consumption, consider a scenario in which $N_\mathcal{S}= 512$  skills are divided into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. Additionally, consider that $m=32$ robots are available to learn the skills and that a skill is considered learned once the remaining knowledge goes below $\epsilon = 0.01$. Furthermore, the skill fundamental complexity is $c_0=100$ episodes. In this scenario the robots are used to learn in parallel the skills of each cluster in succession, as shown in Fig.~\ref{fig:cluster_learning_sequence}. The remaining parameters are selected as follows:
-% ---
-\begin{itemize}
-	\item $\alpha =  0.0461$ (in accordance to \eqref{eq:isolated_learning_rate})
-	\item $\delta =  0.0360$ (see \eqref{eq:delta})
-	\item $\eta= 0.1$
-\end{itemize} 
-% ---
-The remaining knowledge for the four skills learned per robot are shown in Fig.~\ref{fig:collective_learning} in logarithmic scale. Notice that as expected, isolated exhibits the worst performance, always requiring $c_0$ episodes to learn every single skill. Since incremental learning does not benefit from the knowledge from the previously visited clusters, the robot needs to start accumulating knowledge from the beginning every time it moves to a different cluster. This is not the case in transfer learning, as the more clusters the robot has visited the faster a new skill is learned. The speed of knowledge collection is clearly exponentiated with collective learning thanks to the exchange of knowledge among robots. In comparison to the other learning paradigms, with CL the skills are learned within a few trial episodes in every cluster. 
-
-To assess how the number of robots affects the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills we use the same parameters as before but vary the number of robots in $m \in \left \lbrace 2,4,8,16,32,64\right \rbrace$. Moreover, we considered an additional collective learning scenario in which, unlike the previous case, the total number of available robots is distributed equally among the clusters to benefit from transfer learning at an earlier time during learning. The results are shown in Fig.~\ref{fig:total_episodes_per_n_robots}. From it, it can be seen that, at first, incremental learning is better than the trivial isolated learning case; however, as the number or robots increases, the skill knowledge is divided among the available robots which implies that less knowledge can be passed as the pool of learned sills $\zeta_k$ per robot gets smaller. This explains why the total number of trial episodes for IsL and IL approach each other in the limit. TIL exhibits a similar behavior, as the number of robots grows less cluster knowledge can be collected by each robot and transferred to the next cluster. Indeed, TIL rapidly converges to IL and eventually to IsL. Clearly, neither of the CL versions experiences this a problem
-% ---
-\begin{figure}[!th]
-	\centering
-	\includegraphics[width=0.9\columnwidth]{fig/total_episodes_per_n_robots.pdf}
-	\caption{Total number of episodes to learn the universe of skills as a function of the available robots.}
-	\label{fig:total_episodes_per_n_robots}
-\end{figure}
-% ---
 
 
 
