@@ -430,9 +430,6 @@
   year      = {2020},
 }
 
-@Article{,
-}
-
 @InProceedings{Pirani2014Stabilitydynamicalsystems,
   author       = {Pirani, Mohammad and Costa, Thilan and Sundaram, Shreyas},
   booktitle    = {53rd IEEE Conference on Decision and Control},
@@ -440,6 +437,26 @@
   year         = {2014},
   organization = {IEEE},
   pages        = {613--618},
+}
+
+@Article{Lehdonvirta2022futuresunpaidwork,
+  author   = {V. Lehdonvirta and Lulu P. Shi and E. Hertog and N. Nagase and Yuji Ohta},
+  title    = {The future(s) of unpaid work: How susceptible do experts from different backgrounds think the domestic sphere is to automation?},
+  year     = {2022},
+  abstract = {The future of work has become a prominent topic for research and policy debate. However, the debate has focused entirely on paid work, even though people in industrialized countries on average spend comparable amounts of time on unpaid work. The objectives of this study are therefore (1) to expand the future of work debate to unpaid domestic work and (2) to critique the main methodology used in previous studies. To these ends, we conducted a forecasting exercise in which 65 AI experts from the UK and Japan estimated how automatable are 17 housework and care work tasks. Unlike previous studies, we applied a sociological approach that considers how experts’ diverse backgrounds might shape their estimates. On average our experts predicted that 39 percent of the time spent on a domestic task will be automatable within ten years. Japanese male experts were notably pessimistic about the potentials of domestic automation, a result we interpret through gender disparities in the Japanese household. Our contributions are providing the first quantitative estimates concerning the future of unpaid work and demonstrating how such predictions are socially contingent, with implications to forecasting methodology.},
+  doi      = {10.1371/journal.pone.0281282},
+  pmid     = {36812184},
+  url      = {https://www.semanticscholar.org/paper/5be59982bbf6639d4857a0019fa4d3eaf418d0e9},
+  venue    = {PLoS ONE},
+}
+
+@InProceedings{Chebotar2019Closingsimreal,
+  author       = {Chebotar, Yevgen and Handa, Ankur and Makoviychuk, Viktor and Macklin, Miles and Issac, Jan and Ratliff, Nathan and Fox, Dieter},
+  booktitle    = {2019 International Conference on Robotics and Automation (ICRA)},
+  title        = {Closing the sim-to-real loop: Adapting simulation randomization with real world experience},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {8973--8979},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
