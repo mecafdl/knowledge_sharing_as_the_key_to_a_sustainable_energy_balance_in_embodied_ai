@@ -36,13 +36,13 @@ To simplify the analysis consider the following conservative assumption
 % ---
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Energy requirement}}
-Under Asm.~\ref{assumption:time}, the energy consumption of the $n$-th episode $e_j(n)$ is simply
+Under Asm.~\ref{assumption:time}, the energy consumption of the $n$-th episode $e_j(n)$ becomes simply
 % ---
 \begin{equation}\label{eq:energy_per_episode}
     e_j(n) = \underbrace{P_0\cdot \Delta t}_{\text{constant}} = e_0.
 \end{equation}
 % ---
-Consequently, the energy consumed by a robot learning the skill $ s_j $ is directly proportional to the complexity; i.e.
+Consequently, the energy consumed by a robot learning the skill $ s_j $ is directly proportional to the skills complexity; i.e.
 % ---
 \begin{equation}\label{eq:energy_per_skill}
     E_j =\sum_{n=1}^{c_j} e_j(n) = e_0 \cdot c_j.
@@ -73,7 +73,7 @@ As a consequence of Asm.~\ref{assumption:time} and \eqref{eq:energy_per_skill}, 
 \subsection{Similarity and knowledge}
 %---
 \begin{tcolorbox}
-	\begin{assumption}\label{assumption:skill_clustering} If the degree of similarity among a set of skills is comparable, the exchange of acquired knowledge from these skills expedites the overall learning process.
+	\begin{assumption}\label{assumption:skill_clustering} If the similarity among a set of skills is significant, the exchange of acquired knowledge from these skills expedites the overall learning process.
 		\end{assumption}
 \end{tcolorbox}
 % ---
@@ -104,7 +104,7 @@ If, in learning a skill $ s_{j,k} $, a robot uses the knowledge contained in $\m
 	\item Knowledge acquisition is accelerated
 \end{enumerate}
 %associated complexity $ c_{j,k} $ is necessarily smaller than the fundamental complexity $c_{0}$; i.e. $c_{j,k} < c_0~\forall j>1$.
-This implies that the remaining knowledge scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$. As a consequence, the complexity $c_{j,k}$ of said skill is smaller than the the fundamental complexity $c_0$.%, as exemplified in Fig.~\ref{fig:complexity_per_cardinality}. 
+This implies that the remaining knowledge scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$. As a consequence, the complexity $c_{j,k}$ of said skill is smaller than the fundamental complexity $c_0$.%, as exemplified in Fig.~\ref{fig:complexity_per_cardinality}. 
 
 The effects of knowledge exchange lead us to introduce another assumption.
 % ---
@@ -122,7 +122,7 @@ The effects of knowledge exchange lead us to introduce another assumption.
 %		\bar{\sigma}_{j,k}(0) &= g\left(N_{\zeta_k}\right)
 %	\end{alignat}
 %\end{subequations}
-An idealization of these behavior can be modeled via the linear homogeneous differential equation.
+An idealization of this behavior can be modeled via the linear homogeneous differential equation.
 \begin{tcolorbox}
 	\begin{definition}\label{assumption:ode_model}
 		The remaining knowledge function $\bar{\sigma}_{j,k}$ is a modeled as a first order linear differential equation defined as
@@ -141,17 +141,17 @@ This model is a function of the trial episodes $n$ and is parameterized by the n
 	\boxed{\bar{\sigma}_{j,k}(n) = g_{j,k}\left(N_{\zeta_k}\right) e ^{-f_{j,k}\left(N_{\zeta_k}\right) n} \in (0,1]}
 \end{equation}
 % ---
-and meets the desired behavior in Asm.~\ref{assumption:exponential_decrease},¨ see Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}, r\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, i.e. the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta}\right)$, which is also dependent on the number of learned skills.
+and meets the desired behavior in Asm.~\ref{assumption:exponential_decrease}, see Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}, r\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, i.e. the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta}\right)$, which is also dependent on the number of learned skills.
 % ---
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=0.95\columnwidth]{fig/knowledge_idealization.pdf}
-	\caption{Remaining knowledge to learn a new skill $s_{j,k}$. The learning threshold $\epsilon$ represents when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.}
+	\caption{Remaining knowledge to learn a new skill $s_{j,k}$. The learning threshold $\epsilon$ indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.}
 	\label{fig:knowledge_idealization}
 \end{figure}
 % ---
 % ===================================================================================================
-\subsection{Knowledge sharing under different learning paradigms}
+\subsection{Knowledge sharing and transfer under different learning paradigms}
 %The following assumptions are analogous to average behavior and imply that a suitable scaling strategy is available and executed.
 The following assumptions are analogous to an average behavior that stems from considering comparable EAI agents and a balanced ordering and segregation of the skills in $\mathcal{S}$ according to their similarity.
 % ---
@@ -289,7 +289,7 @@ where $\eta>0$ represents the efficiency of knowledge exchange from $\zeta_k$ to
 	g_{j,k}\left(N_{\zeta_k}\right) = e^{-\delta N_{\zeta_k}},
 \end{equation}
 %---
-again with a term $\delta>0$ controlling the rate at which the exponential converges. Similar to $\alpha$, using Asm.~\ref{assumption:cluster_size} $\delta$ can be defined as 
+again with a factor $\delta>0$ controlling the rate at which the exponential converges. Similar to $\alpha$, using Asm.~\ref{assumption:cluster_size} $\delta$ can be defined as 
 % ---
 \begin{equation}\label{eq:delta}
 	\delta = -\frac{1}{N_\mathcal{Z}}\text{log}(\epsilon).
@@ -415,8 +415,6 @@ To formalize this idea, let $ \left\lbrace \rho_i \right\rbrace_{i=1}^{m} $ be a
 Collective learning contrasts with the previously discussed incremental learning in that a single agent $ r_i $ can aggregate only so much knowledge via trial and error and is limited by a sequential learning structure. Learning collectively, on the other hand, enforces parallelization of knowledge acquisition via the concurrent learning and sharing of all agents as they acquire new skills, knowledge. Moreover, collective learning involves not only the information acquisition, but also how this information is brought to use to form and develop knowledge. 
 
 Collective learning is not only a promising research direction but, in our opinion, has the potential to be a unifying solution to the grand the challenges posed by embodied AI. By incorporating new mechanical designs as agents in the learning pipeline it is possible to iteratively evaluate the energy efficiency of proposed solutions and select the best ones as reference designs for future manufacturing processes, therefore, promoting a cyclical optimization towards a semi-optimal general design.
-
-
 % ---
 \begin{figure}[!th]
 	\centering
@@ -425,14 +423,14 @@ Collective learning is not only a promising research direction but, in our opini
 	\label{fig:cl_example_figure}
 \end{figure}
 % ---
-Unlike isolated and transfer learning, in this paradigm a batch of robots $\left \lbrace r_i \right \rbrace^m_{1}$ not only learn different skills concurrently but also exchange the acquired knowledge between each other. To enable collective learning, it is assumed that
+Unlike isolated and transfer learning, in this paradigm a batch of robots $\left \lbrace r_i \right \rbrace^m_{1}$ not only learn different skills concurrently but also exchange the acquired knowledge between each other and are actually able to leverage it. To enable collective learning, it is assumed that
 \begin{itemize}
 	\item an inter-agent communication protocol/infrastructure is in place that
 	\item enables agents to concurrently exchange and integrate the self-acquired and received knowledge to
 	\item incrementally speed up the learning of all the agents as a whole.
 \end{itemize}
 % ---
-Naturally, the collective learning paradigm involves a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge sharing strategy. Since we have not tackled this problem yet, we ground the subsequent discussion on Assumptions~\ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability} that suggest an average behavior.
+As a result, the intra- and inter-cluster knowledge transfer is possible. Naturally, the collective learning paradigm involves a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge sharing strategy. Since we have not tackled this problem yet, we ground the subsequent discussion on Assumptions~\ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability} that suggest an average behavior.
 
 Fig.~\ref{fig:cl_example_figure} illustrates the CL concept, where the self loop represents the dynamics of a single robot learning (at a rate $\alpha$). The exchange of knowledge across agents is represented via the cross-couplings weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is. Similar to transfer learning, if two robots exchange knowledge about skills with low similarity (i.e. skills in different clusters), then $\gamma$ is scaled by the inter-cluster transferability  parameter $\beta$. In CL \eqref{eq:simple_knowledge_dynamics} is extended to 
 % ---
@@ -443,14 +441,14 @@ Fig.~\ref{fig:cl_example_figure} illustrates the CL concept, where the self loop
 	\end{alignat}
 \end{subequations}
 % ---
-where $r=m$ is the number of robots that exchange knowledge among them. This implies that now $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ is a vector that represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $i$ exchanges knowledge with robot $j$ an $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Furthermore, since there may be robots learning skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, \beta_{k} \right \rbrace$, with
+where $r=m$ is the number of robots that exchange knowledge among them. This implies that now $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ is a vector that represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $i$ exchanges knowledge with robot $j$ and $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Furthermore, since there may be robots learning skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, \beta_{k} \right \rbrace$, with
 % ---
 \begin{equation}
 	%\beta_{k} = 1/N_\mathcal{K}, 
 	\beta_{k} = r\frac{ N_\zeta}{N_\mathcal{S}}, 
 \end{equation}
 % ---
-scale down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ f(\cdot)$ and $g(\cdot)$ are now also dependent on the number of robots that exchange knowledge, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle; i.e.
+scales down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ f(\cdot)$ and $g(\cdot)$ are now also dependent on the number of robots that exchange knowledge, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle; i.e.
 % ---
 \begin{equation}\label{eq:f_function_collective}
 	f_{j,k}\left(N_{\zeta_k},r\right) = -\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right),
@@ -468,7 +466,7 @@ Some considerations need to be taken when selecting the value of $\gamma$ given 
 	\bar{\bm{A}}\left(N_{\zeta_k}\right) = f\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B} 
 \end{equation} 
 % ---
-exhibits a dependency of  on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective. Yet, it can be proven that there is a coupling strength $\gamma$ for a given connectivity $\bm{A}$ that ensures that the remaining knowledge for all skills converges asymptotically to zero.
+exhibits a dependency on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective. Yet, it can be proven that there is a coupling strength $\gamma$ for a given connectivity $\bm{A}$ that ensures that the remaining knowledge for all skills converges asymptotically to zero.
 
 \TODO \textcolor{red}{is there an approximation of the convergence rate of all the skills?}
 

@@ -32,7 +32,7 @@ The power in \eqref{eq:energy_per_episode} is composed by the sum of the power r
     P_0 = P_{BEE}+P_{MIE} + P_{CCE}.
 \end{equation}
 % ---
-To choose $P_{BEE}$, we consider that the smart factory will be populated with state-of-the-art cobots, like the Franka Emika Panda, which requires a typical power of about $\unit[72]{W}$. To approximate $P_{MIE}$, we use the fact that, in demanding tasks, the power demand of the cobot can go up to a maximum of about $ \unit[300] {W} $. Finally, to determine $P_{CCE}$, we make the assumption that, to deal with the computing effort that learning new skills will have on the robots' local processors, the smart factory will delegate the computational burden to a remote computing unit (i.e. cloud computing). Thus, we take as reference the work in \cite{Strubell2019EnergyAP}, where a state-of-the-art machine learning algorithm executed in a cluster required $\unit[1,415.78]{W}$ to solve a task. Additionally, without loss of generality, we can assume that each trial episode takes $\Delta t = 60$ seconds to execute. Using these reference values, we can estimate that, when learning a skill, a trial episode has en energetic demand of:
+To choose $P_{BEE}$, we consider that the smart factory will be populated with state-of-the-art tactile robots, like the Franka Emika Robot, which requires a typical power of about $\unit[72]{W}$. To approximate $P_{MIE}$, we use the fact that, in demanding tasks, the power demand of the system can go up to a maximum of about $ \unit[300] {W} $. Finally, to determine $P_{CCE}$, we make the assumption that, to deal with the computing effort that learning new skills will have on the robots' local processors, the smart factory will delegate the computational burden to a remote computing unit (i.e. cloud computing). Thus, we take as reference the work in \cite{Strubell2019EnergyAP}, where a state-of-the-art machine learning algorithm executed in a cluster required $\unit[1,415.78]{W}$ to solve a task. Additionally, without loss of generality, we can assume that each trial episode takes $\Delta t = 60$ seconds to execute. Using these reference values, we can estimate that, when learning a skill, a trial episode has en energetic demand of:
 % ---
 \begin{equation}
 	e_0 = P_0 \Delta t = \left(70 + 300 + 1,415.78\right) \left(60\right) \approx 105~\text{kJ}
@@ -113,7 +113,7 @@ To assess how the number $m$ of robots affects the total number of trial episode
 
 % SUBSECTION ========================================================================================
 \subsection{Energy consumption}
-Consider that the results in \ref{fig:total_episodes_per_n_robots} shows the total number of episodes required by each of the $m$ robots. To compute the total energy demand those numbers need to be scaled by the factor $m e_0$, which leads to the consumption shown in Fig.~\ref{fig:total_energy_per_n_robots}.
+Consider that the results in Fig.~\ref{fig:total_episodes_per_n_robots} shows the total number of episodes required by each of the $m$ robots. To compute the total energy demand those numbers need to be scaled by the factor $m e_0$, which leads to the consumption shown in Fig.~\ref{fig:total_energy_per_n_robots}.
 % ---
 %\begin{figure}[!th]
 %	\centering

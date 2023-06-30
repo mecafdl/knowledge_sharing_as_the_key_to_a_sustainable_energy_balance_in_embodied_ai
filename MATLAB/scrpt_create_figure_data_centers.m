@@ -1,5 +1,12 @@
 close all
 clc
+clearvars
+
+cd(fileparts(matlab.desktop.editor.getActiveFilename));
+load('robot_plots_embodied_ai_paper.mat')
+%%
+close all
+clc
 
 clear fig ax plt leg
 
@@ -26,7 +33,7 @@ leg.Orientation = 'horizontal';
 % set(plt,'LineWidth',3)
    
 % Figure storage
-SAVE_FIG = 1;
+SAVE_FIG = 0;
 if SAVE_FIG == 1
     export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\data_center_energy_consumption','-pdf')
     close(gcf);
@@ -50,7 +57,7 @@ plt2 =  plot(irOpStock(:,1),irOpStock(:,3),'k--');
 plt3 =  plot(irOpStock(:,1),irOpStock(:,4),'k:');
 plt  = [plt1,plt2,plt3];
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('Operational stock [x$10^6$]','interpreter','Latex','FontSize', 20);
+ylabel('Units/Year [x$10^6$]','interpreter','Latex','FontSize', 20);
 leg = legend('Actual','12\%','25\%', 'FontSize', 20);
 set(leg,'Interpreter','latex')
 xlim([2009 2025])
@@ -63,10 +70,11 @@ leg.Orientation = 'horizontal';
 % set(plt,'LineWidth',3)
    
 % Figure storage
-SAVE_FIG = 1;
+SAVE_FIG = 0;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\ir_units_projections','-pdf')
-    close(gcf);
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\ir_units_projections','-pdf')
+    exportgraphics(fig,'./figures/ir_units_projections.pdf','Resolution',300)
+    close(fig);
 end    
 %% Energy projections for industrial robots
 clc
@@ -83,7 +91,7 @@ plt2 =  plot(irEnDemand(:,1),irEnDemand(:,3),'k--');
 plt3 =  plot(irEnDemand(:,1),irEnDemand(:,4),'k:');
 plt  = [plt1,plt2,plt3];
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('Energy [$PJ$] (24/7)','interpreter','Latex','FontSize', 20);
+ylabel('$PJ$/Year @ (24/7)','interpreter','Latex','FontSize', 20);
 leg = legend('Actual','12\%/year','25\%/year', 'FontSize', 20);
 set(leg,'Interpreter','latex')
 xlim([2009 2025])
@@ -96,10 +104,11 @@ leg.Orientation = 'horizontal';
 % set(plt,'LineWidth',3)
    
 % Figure storage
-SAVE_FIG = 0;
+SAVE_FIG = 1;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\ir_energy_projections','-pdf')
-    close(gcf);
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\ir_energy_projections','-pdf')
+    exportgraphics(fig,'./figures/ir_energy_projections.pdf','Resolution',300)
+    close(fig);
 end    
 
 %% ************************************************************************
@@ -118,7 +127,7 @@ plt1 =  plot(cbOpStock(1:5,1),cbOpStock(1:5,2)/1000,'k-');
 plt2 =  plot(cbOpStock(5:end,1),cbOpStock(5:end,2)/1000,'k--');
 plt  = [plt1,plt2];
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('Operational stock [x$10^3$]','interpreter','Latex','FontSize', 20);
+ylabel('Units/Year [x$10^3$]','interpreter','Latex','FontSize', 20);
 leg = legend('Reported','Projected', 'FontSize', 20);
 set(leg,'Interpreter','latex')
 
@@ -131,10 +140,11 @@ leg.Orientation = 'horizontal';
 % set(plt,'LineWidth',3)
    
 % Figure storage
-SAVE_FIG = 1;
+SAVE_FIG = 0;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_units_projections','-pdf')
-    close(gcf);
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_units_projections','-pdf')
+    exportgraphics(fig,'./figures/cb_units_projections.pdf','Resolution',300)
+    close(fig);
 end 
 
 
@@ -161,23 +171,25 @@ leg.Orientation = 'horizontal';
 % Figure storage
 SAVE_FIG = 0;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_sales_projections','-pdf')
-    close(gcf);
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_sales_projections','-pdf')
+    exportgraphics(fig,'./figures/cb_sales_projections.pdf','Resolution',300)
+    close(fig);
 end 
 %% Energy projections for cobots
+% *NOTE: Assumed power 20 kW
+
 clc
 close all 
 
 fig = figure(1);
 ax  = gca;
 hold on
-% plt =  bar(cb_energy(:,1),cb_energy(:,2:3));
+
+cbEnDemand = cb_energy(2:end,1);
+cbEnDemand = [cbEnDemand, 2*1000*3600*24*365*cbOpStock(:,2)*1E-15];
 plt =  plot(cbEnDemand(:,1),cbEnDemand(:,2),'k--');
-% plt2 =  plot(data(1,:),data(3,:),'k-');
-% plt3 =  plot(data(1,:),data(4,:),'k:');
-% plt  = [plt1,plt2,plt3];
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('Energy [$PJ$] (24/7)','interpreter','Latex','FontSize', 20);
+ylabel('$PJ$/Year @ (24/7)','interpreter','Latex','FontSize', 20);
 % leg = legend('60\%/year','80\%/year', 'FontSize', 20);
 leg = legend('Estimate', 'FontSize', 20);
 set(leg,'Interpreter','latex')
@@ -193,7 +205,8 @@ leg.Orientation = 'horizontal';
 % Figure storage
 SAVE_FIG = 1;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_energy_projections','-pdf')
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_energy_projections','-pdf')
+    exportgraphics(fig,'./figures/cb_energy_projections.pdf','Resolution',300)
     close(gcf);
 end
 
