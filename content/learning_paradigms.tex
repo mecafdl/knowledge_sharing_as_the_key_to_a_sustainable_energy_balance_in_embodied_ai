@@ -109,7 +109,7 @@ This implies that the remaining knowledge scales down as a function of the numbe
 The effects of knowledge exchange lead us to introduce another assumption.
 % ---
 \begin{tcolorbox}
-	\begin{assumption}\label{assumption:exponential_decrease} The knowledge function $\bar{\sigma}_{j,k}(\cdot)$ has a monotonically decreasing behavior.
+	\begin{assumption}\label{assumption:exponential_decrease} The remaining knowledge function $\bar{\sigma}_{j,k}(\cdot)$ has a monotonically decreasing behavior.
 	\end{assumption}
 \end{tcolorbox} 
 % ---
@@ -153,34 +153,44 @@ and meets the desired behavior in Asm.~\ref{assumption:exponential_decrease}, se
 % ===================================================================================================
 \subsection{Knowledge sharing and transfer under different learning paradigms}
 %The following assumptions are analogous to average behavior and imply that a suitable scaling strategy is available and executed.
-The following assumptions are analogous to an average behavior that stems from considering comparable EAI agents and a balanced ordering and segregation of the skills in $\mathcal{S}$ according to their similarity.
+%Before tacking the different learning schemes let us define the idealized reference system in which a large number of robots coexists learning a large number of skills.
+
+For the upcoming analysis we consider an idealized reference system in which a large number of robots coexist learning a large number of skills. Such system exhibits
 % ---
 \begin{tcolorbox}
-	\begin{assumption}\label{assumption:agent_similarity}
-		Every agent has the same capabilities and energetic cost.
+	\begin{assumption}\label{assumption:average_behavior}
+		An average behavior that results from comparable EAI agents learning and executing the skills in $\mathcal{S}$ ordered and segregated according to their similarity.
 	\end{assumption}
 \end{tcolorbox}
-% %---
-% \begin{tcolorbox}
-% 	\begin{assumption}\label{assumption:skill_clustering} When the degree of similarity among a set of skills is comparable, they can be clustered together.
-% 		\end{assumption}
-% \end{tcolorbox}
-% % ---
+%---
+Each of the EAI agents in the system
+\begin{tcolorbox}
+	\begin{assumption}\label{assumption:agent_similarity}
+		Has the same capabilities with highly similar BEE and MIE expenditures.
+	\end{assumption}
+\end{tcolorbox}
+%---
+The large number of skills in $\mathcal{S}$ implies that
+% ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:cluster_size}
 		Every cluster $\mathcal{Z}_{k}$ contains the same number $N_{\mathcal{Z}} $ of skills.
 	\end{assumption}
 \end{tcolorbox}
 % ---
+By virtue of the optimal ordering of the skills and the balanced size of the clusters, is reasonable that
+% ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:cluster_transferability}
-		The knowledge transferability between skills ---modeled by \eqref{eq:f_function_incremental} and \eqref{eq:g_function_incremental}--- is assumed to be equal; as is transferability between skill clusters, see \eqref{eq:f_function_transfer} and \eqref{eq:g_function_transfer}.
+		The knowledge transferability between in-cluster skills ---modeled by \eqref{eq:f_function_incremental} and \eqref{eq:g_function_incremental}--- is assumed to be equal; as is transferability between clusters, see \eqref{eq:f_function_transfer} and \eqref{eq:g_function_transfer}.
 	\end{assumption}
 \end{tcolorbox}
-
+% ---
+Finally, the different learning paradigms that exploit the collected knowledge by the EAI agents rely on the fact that
+% ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:enabling_agorithms}
-		The different learning paradigms that exploit the knowledge collected by one or several EAI agents are reliant on the existence of advanced control and machine learning algorithms designed to inherently use this knowledge.
+	There are advanced control and machine learning algorithms designed to inherently use this knowledge.
 	\end{assumption}
 \end{tcolorbox}
 
@@ -400,10 +410,8 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{\textbf{Collective learning (CL)}}
-As mentioned in Sec.~\ref{sec:intro}, EAI agents will be a core element of the smart factory. Moreover, the communication and cloud processing of the smart factory and Industry 4.0 will be at the disposal of these systems and there will be legions of EAI agents performing/learning several different skills at any given time. It is immediately evident, that the above previous learning paradigms are not meant to exploit the communication infrastructure of the smart factory and would not take full advantage of the capability for concurrent knowledge exchange among the learning agents. Therefore, isolated, incremental, and transfer used by these legions of agents 
-would directly contribute to more computational demands (see \textbf{challenge 1}) Sec.~\ref{sec:robots_challenge}. In contrast, collective learning presents itself as the natural paradigm that exploits the full communication potential of the smart factory infrastructure and leverage all the real-time exchange of collected knowledge of all the networked EAI agents in a synergistic manner.
-
-
+As mentioned in Sec.~\ref{sec:intro}, EAI agents will be a core element of industrial, healthcare, and domestic ecosystems with advanced communication and remote processing capabilities. Given the anticipated legions of EAI agents executing/learning several different skills at any given time in those environments, it is immediately evident that the previous learning paradigms are not meant to exploit these large number of agents together with the advanced communication and processing infrastructure to take full advantage of the potential for concurrent knowledge exchange among the agents. Therefore, the use of isolated, incremental, and transfer learning by these many agents 
+would directly aggravate computational demand (see \textbf{challenge 1} in Sec.~\ref{sec:robots_challenge}). In contrast, collective learning is the natural paradigm that exploits the full communication potential of the networked EAI agents to leverage the real-time exchange of collected knowledge synergistically.
 
 To formalize this idea, let $ \left\lbrace \rho_i \right\rbrace_{i=1}^{m} $ be a set of robotic agents that defines a community of robots. In collective learning, the different robotic agents $ \rho_i $ develop and accumulate dynamically a common mind (body of knowledge) via networked interactions where individual experience, knowledge and skills are disseminated to all the other elements in the collective. Information flows vertically as previous knowledge is passed on, as well as horizontally by sharing concurrent experience between agents. Via these mechanisms, knowledge can be replicated, complimented and further developed. We take from \cite{Garavan2012CollectiveLearning} two notions central in collective learning that are applicable to the embodied AI agents:
 % ---
@@ -414,7 +422,7 @@ To formalize this idea, let $ \left\lbrace \rho_i \right\rbrace_{i=1}^{m} $ be a
 % ---
 Collective learning contrasts with the previously discussed incremental learning in that a single agent $ r_i $ can aggregate only so much knowledge via trial and error and is limited by a sequential learning structure. Learning collectively, on the other hand, enforces parallelization of knowledge acquisition via the concurrent learning and sharing of all agents as they acquire new skills, knowledge. Moreover, collective learning involves not only the information acquisition, but also how this information is brought to use to form and develop knowledge. 
 
-Collective learning is not only a promising research direction but, in our opinion, has the potential to be a unifying solution to the grand the challenges posed by embodied AI. By incorporating new mechanical designs as agents in the learning pipeline it is possible to iteratively evaluate the energy efficiency of proposed solutions and select the best ones as reference designs for future manufacturing processes, therefore, promoting a cyclical optimization towards a semi-optimal general design.
+CL is not only a promising research direction but, in our opinion, has the potential to be a unifying solution to the grand challenges posed by embodied AI. Furthermore, by incorporating new mechanical designs as elements of the learning pipeline it is possible to iteratively evaluate the energy efficiency of proposed solutions and select the best ones as reference designs for future manufacturing processes with underlying learning, therefore, promoting a cyclical optimization towards a semi-optimal general design.
 % ---
 \begin{figure}[!th]
 	\centering
@@ -423,14 +431,15 @@ Collective learning is not only a promising research direction but, in our opini
 	\label{fig:cl_example_figure}
 \end{figure}
 % ---
-Unlike isolated and transfer learning, in this paradigm a batch of robots $\left \lbrace r_i \right \rbrace^m_{1}$ not only learn different skills concurrently but also exchange the acquired knowledge between each other and are actually able to leverage it. To enable collective learning, it is assumed that
+
+Unlike isolated and transfer learning, in this paradigm a batch of robots $\left \lbrace r_i \right \rbrace^m_{1}$ not only learn different skills concurrently but also exchange the acquired knowledge between each other and are actually able to leverage it. To enable CL, it is assumed that
 \begin{itemize}
 	\item an inter-agent communication protocol/infrastructure is in place that
 	\item enables agents to concurrently exchange and integrate the self-acquired and received knowledge to
 	\item incrementally speed up the learning of all the agents as a whole.
 \end{itemize}
 % ---
-As a result, the intra- and inter-cluster knowledge transfer is possible. Naturally, the collective learning paradigm involves a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge sharing strategy. Since we have not tackled this problem yet, we ground the subsequent discussion on Assumptions~\ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability} that suggest an average behavior.
+As a result, the intra- and inter-cluster knowledge transfer is possible. Naturally, the CL paradigm involves a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge sharing strategy. Since we have not tackled this problem yet, we ground the subsequent discussion on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability} that suggest an average behavior given a suitable scheduling.
 
 Fig.~\ref{fig:cl_example_figure} illustrates the CL concept, where the self loop represents the dynamics of a single robot learning (at a rate $\alpha$). The exchange of knowledge across agents is represented via the cross-couplings weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is. Similar to transfer learning, if two robots exchange knowledge about skills with low similarity (i.e. skills in different clusters), then $\gamma$ is scaled by the inter-cluster transferability  parameter $\beta$. In CL \eqref{eq:simple_knowledge_dynamics} is extended to 
 % ---

@@ -10,16 +10,16 @@ Based on the energy expenditure categories introduced in Sec.~\ref{sec:intro}, w
 
 % SUBSECTION ========================================================================================
 \subsection{\textbf{CHALLENGE 1} (C1). Energy for AI infrastructure}
-Most state-of-the-art machine learning algorithms depend on significant volumes of data and a vast number of computational iterations to converge to a solution \cite{Strubell2019EnergyAP}. To accelerate the time spent training such models, researchers and companies take advantage of the readily available infrastructure or use several cloud computing services running on data centers. Serving many purposes, data centers have turned into a relevant sink of energy usage.  For instance, in the six years between 2015 and 2021, the worldwide energy use of data centers moved from 200 TWh to an estimated 220-320 TWh\footnote{Data from the International Energy Agency, see \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. Comparatively, only in Germany, the energy consumption of data centers increased from 10 TWh in 2010 to 17 TWh in 2021. At this rate, experts anticipate that data centers in the country will require 28 TWh by 2030 \cite{Hintemann2022Cloudcomputingdrives}. Fig.~\ref{fig:dataCenterEnergy} illustrates the increasing trend in the energy demand from data centers. \textcolor{red}{According to this trend, this demand amounts for about 1\% of the worldwide electricity consumption in 2021.}
+Most state-of-the-art machine learning algorithms depend on significant volumes of data and a vast number of computational iterations to converge to a solution \cite{Strubell2019EnergyAP}. To accelerate the time spent training such models, researchers and companies take advantage of the readily available infrastructure or use several cloud computing services running on data centers. Serving many purposes, data centers have turned into a relevant sink of energy usage. For instance, in the six years between 2015 and 2021, the worldwide energy use of data centers moved from 200 TWh to an estimated 220-320 TWh\footnote{Data from the International Energy Agency, see \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. Comparatively, only in Germany, the energy consumption of data centers increased from 10 TWh in 2010 to 17 TWh in 2021. At this rate, experts anticipate that data centers in the country will require 28 TWh by 2030 \cite{Hintemann2022Cloudcomputingdrives}. Fig.~\ref{fig:dataCenterEnergy} illustrates the increasing trend in the energy demand from data centers.
 %---
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=0.9\columnwidth]{fig/data_center_energy_consumption.pdf}
+	\includegraphics[width=0.95\columnwidth]{fig/data_center_energy_consumption.png}
 	\caption{Global electricity demand of data centers (adapted from \cite{andrae2015global})}
 	\label{fig:dataCenterEnergy}
 \end{figure}
 % ---
-To further exacerbate the problem, unlike reference state-of-the-art machine learning models (e.g., transformer models) that are trained once on a large amount of data. Embodied AI will use models that require constant retraining and re-evaluation, such as neural architecture search \cite{real2019regularized}. A key contribution to increasing the energy consumption of machine learning algorithms emerged because recent techniques allowed data sample complexity to increase from precisely located sensor measurements to full camera images, scaling up the number of computations required in a given architecture iteration \cite{krizhevsky2012imagenet}. The challenge now is to develop new efficient algorithms capable of reducing the average energy demand despite the increase in processing complexity of the sensory data.
+To further exacerbate the problem, unlike reference state-of-the-art machine learning models (e.g., transformer models) that are trained once on a large amount of data. Embodied AI will use models that require constant retraining and re-evaluation, such as neural architecture search \cite{real2019regularized}. An essential contribution to increasing the energy consumption of machine learning algorithms emerged because recent techniques allowed data sample complexity to increase from precisely located sensor measurements to full camera images, scaling up the number of computations required in a given architecture iteration \cite{krizhevsky2012imagenet}. The challenge now is to develop new efficient algorithms capable of reducing the average energy demand despite the increase in processing complexity of the sensory data.
 
 % SUBSECTION ========================================================================================
 \subsection{\textbf{CHALLENGE 2} (C2). Energy for the masses}\label{sec:robots_challenge}
@@ -27,7 +27,7 @@ As mentioned earlier in Sec.~\ref{sec:energy_in_robotics}, the number of robots 
 
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{Industrial robots}
-In the last years, the install base of industrial robots has gone from 1,235,389 units in 2012 to an estimated 3,152,000 units in 2020, signifying a 250 \% increase in only eight years. According to the International Federation of Robotics, the yearly growth has been between 12-15 \% since 2012 \cite{IFR2019}. Based on this rate, an astonishing four million robots are estimated to be operating in factories worldwide. Fig.~\ref{fig:ir_stock} projects this trend until 2025, showing that the install base of industrial robots will be almost three times larger than 2015\footnote{These numbers are in the neighborhood of a slightly more conservative prediction for the robot operational stock presented by \textit{The Boston Consulting Group} in \cite{sirkin2015}.}. Using this projection, and assuming 24/7 operation, we estimate the expected energy demand of industrial robots, i.e., the total \textit{World Robot Energy Consumption} (WREC)\footnote{To determine an estimate of the electric energy consumption derived from the worldwide operational stock of industrial robots, the market distribution per manufacturer was considered as well as an estimate of the average power consumption according to the robot's category (e.g., assembling, processing, welding, etc.). Further details can be found in Appendix~\ref{sec:app_robot_ener_consumption}.}, see Fig.~\ref{fig:ir_energy}. For reference, the WREC in 2025 represents 7.2 \% of the installed electricity generation capacity in Germany (one of the leading industrialized nations) \cite{fraunhofer2016}. 
+In the last years, the install base of industrial robots has gone from 1,235,389 units in 2012 to an estimated 3,152,000 units in 2020, signifying a 250 \% increase in only eight years. According to the International Federation of Robotics, the yearly growth has been between 12-15 \% since 2012 \cite{IFR2019}. Based on this rate, an astonishing four million robots are estimated to operate in factories worldwide. Fig.~\ref{fig:ir_stock} projects this trend until 2025, showing that the install base of industrial robots will be almost three times larger than 2015\footnote{These numbers are in the neighborhood of a slightly more conservative prediction for the robot operational stock presented by \textit{The Boston Consulting Group} in \cite{sirkin2015}.}. Using this projection, and assuming 24/7 operation, we estimate the expected energy demand of industrial robots, i.e., the total \textit{World Robot Energy Consumption} (WREC)\footnote{To determine an estimate of the electric energy consumption derived from the worldwide operational stock of industrial robots, the market distribution per manufacturer was considered as well as an estimate of the average power consumption according to the robot's category (e.g., assembling, processing, welding, etc.). Further details can be found in Appendix~\ref{sec:app_robot_ener_consumption}.}, see Fig.~\ref{fig:ir_energy}. For reference, the WREC in 2025 represents 7.2 \% of the installed electricity generation capacity in Germany (one of the leading industrialized nations) \cite{fraunhofer2016}. 
 
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{Collaborative robots and service robots}
@@ -35,32 +35,27 @@ Just like industrial robots, the future impact of collaborative and service robo
 %---
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width= 0.9\columnwidth]{fig/share_industrial_and_cobots} 
+	\includegraphics[width= 0.9\columnwidth]{fig/share_industrial_and_cobots.png} 
 	\caption{Ratio of industrial robots to cobots \cite{statista_ir_cobot_share}}
 	\label{fig:industrial_cobot_share}
 \end{figure}
 % ---
 % ---------------------------------------------------------------------------------------------------
 \subsubsection{Implications}
-Modern production paradigms, lifestyle, and societal needs will make robots ubiquitous, permeating many aspects of human life. Consequently, just by their sheer number, industrial, collaborative, and service robots already represent a currently disregarded niche in the global energy landscape. In standard operation, the energy they consume corresponds naturally to the BEE and MI categories in embodied AI systems, and thus, the numbers introduced in this section serve as an indication of the basic energetic requirements in embodied AI. Concretely, the challenge here consists of devising better strategies for efficiently using these legions of robots. If the skills these robots take care of are performed in the most time- and energy-optimal fashion, then BEE and MI energies will also be kept at the optimal minimum.
+Modern production paradigms, lifestyle, and societal needs will make robots ubiquitous, permeating many aspects of human life. Consequently, just by their sheer number, industrial, collaborative, and service robots already represent a currently disregarded niche in the global energy landscape. In standard operation, the energy they consume corresponds naturally to embodied AI systems' BEE and MI categories. Thus, the numbers introduced in this section serve as an indication of the basic energetic requirements in embodied AI. Concretely, the challenge here consists of devising better strategies for efficiently using these legions of robots. If the skills these robots take care of are performed in the most time- and energy-optimal fashion, then BEE and MI energies will also be kept at the optimal minimum.
 %---
 \begin{figure*}[!t]
 	\centering
-% 	\hspace*{\fill}
-% 	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/robot_stock} \label{fig:ir_stock}}
-% 	\hfill
-% 	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/robot_energy} \label{fig:ir_energy}}
-% 	\hspace*{\fill}
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/ir_units_projections.pdf} \label{fig:ir_stock}}
+	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/ir_units_projections.pdf} \label{fig:ir_stock}}
 	\hfill
-	\subfloat[]{\includegraphics[width= 0.90\columnwidth]{fig/ir_energy_projections.pdf} \label{fig:ir_energy}}
+	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/ir_energy_projections.pdf} \label{fig:ir_energy}}
 	\hspace*{\fill}
 	\\%[-2ex]
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.9\columnwidth]{fig/cb_units_projections.pdf}\label{fig:cobot_stock}}
+	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/cb_units_projections.pdf}\label{fig:cobot_stock}}
 	\hfill    
-	\subfloat[]{\includegraphics[width= 0.9\columnwidth]{fig/cb_energy_projections.pdf}\label{fig:cobot_energy}}
+	\subfloat[]{\includegraphics[width= 0.95\columnwidth]{fig/cb_energy_projections.pdf}\label{fig:cobot_energy}}
 	\hspace*{\fill}    
 	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock reported by the IFR and energy consumption estimates: \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:ir_energy} estimated worldwide energy consumption, \subref{fig:cobot_stock} cobots install base forecast and their \subref{fig:cobot_energy} estimated worldwide energy consumption.}
 \end{figure*}
@@ -68,12 +63,12 @@ Modern production paradigms, lifestyle, and societal needs will make robots ubiq
 
 % SUBSECTION ========================================================================================
 \subsection{\textbf{CHALLENGE 3} (C3). Energy for manufacturing}
-Although not the focus of this work, we briefly discuss this challenge for completeness and to motivate its study in future works. This last challenge expands the scope and considers the energetic cost of the manufacturing process of the EAI agents. It involves, firstly, the energy to procure the materials needed for manufacturing robots and the computation infrastructure. Secondly, the energy demanded by the manufacturing process itself. As the energy required for material procurement and the manufacturing process is directly linked to the number of EAI agents being manufactured, it can be logically concluded that if their numbers increase exponentially, so will the energy consumed to produce them. Analyzing this demand and devising strategies to handle it are central to this challenge. Although no clear solution is apparent, and since meaningful energy savings in the procurement of raw materials are unrealistic, we see significant potential for energy savings in robot recycling strategies. As a final thought, it is likely that in the future, the manufacturing of EAI agents will be conducted by other EAI agents (e.g., see Fig.~\ref{fig:franka_builds_franka}); thus connecting this challenge directly with the first two challenges.
+Although not the focus of this work, we briefly discuss this challenge for completeness and to motivate its study in future works. This last challenge expands the scope and considers the energetic cost of the manufacturing process of the EAI agents. It involves, firstly, the energy to procure the materials needed for manufacturing robots and the computation infrastructure. Secondly, the energy demanded by the manufacturing process itself. As the energy required for material procurement and the manufacturing process is directly proportional to the number of EAI agents manufactured, it follows that if their numbers increase exponentially, so will the energy consumed to produce them. Analyzing this demand and devising strategies to handle it are central to this challenge. Although no clear solution is apparent, and since meaningful energy savings in the procurement of raw materials are unrealistic, we see significant potential for energy savings in robot recycling strategies. As a final thought, it is likely that in the future, EAI agents will manufacture other EAI agents (e.g., see Fig.~\ref{fig:franka_builds_franka}), connecting this challenge directly with challenges C1 and C2.
 %---
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=0.75\columnwidth]{fig/franka_builds_franka.jpg}
-	\caption{Robots manufacturing more robots}
+	\caption{Robots manufacturing more robots \textcolor{red}{Missing image copyright}}
 	\label{fig:franka_builds_franka}
 \end{figure}
 % ---

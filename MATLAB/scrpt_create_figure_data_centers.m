@@ -25,6 +25,7 @@ set(leg,'Interpreter','latex')
 % (fig, ax, plt, leg, tx, text_width, k_scaling, k_width_height)
 
 fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+% fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 1)
 grid off
 leg.Location    = 'northwest'; 
 leg.Orientation = 'horizontal'; 
@@ -35,9 +36,37 @@ leg.Orientation = 'horizontal';
 % Figure storage
 SAVE_FIG = 0;
 if SAVE_FIG == 1
-    export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\data_center_energy_consumption','-pdf')
+    %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\data_center_energy_consumption','-pdf')
+    exportgraphics(gcf,'/home/diaz/Documents/Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/data_center_energy_consumption.png','Resolution',600)
     close(gcf);
 end    
+%%
+clc
+close all
+x = [1980 1990 2000];
+y = [15 20 -5; 10 -17 21; -10 5 15; 13 -37 4];
+bar(x,y,'stacked')
+
+%%
+close all
+
+%% Industrial and cobot share
+clc
+close all
+fig = figure('color','w');
+plt = bar(ir_cr_share(:,1)',ir_cr_share(:,2:3)',"stacked");
+ax = gca;
+xlabel('Year','interpreter','Latex','FontSize', 20);
+ylabel('Share [%]','interpreter','Latex','FontSize', 20);
+leg = legend('Industrial','Cobots','FontSize', 20);
+% set(leg,'Interpreter','latex')
+fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+axis tight
+SAVE_FIG = 0;
+if SAVE_FIG == 1
+    exportgraphics(fig,'/home/diaz/Documents/Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/share_industrial_and_cobots.png','Resolution',600)
+    close(fig);
+end  
 
 %% Installed base of industrial robots
 
