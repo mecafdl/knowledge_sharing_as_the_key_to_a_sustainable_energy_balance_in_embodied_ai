@@ -113,10 +113,28 @@
 	title={Share of traditional and collaborative robot unit sales worldwide from 2018 to 2022}, url={https://www.statista.com/statistics/1018935/traditional-and-collaborative-robotics-share-worldwide/}, author={Statista}, year={2020}
 }
 
+@misc{statista_ir_operational_stock,
+	title={Operational stock of multipurpose industrial robots worldwide from 2010 to 2020}, url={https://www.statista.com/statistics/281380/estimated-operational-stock-of-industrial-robots-worldwide/}, author={Statista}, year={2023}
+}
+
+@Misc{statista_ai_robots_market_size,
+  author = {Statista},
+  title  = {Artificial intelligence ({AI}) driven robots market size worldwide in 2021 with a forecast until 2030},
+  year   = {2023},
+  url    = {https://www.statista.com/statistics/1366499/artificial-intelligence-robotics-market-size/},
+}
+
 @misc{ekin_2019,
 	title={AI can help us fight climate change. But it has an energy problem, too}, url={https://horizon-magazine.eu/article/ai-can-help-us-fight-climate-change-it-has-energy-problem-too.html}, journal={Horizon Magazine}, author={Ekin, Annette}
 }
 
+@misc{ptaannreport,
+	title={{Pakistan Telecommunication Authority, 2011 Annual Report}},
+	author={Pakistan Telecommunication Authority},
+	howpublished={\url{https://www.nextmsc.com/report/ai-robots-market}},
+	month={December},
+	year={2011}
+}
 
 
 @InProceedings{barnett_2017,
@@ -415,28 +433,4 @@
 @Article{andrae2015global,
   author    = {Andrae, Anders SG and Edler, Tomas},
   journal   = {Challenges},
-  title     = {On global electricity usage of communication technology: trends to 2030},
-  year      = {2015},
-  number    = {1},
-  pages     = {117--157},
-  volume    = {6},
-  publisher = {Multidisciplinary Digital Publishing Institute},
-}
-
-@Book{hintemann2020efficiency,
-  author    = {Hintemann, Ralph},
-  publisher = {Borderstep Inst. f{\"u}r Innovation und Nachhaltigkeit gGmbH},
-  title     = {Efficiency Gains are Not Enough: Data Center Energy Consumption Continues to Rise Significantly},
-  year      = {2020},
-}
-
-@InProceedings{Pirani2014Stabilitydynamicalsystems,
-  author       = {Pirani, Mohammad and Costa, Thilan and Sundaram, Shreyas},
-  booktitle    = {53rd IEEE Conference on Decision and Control},
-  title        = {Stability of dynamical systems on a graph},
-  year         = {2014},
-  organization = {IEEE},
-  pages        = {613--618},
-}
-
-@Article{Lehdonvirta
+  title     = {On global electricity usage of communication techn

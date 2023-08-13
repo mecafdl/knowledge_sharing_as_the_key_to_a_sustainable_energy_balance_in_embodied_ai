@@ -113,10 +113,28 @@
 	title={Share of traditional and collaborative robot unit sales worldwide from 2018 to 2022}, url={https://www.statista.com/statistics/1018935/traditional-and-collaborative-robotics-share-worldwide/}, author={Statista}, year={2020}
 }
 
+@misc{statista_ir_operational_stock,
+	title={Operational stock of multipurpose industrial robots worldwide from 2010 to 2020}, url={https://www.statista.com/statistics/281380/estimated-operational-stock-of-industrial-robots-worldwide/}, author={Statista}, year={2023}
+}
+
+@Misc{statista_ai_robots_market_size,
+  author = {Statista},
+  title  = {Artificial intelligence ({AI}) driven robots market size worldwide in 2021 with a forecast until 2030},
+  year   = {2023},
+  url    = {https://www.statista.com/statistics/1366499/artificial-intelligence-robotics-market-size/},
+}
+
 @misc{ekin_2019,
 	title={AI can help us fight climate change. But it has an energy problem, too}, url={https://horizon-magazine.eu/article/ai-can-help-us-fight-climate-change-it-has-energy-problem-too.html}, journal={Horizon Magazine}, author={Ekin, Annette}
 }
 
+@misc{ptaannreport,
+	title={{Pakistan Telecommunication Authority, 2011 Annual Report}},
+	author={Pakistan Telecommunication Authority},
+	howpublished={\url{https://www.nextmsc.com/report/ai-robots-market}},
+	month={December},
+	year={2011}
+}
 
 
 @InProceedings{barnett_2017,
@@ -459,6 +477,13 @@
   pages        = {8973--8979},
 }
 
+@Misc{Hintemann2022Cloudcomputingdrives,
+  author = {Hintemann, Ralph and Hinterholzer, Simon},
+  title  = {Cloud computing drives the growth of the data center industry and its energy consumption},
+  year   = {2022},
+  url    = {https://www.borderstep.de/wp-content/uploads/2022/08/Borderstep_Rechenzentren_2021_eng.pdf},
+}
+
 @InProceedings{Cao2020TowardsAccurateReliable,
   author    = {Cao, Qingqing and Balasubramanian, Aruna and Balasubramanian, Niranjan},
   booktitle = {Proceedings of SustaiNLP: Workshop on Simple and Efficient Natural Language Processing},
@@ -471,6 +496,14 @@
   abstract  = {Accurate and reliable measurement of energy consumption is critical for making well-informed design choices when choosing and training large scale NLP models. In this work, we show that existing software-based energy estimations are not accurate because they do not take into account hardware differences and how resource utilization affects energy consumption. We conduct energy measurement experiments with four different models for a question answering task. We quantify the error of existing software-based energy estimations by using a hardware power meter that provides highly accurate energy measurements. Our key takeaway is the need for a more accurate energy estimation model that takes into account hardware variabilities and the non-linear relationship between resource utilization and energy consumption. We release the code and data at https://github.com/csarron/sustainlp2020-energy.},
   doi       = {10.18653/v1/2020.sustainlp-1.19},
   url       = {https://aclanthology.org/2020.sustainlp-1.19},
+}
+
+@InProceedings{Heredia2023BreakingEnergyConsumption,
+  author       = {Heredia, Juan and Schlette, Christian and Kj{\ae}rgaard, Mikkel Baun},
+  booktitle    = {IEEE International Conference on Emerging Technologies and Factory Automation},
+  title        = {Breaking Down the Energy Consumption of Industrial and Collaborative Robots: A Comparative Study},
+  year         = {2023},
+  organization = {IEEE},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

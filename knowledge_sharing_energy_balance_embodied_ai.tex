@@ -98,7 +98,7 @@
 	\endtikzpicture}
 
 \makeatother
-
+\newcommand\myhl[1]{\textcolor{red}{#1}}
 \newcommand*{\important}[1]{\textcolor{red}{\danger~\textbf{IMPORTANT:~} #1}}
 \newcommand{\task}{\ensuremath{\tau}}
 \newcommand{\sltwoi}{\ensuremath{t_l}} %single learning time without index
@@ -228,12 +228,14 @@ Classical AI and its current learning paradigms require copious amounts of energ
 %                                                 |                                                 |
 % ===================================================================================================
 \section{Conclusion}\label{sec:conclusion}
-\TODO
-We have shown in this work that the introduction of robots in many aspects...
+This work has presented arguments emphasizing energy consumption's significance in embodied AI systems. We introduced three principal categories of energy usage and juxtaposed them with the grand challenges stemming from the escalating population of Embodied AI (EAI) agents. It was underscored that mitigating energy consumption in EAI systems requires enhanced mechanical designs, efficient computational hardware and algorithms, and a paramount emphasis on harnessing the simultaneous sharing, exchange, transfer, and accumulation of knowledge acquired by the various EAI agents.
+
+Our discussion on the established paradigms of isolated, incremental, and transfer learning showed that even with the deployment of multiple agents in parallel, optimal energy utilization remains unattainable in the absence of inter-agent knowledge exchange. Conversely, we established that the collective learning paradigm indeed presents a solution to the energy demand, contingent on the effective concurrent dissemination of knowledge based upon skill similarity. Indeed, our case study of a smart factory revealed a substantial escalation in energy requirements under conventional learning paradigms commensurate with the increasing use of EAI agents. In stark contrast, the collective learning approach demonstrated superior performance as robot numbers increased, which enables concurrently acquiring multiple skills knowledge.
+
+We hope that our arguments will effectively focus the attention of the AI and robotics research community on the challenges arising from the emergence of EAI agents. Additionally, we expect that our discussion will foster the development of new machine-learning algorithms and communication methodologies that enable the rapid realization of collective learning strategies.
 
 
-\appendix
-\input{content/appendices.tex}
+%\input{content/appendices.tex}
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
@@ -244,6 +246,16 @@ We have shown in this work that the introduction of robots in many aspects...
 %\bibliography{bib/References}
 \printbibliography
 
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
+\newpage
+%\appendix
+\input{content/appendices.tex}
 
 
 
