@@ -302,7 +302,7 @@ for m = [2,4,8,16,32,64,128]
         plot(n,epsilon*ones(numel(n),1),'k:','LineWidth',2);
         title(['$(r_i,\mathcal{Z}_{',num2str(k),'}$)'],'FontSize',25,'Interpreter','latex')
         xlabel('n','FontSize',25)
-        ylabel(['$\bar{\boldmath{\sigma}}^{(C)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+        ylabel(['$\bar{\boldmath{\sigma}}^{(CL)}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
     end
     for ax=1:N_K
         fcn_scrpt_prepare_graph_science_std([], fig.Children(ax), [], [], [], 18, 3, 0.25)
@@ -311,7 +311,7 @@ for m = [2,4,8,16,32,64,128]
     pause(1)
     tightfig(fig);
 
-SAVE_FIG = 0;
+SAVE_FIG = 1;
 if m == 32 && SAVE_FIG == 1
     exportgraphics(gcf, fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_collective_learning.png'),'Resolution',600)
     close(gcf);
@@ -325,7 +325,7 @@ close all
 clear c_jk_cl_dist_episodes
 entry = 1;
 % Loop over robots
-for m = [4,8,16,32,64,128]
+for m = 32%[4,8,16,32,64,128]
     A_full = ones(m) - eye(m);
     A      = A_full;
     % Inter cluster scaling matrix

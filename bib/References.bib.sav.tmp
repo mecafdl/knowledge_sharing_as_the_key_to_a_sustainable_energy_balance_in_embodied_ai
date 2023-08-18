@@ -74,11 +74,11 @@
 	year={2019}
 }
 
-@inproceedings{Strubell2019EnergyAP,
-	title={Energy and Policy Considerations for Deep Learning in NLP},
-	author={Emma Strubell and Ananya Ganesh and Andrew McCallum},
-	booktitle={ACL},
-	year={2019}
+@InProceedings{Strubell2019EnergyPolicyConsiderations,
+  author    = {Emma Strubell and Ananya Ganesh and Andrew McCallum},
+  booktitle = {ACL},
+  title     = {Energy and Policy Considerations for Deep Learning in NLP},
+  year      = {2019},
 }
 
 % News articles
@@ -266,12 +266,12 @@
 	note    = {Retrieved March 8, 2016 from: \url{http://www.fanucamerica.com/FanucAmerica-news/Press-releases/PressReleaseDetails.aspx?id=76}},
 }
 
-@misc{abb2015,
-	author  = {{\relax ABB}},
-	title   = {ABB Robotics},
-	month   = {August}, 
-	year    = {2015},
-	note    = {Retrieved March 8, 2016 from: \url{http://new.abb.com/products/robotics}},
+@Misc{abb2015,
+  author = {{\relax ABB}},
+  month  = {August},
+  note   = {Retrieved March 8, 2016 from: \url{http://new.abb.com/products/robotics}},
+  title  = {{ABB Robotics}},
+  year   = {2015},
 }
 
 @misc{yaskawa2014,
@@ -327,11 +327,13 @@
 	pages   = {92-102}
 }
 
-@misc{szczepanski_2019, 
-	title={Economic impacts of artificial intelligence ({AI})}, url={https://www.europarl.europa.eu/thinktank/en/document.html?reference=EPRS_BRI(2019)637967}, journal={{European Parliament Think Tank}},
-	author={Szczepanski, Marcin},
-	year={2019},
-	month={Jul}
+@Misc{Szczepanski2019Economicimpactsartificial,
+  author  = {Szczepanski, Marcin},
+  month   = {Jul},
+  title   = {Economic impacts of artificial intelligence ({AI})},
+  year    = {2019},
+  journal = {{European Parliament Think Tank}},
+  url     = {https://www.europarl.europa.eu/thinktank/en/document.html?reference=EPRS_BRI(2019)637967},
 }
 
 
@@ -431,6 +433,4 @@
 }
 
 @Article{andrae2015global,
-  author    = {Andrae, Anders SG and Edler, Tomas},
-  journal   = {Challenges},
-  title     = {On global electricity usage of communication techn
+  author    = {Andrae, Anders SG and Edler, T
