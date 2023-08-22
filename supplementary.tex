@@ -275,32 +275,34 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 %                                                 |                                                 |
 %                                                 |                                                 |
 % ===================================================================================================
+\newpage
 \section{Use case results}\label{sec:use_case_results}
-
-
-\begin{figure*}[!t]
+% ---
+\begin{figure}[!h]
 	\centering
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.8\textwidth]{fig/cluster_learning_sequence.png} \label{fig:cluster_learning_sequence}}
+	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/cluster_learning_sequence.png} \label{fig:cluster_learning_sequence}}
 	\hspace*{\fill}
 	\\	
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.8\textwidth]{fig/dynamics_isolated_learning.png} \label{fig:dynamics_isolated_learning}}  
+	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/dynamics_isolated_learning.png} \label{fig:dynamics_isolated_learning}}  
 	\hspace*{\fill}
 	\\	
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.8\textwidth]{fig/dynamics_incremental_learning.png} \label{fig:dynamics_incremental_learning}}  
+	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/dynamics_incremental_learning.png} \label{fig:dynamics_incremental_learning}}  
 	\hspace*{\fill}	
 	\\
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.8\textwidth]{fig/dynamics_incremental_transfer_learning.png} \label{fig:dynamics_incremental_transfer_learning}}  
+	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/dynamics_incremental_transfer_learning.png} \label{fig:dynamics_incremental_transfer_learning}}  
 	\hspace*{\fill}
 	\\
 	\hspace*{\fill}
-	\subfloat[]{\includegraphics[width= 0.8\textwidth]{fig/dynamics_collective_learning.png} \label{fig:dynamics_collective_learning}}
+	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/dynamics_collective_learning.png} \label{fig:dynamics_collective_learning}}
 	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning} Scenario 1: \subref{fig:cluster_learning_sequence} the skills of each cluster are learned by the $ m$ robots in succession, \subref{fig:dynamics_isolated_learning} isolated learning,  \subref{fig:dynamics_incremental_learning} incremental learning,  \subref{fig:dynamics_incremental_transfer_learning} incremental + transfer learning, \subref{fig:dynamics_collective_learning} collective learning.}
-\end{figure*}
+	\caption[] {\label{fig:collective_learning} Scenario 1: \subref{fig:cluster_learning_sequence} the skills of each cluster are learned by the $ m$ robots in succession, \subref{fig:dynamics_isolated_learning} isolated learning, \subref{fig:dynamics_incremental_learning} incremental learning,  \subref{fig:dynamics_incremental_transfer_learning} incremental + transfer learning, \subref{fig:dynamics_collective_learning} collective learning.}
+\end{figure}
+% ---
+
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -313,15 +315,15 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 \section{Supporting statistics}
 
 % ===================================================================================================
-\subsection{The energy consumption of data centers}\label{sec:energy_of_data_centers}
-%---
-\begin{figure}[!h]
-	\centering
-	\includegraphics[width=0.45\textwidth]{fig/data_center_energy_consumption.png}
-	\caption{Global electricity demand of data centers (adapted from \cite{andrae2015global})}
-	\label{fig:dataCenterEnergy}
-\end{figure}
-% ---
+%\subsection{The energy consumption of data centers}\label{sec:energy_of_data_centers}
+%%---
+%\begin{figure}[!h]
+%	\centering
+%	\includegraphics[width=0.45\textwidth]{fig/data_center_energy_consumption.png}
+%	\caption{Global electricity demand of data centers (adapted from \cite{andrae2015global})}
+%	\label{fig:dataCenterEnergy}
+%\end{figure}
+%% ---
 
 % ===================================================================================================
 \subsection{Industrial and cobot statistics}\label{sec:robot_statistics}
@@ -335,6 +337,37 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 \end{figure}
 % ---
 
+%\begin{figure*}[!h]
+%	\centering
+%	\hspace*{\fill}
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width= \textwidth]{ir_units_projections.png}
+%		\label{fig:ir_stock}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{ir_energy_projections.png} \label{fig:ir_energy}
+%	\end{subfigure}
+%	\hspace*{\fill}
+%	\\
+%	\hspace*{\fill}
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width= \textwidth]{cb_units_projections.png}
+%		\label{fig:cobot_stock}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{cb_energy_projections.png} \label{fig:cobot_energy}
+%	\end{subfigure}
+%	\hspace*{\fill}	
+%%	\caption[] {\label{fig:ir_statistics} Industrial robots statistics. \subref{fig:manufacturers_pie} Percentage of installed industrial robots per manufacturer and \subref{fig:ir_average_power} average power consumption of industrial robots per category.}
+%	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock and energy consumption estimates: \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:ir_energy} estimated worldwide energy consumption, \subref{fig:cobot_stock} cobots install base forecast and their \subref{fig:cobot_energy} estimated worldwide energy consumption.}	
+%\end{figure*}
+
 \begin{figure*}[!h]
 	\centering
 	\hspace*{\fill}
@@ -346,26 +379,12 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 	\hfill
 	\begin{subfigure}[t]{0.45\textwidth}
 		\subcaption{}
-		\includegraphics[width=\textwidth]{ir_energy_projections.png} \label{fig:ir_energy}
-	\end{subfigure}
-	\hspace*{\fill}
-	\\
-	\hspace*{\fill}
-	\begin{subfigure}[t]{0.45\textwidth}
-		\subcaption{}
 		\includegraphics[width= \textwidth]{cb_units_projections.png}
 		\label{fig:cobot_stock}
 	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.45\textwidth}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{cb_energy_projections.png} \label{fig:cobot_energy}
-	\end{subfigure}
 	\hspace*{\fill}	
-%	\caption[] {\label{fig:ir_statistics} Industrial robots statistics. \subref{fig:manufacturers_pie} Percentage of installed industrial robots per manufacturer and \subref{fig:ir_average_power} average power consumption of industrial robots per category.}
-	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock and energy consumption estimates: \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:ir_energy} estimated worldwide energy consumption, \subref{fig:cobot_stock} cobots install base forecast and their \subref{fig:cobot_energy} estimated worldwide energy consumption.}	
+	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock. \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:cobot_stock} cobots install base forecast.}	
 \end{figure*}
-
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
