@@ -371,15 +371,17 @@ Our stance is that achieving more efficient energy utilization in EAI goes beyon
 %\section*{Collective knowledge sharing}
 
 \section*{Modeling the dynamics of skill knowledge}\label{sec:knowledge_dynamics_model}
-To model the scaling of energy and time demand that results from the use of a team of robots learning a universe $\mathcal{S}=\left\lbrace s_1,s_2,\ldots s_j,\ldots, s_{N_\mathcal{S}}\right\rbrace$ of skills, with $|\mathcal{S}| = N_\mathcal{S}$, we consider that the \emph{complexity} $c_j$ of a skill $ s_j $  is the number of trial episodes $n$ needed to successfully learn the skill; i.e., all actions and states visited until a stopping criterion is reached. Furthermore, we assume that
+Understanding the energy and time demands represented by a team of robots learning a universe $\mathcal{S}=\left\lbrace s_1,s_2,\ldots s_j,\ldots, s_{N_\mathcal{S}}\right\rbrace$ of skills, with $|\mathcal{S}| = N_\mathcal{S}$, requires looking at how knowledge about a skill is gained and what effect it can have on the acquisition of any new skill knowledge. 
+
+To start, we consider that the \emph{complexity} $c_j$ of a skill $ s_j $  is the number of trial episodes $n$ needed to successfully learn the skill; i.e., all actions and states visited by an EAI agent until a stopping criterion is reached. Furthermore, we make the simplifying assumption that
 % ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:time}
-		given a large number of robots performing a large number of skills, the average power $P_0$ required by any given robot during learning and the average time $\Delta t$ allocated to the execution of every trial episode $n$ are constant, see Fig.~\ref{fig:power_per_episode}.
+		given a large number of robots performing a large number of skills, on average, the power $P_0$ required by any given robot during learning and the time $\Delta t$ allocated to the execution of every trial episode $n$ are approximately constant, see Fig.~\ref{fig:power_per_episode}.
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent As a consequence of Asm.~\ref{assumption:time} and as describe in Sec.~\ref{sec:power_per_episode} analyzing the complexity of a skill or set of skills is equivalent to analyzing the energy demand of its learning process.
+\noindent As a consequence of Asm.~\ref{assumption:time}, and according to Eqs.~\eqref{eq:energy_per_episode},\eqref{eq:energy_per_skill}, and \eqref{eq:total_energy} in Sec.~\ref{sec:power_per_episode}, the energy demand of an EAI agent learning a skill (or set of skills) is proportional to the skill(s) complexity.
 
 % ===================================================================================================
 \paragraph*{Similarity and knowledge}
@@ -390,37 +392,17 @@ Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ skill
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent This implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. Consequently, the more skills enter $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ will remain to be learned.
+\noindent This implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. Consequently, the more skills in $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ will remain to be learned. To model this effect, we introduce a function $\bar{\sigma}_{j,k}\left(n\right)\in [0,1]$ that expresses the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k \setminus \mathcal{\zeta}_k$ that \emph{is not} contained in the knowledge base of $\mathcal{\zeta}_k$. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies
 % ---
-%\begin{figure*}[!t]
-%	\centering
-%	\hspace*{\fill}
-%	\begin{subfigure}[t]{0.25\textwidth}
-%		\subcaption{}
-%		\includegraphics[width= \textwidth]{f5a_franka_and_imus_annotated.png} \label{fig:real_robot_imu}
-%	\end{subfigure}
-%	\hfill
-%	\begin{subfigure}[t]{0.38\textwidth}
-%		\subcaption{}
-%		\includegraphics[width=\textwidth]{f5b_franka_pi_graph_kinematics_real.pdf} \label{fig:panda_dq_omg_mi_graph_experimental}
-%	\end{subfigure}
-%	\hfill
-%	\begin{subfigure}[t]{0.33\textwidth}
-%		\subcaption{}
-%		\includegraphics[width=\textwidth]{f5c_franka_morphology_experiment.pdf} \label{fig:panda_morphology_comparison_experimental}
-%	\end{subfigure}
-%	\hspace*{\fill}
-%	\\
-%	\hspace*{\fill}
-%	\begin{subfigure}[t]{0.98\textwidth}
-%		\subcaption{}
-%		\includegraphics[width=\textwidth]{f5d_franka_kinematic_errors_real.pdf} \label{fig:panda_morphology_errors}
-%	\end{subfigure}
-%	\hspace*{\fill}
-%	\caption[] {\label{fig:experimental_results} \textbf{Experimental results from the robot manipulator.} \subref{fig:real_robot_imu} The robot arm equipped with IMUs, \subref{fig:panda_dq_omg_mi_graph_experimental} its topology expressed by the $\mathcal{G}^{\mathcal{K}}_\pi$ graph and \subref{fig:panda_morphology_comparison_experimental} the offline-learned kinematic description (fixed base).}	
-%\end{figure*}
+\begin{equation}\label{eq:sigma_bar_conditions}
+	\bar{\sigma}_{j,k}\left(n\right) = 
+	\begin{cases}
+		1 & \text{$\mathcal{\zeta}_k=\emptyset$},\\
+		0 &\text{$\mathcal{\zeta}_k$ has \emph{all} knowledge of $s_{j,k}$}.
+	\end{cases}
+\end{equation}
 % ---
-
+Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.
 % ---
 \begin{figure*}[!t]
 	\centering
@@ -438,22 +420,9 @@ Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ skill
 	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} \subref{fig:skill_similarity} Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$, \subref{fig:knowledge_idealization} remaining knowledge to learn a new skill $s_{j,k}$.}	
 \end{figure*}
 % ---
-
-Now, we introduce a function $\bar{\sigma}_{j,k}\left(n\right)\in [0,1]$ that expresses the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k \setminus \mathcal{\zeta}_k$ that \emph{is not} contained in $\mathcal{\zeta}_k$. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies
-% ---
-\begin{equation}\label{eq:sigma_bar_conditions}
-	\bar{\sigma}_{j,k}\left(n\right) = 
-	\begin{cases}
-		1 & \text{$\mathcal{\zeta}_k=\emptyset$},\\
-		0 &\text{$\mathcal{\zeta}_k$ has \emph{all} knowledge of $s_{j,k}$}.
-	\end{cases}
-\end{equation}
-% ---
-Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.
-
 % ===================================================================================================
 \paragraph*{Leveraging the acquired knowledge}
-To evaluate the effect of knowledge exchange during learning we introduce an upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j,k} $, a robot uses the knowledge contained in $\mathcal{\zeta}_k$; then, two effects take place:
+To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce an upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j,k} $, an EAI agent can access and use the knowledge contained in $\mathcal{\zeta}_k$; then, two effects take place:
 % ---
 \begin{enumerate}
 	\item There is less remaining knowledge, reflected in the initial value; i.e. $\bar{\sigma}_{j,k}(0) < 1$
@@ -485,7 +454,7 @@ These effects signify that the remaining knowledge scales down as a function of 
 	\bar{\sigma}_{j,k}(n) = g_{j,k}\left(N_{\zeta_k}\right) e ^{-f_{j,k}\left(N_{\zeta_k}\right) n} \in (0,1],
 \end{equation}
 % ---
-exhibits the desired, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, i.e. the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$ in Fig.~\ref{fig:knowledge_idealization} indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.
+exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, i.e. the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$ in Fig.~\ref{fig:knowledge_idealization} indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.
 % ---
 %\begin{figure}[!t]
 %	\centering
@@ -567,7 +536,9 @@ For the upcoming analysis we consider an idealized reference system in which a l
 % ---
 
 % ===================================================================================================
-\paragraph*{Conventional learning paradigms} Now we briefly go over the fundamental aspects of the different learning paradigms considered for EAI, a detailed discussion is provided in \nameref{sec:materials_and_methods}. When a robot performs \textbf{isolated learning} (IsL) it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \textbf{incremental Learning} (IL) corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$ ---the self loops--- but also retains and uses the acquired knowledge to learn subsequent skills. \textbf{Transfer learning} (TL) alone refers to the one-time \emph{inter-cluster} exchange of knowledge. TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$. In general, transfer learning is always complemented with IL and so we define the combination of both \textbf{transfer with incremental learning} (TIL) as the third learning paradigm. 
+\paragraph*{Conventional learning paradigms} 
+%Now we briefly go over the fundamental aspects of the different learning paradigms considered for EAI, a detailed discussion is provided in \nameref{sec:materials_and_methods}. 
+When an EAI agent performs \textbf{isolated learning} (IsL) it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \textbf{incremental Learning} (IL) corresponds to the case where an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$ ---the self loops--- but also retains and uses the acquired knowledge to learn subsequent skills. \textbf{Transfer learning} (TL) alone refers to the one-time \emph{inter-cluster} exchange of knowledge. TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$. In general, transfer learning is always complemented with IL and so we define the combination of both \textbf{transfer with incremental learning} (TIL) as the third learning paradigm. In all these paradigms there is no exchange of knowledge among agents, which implies that employing $m$ agents in parallel to learn $m$ skills only subdivides the problem and does not provide an advantage. A detailed discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods}.
 
 % ===================================================================================================
 \paragraph*{\textbf{Collective learning (CL)}}
@@ -590,19 +561,20 @@ where $r=m$ is the number of robots that exchange knowledge among them. Now $\ba
 	\beta_{k} = r\frac{ N_{\zeta_k}}{N_\mathcal{S}}, 
 \end{equation}
 % ---
-scales down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ h(\cdot)$ and $g(\cdot)$ in Eq.~\eqref{eq:collective_knowledge_dynamics} are dependent on the number of knowledge-exchanging robots, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle; i.e.
+scales down the knowledge contributions between robots from different clusters. Finally, the operator $\odot$ represents the Hadamard product of matrices. The functions $ h(\cdot)$ and $g(\cdot)$ in Eq.~\eqref{eq:collective_knowledge_dynamics}, with the former defined as
 % ---
 \begin{equation}\label{eq:f_function_collective}
-	h_{j,k}\left(N_{\zeta_k},r\right) = -\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right).
+	h_{j,k}\left(N_{\zeta_k},r\right) = -\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right),
 \end{equation}
-% ---
+% --- 
+are dependent on the number of knowledge-exchanging robots, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle.
 
 The dynamics of the remaining knowledge for the considered learning paradigms, are described by replacing in Eq.~\eqref{eq:simple_knowledge_dynamics} the expressions for the rate of remaining knowledge and the corresponding initial value as per Table~\ref{tab:learning_paradigms_expressions}; where
 % ---
 \begin{enumerate}
 	\item the constant $ \alpha>0$ models the rate at which a robot in isolation learns any given skill,
 	\item the constant $\eta>0$ represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$,
-	\item the factor $\delta>0$ controls the rate at which the exponential converges, and
+	\item the factor $\delta>0$ controls the rate of exponential decrease in the initial remaining knowledge value, and
 	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
 \end{enumerate}
 % ---
@@ -647,7 +619,7 @@ The dynamics of the remaining knowledge for the considered learning paradigms, a
 %                                                 |                                                 |
 % ===================================================================================================
 \section*{Results}\label{sec_use_case}
-To support our claims about collective learning, we contextualize the problem in a hypothetical case study contrasting different learning paradigms in terms of their associated energy demand (related to the CCE, BEE, and MIE expenditure categories). Concretely, we estimate the substantial effect that our recently introduced paradigm of \emph{collective learning} \cite{Haddadin2014SystemzumErstellen,Haddadin2015Systemgeneratingsets} can have on energy and time demands in a smart factory scenario with several robots performing multiple skills, showing that collective learning is the natural solution to address the energy demand problem in EAI.
+To show the advantages of using CL on reducing the complexity of skill learning and thereby reducing the energy consumed by learning the skills in $\mathcal{S} $, we contextualize the problem in a hypothetical case study contrasting different learning paradigms in terms of their associated energy demand (related to the CCE, BEE, and MIE expenditure categories). Concretely, we estimate the substantial effect that CL can have on energy and time demands in a smart factory scenario with several robots performing multiple skills, showing that CL is the natural solution to address the energy demand problem in EAI.
 
 We use a prototypical instance of a hypothetical smart factory with $m=32$ robots to assess the potential energy demand that EAI agents could have relative to the use of the previously discussed learning paradigms. In this mock factory a pool $\mathcal{S}$ of $N_\mathcal{S}= 512$ skills is divided into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. Additionally, when the remaining knowledge goes below $\epsilon = 0.01$ a given skill is considered learned. For all the skills, the fundamental skill complexity is $c_0 = 100$ episodes.
 
