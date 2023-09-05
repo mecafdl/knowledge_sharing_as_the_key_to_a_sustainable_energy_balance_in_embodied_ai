@@ -1,6 +1,5 @@
 @InBook{Garavan2012CollectiveLearning,
 	author    = {Garavan, Thomas N. and Carbery, Ronan},
-	editor    = {Seel, Norbert M.},
 	pages     = {646--649},
 	publisher = {Springer US},
 	title     = {Collective Learning},
@@ -25,8 +24,6 @@
   title={Regularized evolution for image classifier architecture search},
   author={Real, Esteban and Aggarwal, Alok and Huang, Yanping and Le, Quoc V},
   booktitle={Proceedings of the aaai conference on artificial intelligence},
-  volume={33},
-  number={01},
   pages={4780--4789},
   year={2019}
 }
@@ -433,4 +430,6 @@
 }
 
 @Article{andrae2015global,
-  author    = {Andrae, Anders SG and Edler, T
+  author    = {Andrae, Anders SG and Edler, Tomas},
+  journal   = {Challenges},
+  title     = {On global ele
