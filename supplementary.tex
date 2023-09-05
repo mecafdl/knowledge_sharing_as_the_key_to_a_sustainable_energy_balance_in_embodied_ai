@@ -18,7 +18,7 @@
 \end{figure}
 % ---
 \paragraph{Energy requirements.}
-Under Asm.~\ref{assumption:time}, the energy consumption of the $n$-th episode $e_j(n)$ is the constant product
+Under Asm.~\ref{assumption:power_and_episode_time}, the energy consumption of the $n$-th episode $e_j(n)$ is the constant product
 % ---
 \begin{equation}\label{eq:energy_per_episode}
 	e_j(n) = \underbrace{P_0 \Delta t}_{\text{constant}} = e_0.
@@ -69,7 +69,7 @@ Since in isolated learning $c^{(IsL)}_{j,k} = c_0$, the trial episodes required 
 	%	\begin{split}
 		%		C^{(IsL)}_{k} &= \sum_{j=1}^{N_{\mathcal{Z}}} c^{(IsL)}_{j,k}= N_{\mathcal{Z}}  \cancelto{c_{0}}{c^{(IsL)}_{j,k}} = N_{\mathcal{Z}} c_0
 		%	\end{split}
-	C^{(IsL)}_{k} = \sum_{j=1}^{N_{\mathcal{Z}}} c^{(IsL)}_{j,k}= N_{\mathcal{Z}}  \cancelto{c_{0}}{c^{(IsL)}_{j,k}} = N_{\mathcal{Z}} c_0
+	C^{(IsL)}_{k} = \sum_{j=1}^{N_{\mathcal{Z}}} c^{(IsL)}_{j,k}= N_{\mathcal{Z}}  c^{(IsL)}_{j,k} = N_{\mathcal{Z}} c_0.
 \end{equation}
 %-- 
 Similarly, the total trial episodes to learn the universe of skills is simply
@@ -145,7 +145,7 @@ In essence, using $m$ robots without exchanging knowledge only subdivides the le
 
 % ---------------------------------------------------------------------------------------------------
 \paragraph{\textbf{Transfer + Incremental Learning (TIL)}}
-Transfer learning (TL) alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$; i.e.
+Transfer learning (TL) alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$; i.e.
 % ---
 \begin{equation}\label{eq:f_function_transfer}
 	f_{j,k}\left(N_{\zeta_k}\right) = -\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right),
@@ -276,7 +276,14 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 %                                                 |                                                 |
 % ===================================================================================================
 \newpage
-\section{Use case results}\label{sec:use_case_results}
+\section{Results}\label{sec:use_case_results}
+Fig.~\ref{fig:collective_learning} shows the results of applying isolated learning, incremental learning, transfer and incremental learning, and collective learning to the learning scenario defined by the tuple
+% ---
+\begin{equation*}
+	\phi_{SF} = \left(N_\mathcal{S}= 512, N_\mathcal{K}=4, m=32, \left[\alpha =  0.0461, \delta =  0.0360, \eta= 0.1\right]\right).
+\end{equation*}
+% ---
+In this scenario all $m$ agents are always concurrently learning skills from the same cluster $Z_i$.
 % ---
 \begin{figure}[!h]
 	\centering
@@ -313,61 +320,20 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 % ===================================================================================================
 \newpage
 \section{Supporting statistics}
-
-% ===================================================================================================
-%\subsection{The energy consumption of data centers}\label{sec:energy_of_data_centers}
-%%---
-%\begin{figure}[!h]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{fig/data_center_energy_consumption.png}
-%	\caption{Global electricity demand of data centers (adapted from \cite{andrae2015global})}
-%	\label{fig:dataCenterEnergy}
-%\end{figure}
-%% ---
-
 % ===================================================================================================
 \subsection{Industrial and cobot statistics}\label{sec:robot_statistics}
-
+According to the International Federation of Robotics (IFR) the unit sales of collaborative robots in relation to conventional industrial robots has been constantly increasing in the past years \cite{statista_ir_cobot_share}. Recent data, see Fig.~\ref{fig:industrial_cobot_share}, shows that cobots now make almost 15 \% of the sales.
 %---
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width= 0.45\textwidth]{fig/share_industrial_and_cobots.png} 
-	\caption{Unit sales share industrial robots to cobots \cite{statista_ir_cobot_share}}
+	\caption{Unit sales share industrial robots to cobots }
 	\label{fig:industrial_cobot_share}
 \end{figure}
 % ---
 
-%\begin{figure*}[!h]
-%	\centering
-%	\hspace*{\fill}
-%	\begin{subfigure}[t]{0.45\textwidth}
-%		\subcaption{}
-%		\includegraphics[width= \textwidth]{ir_units_projections.png}
-%		\label{fig:ir_stock}
-%	\end{subfigure}
-%	\hfill
-%	\begin{subfigure}[t]{0.45\textwidth}
-%		\subcaption{}
-%		\includegraphics[width=\textwidth]{ir_energy_projections.png} \label{fig:ir_energy}
-%	\end{subfigure}
-%	\hspace*{\fill}
-%	\\
-%	\hspace*{\fill}
-%	\begin{subfigure}[t]{0.45\textwidth}
-%		\subcaption{}
-%		\includegraphics[width= \textwidth]{cb_units_projections.png}
-%		\label{fig:cobot_stock}
-%	\end{subfigure}
-%	\hfill
-%	\begin{subfigure}[t]{0.45\textwidth}
-%		\subcaption{}
-%		\includegraphics[width=\textwidth]{cb_energy_projections.png} \label{fig:cobot_energy}
-%	\end{subfigure}
-%	\hspace*{\fill}	
-%%	\caption[] {\label{fig:ir_statistics} Industrial robots statistics. \subref{fig:manufacturers_pie} Percentage of installed industrial robots per manufacturer and \subref{fig:ir_average_power} average power consumption of industrial robots per category.}
-%	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock and energy consumption estimates: \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:ir_energy} estimated worldwide energy consumption, \subref{fig:cobot_stock} cobots install base forecast and their \subref{fig:cobot_energy} estimated worldwide energy consumption.}	
-%\end{figure*}
-
+The unit sales are congruent with the the estimated operational stock of industrial (Fig.~\ref{fig:ir_stock}) robots and cobots (\ref{fig:cobot_stock}).
+% ---
 \begin{figure*}[!h]
 	\centering
 	\hspace*{\fill}
@@ -394,19 +360,10 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 % ===================================================================================================
 \newpage
 \section{Industrial robot energy consumption support data}\label{sec:app_robot_ener_consumption}
+To provide estimates of the worldwide energy consumption of industrial and collaborative robots we surveyed various sources including reports from consulting agencies and non-profit organizations, news articles and manufacturer press releases and data-sheets to determine essential data such as the operational stock and power consumption per type of robot.
 
 \subsection{Industrial robots}
 According to \cite{montaqim2015} and available press releases of different robotic companies \cite{fanuc2015, yaskawa2014, ABB2015}, the approximate distribution of the industrial robot install base per manufacturer is shown in Fig.~\ref{fig:manufacturers_pie}.
-% ---
-%\begin{figure}[!ht]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{fig/manufacturers}
-%	\caption{Percentage of installed industrial robots per manufacturer}
-%	\label{fig:manufacturers_pie}
-%\end{figure}
-% ---
-
-
 % ---
 \begin{figure*}[!h]
 	\centering
@@ -426,36 +383,19 @@ According to \cite{montaqim2015} and available press releases of different robot
 \end{figure*}
 % ---
 
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{fig/industrial_robots_average_power_per_category}
-%	\caption{Average power consumption of industrial robots per category.}
-%	\label{fig:ir_average_power}
-%\end{figure}
-
-
-Since Fanuc, Yaskawa, and ABB make for two-thirds of the total install base of industrial robots, we took the power consumption of the robots from those manufacturers to estimate the total power consumption. 
-After surveying the datasheets for their robot portfolio, the average power consumption for each model was estimated. Additionally, every manufacturer classifies their robots according to one or more possible applications, which can be grouped into the application categories defined by the IFR. The average power consumption was calculated for every application using the values reported in the robot datasheets. Finally, the power consumption for each category was computed as a weighted average based on the companies' market share percentage (assuming that 68 \% is the total number of robots)\footnote[1]{These numbers should be used with discretion since there is no available information on which are the most common installed robot models. This information may change the estimation.}. The estimated power consumption per robot application is shown in Fig.~\ref{fig:ir_average_power}.
-%---
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{fig/industrial_robots_average_power_per_category}
-%	\caption{Average power consumption of industrial robots per category.}
-%	\label{fig:ir_average_power}
-%\end{figure}
-%---
-Using these numbers and the estimated operational stock of industrial robots reported in \cite{statista_ir_operational_stock} and by the International Federation of Robotics (see Fig.~\ref{fig:ir_stock}), the estimated worldwide industrial robot energy consumption was computed and shown in Fig.~\ref{fig:ir_energy}.
+Since Fanuc, Yaskawa, and ABB make for two-thirds of the total install base of industrial robots, we took the power consumption of the robots from those manufacturers to estimate the total power consumption. After surveying the data-sheets for the different robot types in their portfolio, the average power consumption for each model was estimated. Additionally, every manufacturer classifies their robots according to one or more possible applications, which can be grouped into the application categories defined by the IFR. The average power consumption was calculated for every application using the values reported in the robot data-sheets. Finally, the power consumption for each category was computed as a weighted average based on the companies' market share percentage (assuming that 68 \% is the total number of robots)\footnote[1]{These numbers should be used with discretion since there is no available information on which are the most common installed robot models. This information may change the estimation.}. The estimated power consumption per robot application is shown in Fig.~\ref{fig:ir_average_power}. Using these numbers and the estimated operational stock of industrial robots reported in \cite{statista_ir_operational_stock} and by the International Federation of Robotics (see Fig.~\ref{fig:ir_stock}), the estimated worldwide industrial robot energy consumption was computed and shown in Fig.~\ref{fig:ir_energy}.
 
 % ===================================================================================================
 \subsection{Collaborative robots}\label{sec:app_cobot_ener_consumption}
-To approximate the energy consumption of cobots we looked at the power consumption per payload of various manufacturers, see Fig.~\ref{fig:cobot_watt_per_kg} resulting in an average power consumption of approximately 40 W. Together with a typical power consumption of the robot controller of 60 W \cite{Heredia2023BreakingEnergyConsumption}, we consider a total of 100 W power demand. Similar to the industrial robots, the worldwide energy consumption was calculated assuming a 24/7 operation.
 %---
-\begin{figure}[h]
+\begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.45\textwidth]{cobot_watt_per_kg.png}
 	\caption{Power consumption per payload for different cobots.}
 	\label{fig:cobot_watt_per_kg}
 \end{figure}
 %---
+To approximate the energy consumption of cobots we looked at the power consumption per payload of various manufacturers, see Fig.~\ref{fig:cobot_watt_per_kg} resulting in an average power consumption of approximately 40 W. Together with a typical power consumption of the robot controller of 60 W \cite{Heredia2023BreakingEnergyConsumption}, we consider a total of 100 W power demand. Similar to the industrial robots, the worldwide energy consumption was calculated assuming a 24/7 operation.
+
 
 
