@@ -192,7 +192,7 @@
 
 
 % Include your paper's title here
-\title{Collective knowledge sharing allows minimum learning time and sustainable energy balance in embodied AI}
+\title{\textbf{Title:} Collective knowledge sharing allows minimum learning time and sustainable energy balance in embodied AI}
 
 % Place the author information here.  Please hand-code the contact
 % information and notecalls; do *not* use \footnote commands.  Let the
@@ -201,13 +201,13 @@
 % settings shown here.
 
 \author
-{Fernando D\'iaz Ledezma$^{\ast}$ and Sami Haddadin
-\\
-\normalsize{Chair of Robotics and Systems Intelligence,}\\
-\normalsize{MIRMI - Munich Institute of Robotics and Machine Intelligence,}\\
-\normalsize{Technical University of Munich, Georg-Brauchle-Ring 60-62, M\"unchen, 80992, Germany}\\
-\\
-\normalsize{$^\ast$To whom correspondence should be addressed; E-mail: fernando.diaz@tum.de}
+{\textbf{Authors:} Fernando D\'iaz Ledezma$^{\ast}$ and Sami Haddadin
+	\\
+	\normalsize{\textbf{Affiliations:} Chair of Robotics and Systems Intelligence,}\\
+	\normalsize{MIRMI - Munich Institute of Robotics and Machine Intelligence,}\\
+	\normalsize{Technical University of Munich, Georg-Brauchle-Ring 60-62, M\"unchen, 80992, Germany}\\
+	\\
+	\normalsize{$^\ast$To whom correspondence should be addressed; E-mail: fernando.diaz@tum.de}
 }
 
 % Include the date command, but leave its argument blank.
@@ -233,8 +233,10 @@
 
 % Place your abstract within the special {sciabstract} environment.
 \begin{sciabstract}
-	Classical artificial intelligence (AI) and its current learning paradigms consume significant amounts of energy due to high computational loads and limited utilization of acquired knowledge. As AI and robotics merge to form embodied AI systems, their energy demand will continue to rise as data acquisition and learning rely on constant interaction with the physical environment. In this study, we examine the fundamental energy requirements of embodied AI systems and discuss the escalating energy challenges associated with maintaining current learning paradigms. Consequently, we propose collective learning as a paradigm shift that departs from isolated learning and expands on the concepts of incremental and transfer learning. Collective learning enables efficient learning in embodied AI agents by actively sharing, aggregating, and utilizing previous and current knowledge across systems to acquire new skills in shorter timeframes, significantly reducing energy consumption.
+	\textbf{Abstract:} The current learning paradigms of classical artificial intelligence (AI) consume significant amounts of energy due to high computational loads and limited utilization of acquired knowledge. As AI and robotics merge to form embodied AI (EAI) systems, their energy demand will continue to rise as data acquisition and learning rely on constant interaction with the physical environment. This study examines the fundamental energy requirements of EAI systems and discusses the energy challenges associated with maintaining current learning paradigms. Consequently, we position collective learning, a paradigm shift that enables efficient learning in EAI agents by actively sharing, aggregating, and utilizing previous and current knowledge across systems, as the key to reducing energy consumption and facilitating the acquisition of new skills in shorter timeframes.
 \end{sciabstract}
+
+\textbf{One-Sentence Summary:} Embracing collective learning in embodied AI reduces energy consumption and accelerates skill acquisition.
 
 % In setting up this template for *Science* papers, we've used both
 % the \section* command and the \paragraph* command for topical
@@ -258,6 +260,8 @@
 }
 
 
+\section*{Main Text:}
+
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
@@ -266,20 +270,38 @@
 %                                                 |                                                 |
 % ===================================================================================================
 \section*{Introduction}\label{sec:intro}
-As AI technology develops and permeates many aspects of human life, not only will smart factories become the norm \cite{Szczepanski2019Economicimpactsartificial}, but healthcare services will modernize to integrate the analysis and prediction power of AI services. Households will morph into mostly automated environments. The future will witness the widespread presence of modern robots in various sectors such as industry, logistics, service, and healthcare. These robots will possess local and network computing capabilities, enabling them to operate in these environments and gather and exchange information. Artificial intelligence (AI) will be an inherent feature of these robots, empowering them to acquire new skills and disseminate their acquired knowledge across different systems. The more these \emph{embodied AI} (EIA) agents integrate synergistically into varied environments, the more they will take over diverse tasks while also actively cooperating with humans. Yet, among the many challenges emerging as EAI agents become ubiquitous, their energy demand deserves particular attention.
+%As AI technology develops it steadily permeates many aspects of human life. As a result, smart factories will become the norm \cite{Szczepanski2019Economicimpactsartificial}, healthcare services will modernize to integrate the analysis and prediction power of AI services, and households will morph into mostly automated environments.
+As Artificial intelligence (AI) technology develops, it steadily permeates many aspects of human life. We can expect, for instance, smart factories to become the norm, healthcare services to harness the analytical and predictive capabilities of AI, and households to evolve into predominantly automated environments. The future will witness the widespread presence of modern robots in various sectors such as industry, logistics, service, and healthcare. These robots will possess local and network computing capabilities, enabling them to operate in these environments while gathering and exchanging information. AI will be an inherent feature of these robots, empowering them to acquire new skills and disseminate their acquired knowledge across different systems. The more these \emph{embodied AI} (EIA) agents integrate synergistically into varied environments, the more they will take over diverse tasks while also actively cooperating with humans. Yet, among the many challenges emerging as EAI agents become ubiquitous, their energy demand deserves particular attention.
 
 % SUBSECTION ========================================================================================
-Classical AI (CAI) interprets intelligence as a purely computational symbol-processing problem decoupled from physical agents and interaction with the world. Progress in CAI relies on two computing stages: (i) learning and (ii) deployment. While the latter is not energy-efficient compared to its biological counterparts, the former craves a considerable energy quota to process large amounts of data for training, validation, and testing of models (e.g., supercomputing). Furthermore, both model and training data are expected to carry enough information to transfer knowledge between different tasks and even systems (at least to a certain extent). However, retraining is required when this information is unavailable in the data ---sometimes even from scratch---, leading to highly energy-inefficient learning paradigms. The implication is that the energetic cost of CAI can sometimes outweigh the benefits \cite{Strubell2019EnergyPolicyConsiderations}. Even current breakthroughs like the use of transformer models for Natural Language Processing exhibit energetic challenges \cite{Cao2020TowardsAccurateReliable}.
-% ---
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=0.95\textwidth]{fig/embodied_ai_learning_pipeline_v7.png}
-	\caption{Standard skill execution pipeline of isolated EAI agents.}
-	\label{fig:embodied_ai_pipeline}
-\end{figure}
-% ---
+Classical AI (CAI) interprets intelligence as a purely computational symbol-processing problem decoupled from physical agents and interaction with the world. \myhl{In general the energetic demand of a CAI application can be subdivided in the energy for learning ---i.e., for training the model--- and the energy for deployment ---to run inference and prediction---, see Fig.~\ref{fig:cai_and_eai}. Aside from the associated demands to collect large amounts of data via several edge devices, learning in CAI craves a considerable energy quota to process the data and to train, validate, and test several models. Both model and training data are expected to carry enough information to transfer knowledge between different tasks and even systems (at least to a certain extent). However, retraining is required when this information is unavailable in the data ---sometimes even from scratch---, leading to highly energy-inefficient learning paradigms. Furthermore, even if learning is done only once, deployment alone can demand considerable energy due to the constant execution of the model. A third relevant source of energy consumption in CAI relates to the energy corresponding to the manufacturing of the required computation and communication hardware. Depending on the application, it is possible that the energetic cost of CAI sometimes outweighs the benefits \cite{Strubell2019EnergyPolicyConsiderations}. Even current breakthroughs like the use of transformer models for Natural Language Processing come with their energetic challenges \cite{Cao2020TowardsAccurateReliable}.}
+%% ---
+%\begin{figure}[!t]
+%	\centering
+%	\includegraphics[width=0.95\textwidth]{fig/embodied_ai_learning_pipeline.png}
+%	\caption{Standard skill execution pipeline of isolated EAI agents.}
+%	\label{fig:embodied_ai_pipeline}
+%\end{figure}
+%% ---
 
-With the evolution towards EAI systems, i.e., the integration of AI and robotics, the challenges mentioned before expand. Since the real world cannot be faithfully replicated in virtual environments, and despite the considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}, data acquisition for EAI agents necessitates constant and active energy-expending interaction with the physical environment. Learning a skill in the real world implies physically executing it several times, spending energy on motion and interaction during each execution. Consider, for example, autonomous driving, where the vehicle is a rather rudimentary form of an EAI agent. Despite operating primarily in a structured human-made environment, complexity is already present in the system. The vehicle consumes energy by simply fulfilling its purpose of autonomous movement and collecting vast amounts of data during driving to retrain and improve the policy model. Another, perhaps inconspicuous, example is household robots. Current estimates indicate that 39~\%  of domestic chores could be automated in the short term \cite{Lehdonvirta2022futuresunpaidwork}. Even though, superficially, homes may be less complex when compared to factory floors, they are extremely challenging dynamic environments that require household robots to undergo constant retraining. 
+
+\begin{figure*}[!t]
+	\centering
+	\hspace*{\fill}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\subcaption{}
+		\includegraphics[width= \textwidth]{cai_and_eai.png} \label{fig:cai_and_eai}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\subcaption{}
+		\includegraphics[width=\textwidth]{embodied_ai_learning_pipeline.png} \label{fig:embodied_ai_pipeline}
+	\end{subfigure}	
+	\hspace*{\fill}
+	\caption[] {\label{fig:cai_and_eai_general} \textbf{Classical and embodied AI.} \subref{fig:cai_and_eai} Differences in learning and deployment in CAI and EAI. \subref{fig:embodied_ai_pipeline} Standard skill execution pipeline of isolated EAI agents.}
+\end{figure*}
+
+With the evolution towards EAI systems, i.e., the integration of AI and robotics, the energy usage spectrum broadens. \myhl{Since the real world cannot be faithfully replicated in virtual environments, and despite the considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}, learning and deployment in EAI necessitates constant and active energy-expending interaction with the physical environment (see Fig.~\ref{fig:cai_and_eai}).} Learning and mastering a skill in the physical world implies its constant and repeated execution, expending energy on motion and interaction during each run. Consider, for example, autonomous driving, where the vehicle is a rather rudimentary form of an EAI agent operating primarily in a structured human-made environment. Apart from consuming energy by simply fulfilling its purpose (i.e., autonomous movement), the vehicle consumes additional energy on motion to collect the necessary data to retrain and improve the policy model. Another, perhaps inconspicuous, example is that of household robots. Current estimates indicate that 39~\%  of domestic chores could be automated in the short term \cite{Lehdonvirta2022futuresunpaidwork}. Even though, superficially, homes appear less complex than highways or factory floors, they are challenging dynamic environments that require household robots to undergo constant retraining. 
 
 When an EAI agent executes a skill, a lower bound exists to the energy requirements. Consider a generic skill $\tau$ ---such as a pick-and-place operation--- and suppose the optimal trajectory $p^\star$ for moving an object from its origin to its destination is known. The intrinsic properties of the object and the optimal path $p^\star$ uniquely define the minimum energy requirement $E^\star_{\tau}$ needed to perform skill $\tau$. In practice, however, the total energy expended in mastering and executing a skill encompasses not only $E^\star_{\tau}$. The standard skill execution pipeline of a stereotypical EAI agent (Fig.~\ref{fig:embodied_ai_pipeline}) allows the identification of three fundamental energetic expenditure categories, namely:
 % ---
@@ -331,14 +353,27 @@ While the energetic requirements of EAI have only recently gained attention with
 
 % SUBSECTION ========================================================================================
 \paragraph*{\textbf{Challenge 1} (C1): Energy for AI infrastructure}
-The remarkable progress across various domains, attributed to the exponential growth of AI and machine learning applications, comes with costs. These advancements demand substantial computational power for cutting-edge machine learning algorithms to process, analyze, and learn from extensive data, often requiring numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations rely on existing infrastructure or cloud computing services in data centers for energy-intensive model training and deployment. This has increased energy consumption, driven by demanding computational workloads in data centers and associated hardware like Graphics Processing Units (GPUs). For instance, in Germany, data center energy consumption surged from 10 TWh in 2010 to 17 TWh in 2021, with projections reaching 28 TWh by 2030 \cite{Hintemann2022Cloudcomputingdrives}. Globally, data center energy consumption rose from 200 TWh to an estimated 220-320 TWh between 2015 and 2021\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This trend is illustrated in Figure~\ref{fig:dataCenterEnergy}.
+%The remarkable progress across various domains, attributed to the exponential growth of AI and machine learning applications, comes with costs. These advancements demand substantial computational power for cutting-edge machine learning algorithms to process, analyze, and learn from extensive data, often requiring numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations rely on existing infrastructure or cloud computing services in data centers for the energy-intensive computational workloads for the learning and deployment phases. \myhl{This has clearly increased the energy consumption in data centers and associated hardware, like Graphics Processing Units (GPUs); as training AI models in data centers is estimated to require about three times more energy than traditional cloud tasks \cite{Thomas2023cloudusesmassive}. Consider as an example the latest breakthroughs brought about by generative AI: large language models and text-to-image models. The number of parameters in such models are in the billions and their training requires thousands of deep learning GPU units and millions of GPU hours \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}.} For instance, in Germany, data center energy consumption surged from 10 TWh in 2010 to 17 TWh in 2021, with projections reaching 28 TWh by 2030 \cite{Hintemann2022Cloudcomputingdrives}. Globally, data center energy consumption rose from 200 TWh to an estimated 220-320 TWh between 2015 and 2021\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This trend is illustrated in Figure~\ref{fig:dataCenterEnergy}. \myhl{To face this expected increase in the energy demands to host machine learning processes in data centers companies such as Microsoft to consider nuclear energy to power their data centers\footnote{See \url{https://www.theverge.com/2023/9/26/23889956/microsoft-next-generation-nuclear-energy-smr-job-hiring}}.}
 
-This escalating energy usage has sparked growing concerns within the research community regarding the adverse environmental effects of AI and machine learning. Recent discussions on this matter, such as \cite{schwartz2019green}, \cite{vinuesa2020role}, and \cite{Strubell2019EnergyPolicyConsiderations}, delve into the efficiency of computation-intensive deep learning algorithms. Notably, the staggering increase---more than 300,000 times over the last decade---in the number of computations required by these algorithms is alarming \cite{schwartz2019green}. Various metrics have been established to gauge the energy consumption of machine learning algorithms. These include assessing energy efficiency during development phases \cite{zhou2020hulk}, analyzing accuracy, model size, time, and CPU/GPU energy consumption for training and inference phases \cite{Dalgren2019GreenMLA}, as well as encompassing other system-level performance indicators like real-time metrics, instruction-level analysis, and hardware-level power estimation \cite{garcia2019estimation}. Despite the burgeoning awareness surrounding AI's energy consumption, tangible actions remain scarce in addressing the underlying issues and proposing potential remedies.
+%\myhl{The remarkable progress across various domains, attributed to the exponential growth of AI and machine learning applications, comes with costs. These advancements demand substantial computational power for cutting-edge machine learning algorithms to process, analyze, and learn from extensive data, often requiring numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations rely on existing infrastructure or cloud computing services in data centers for the energy-intensive computational workloads for the learning and deployment phases. This has clearly increased the energy consumption in data centers and associated hardware, like Graphics Processing Units (GPUs); as training AI models in data centers is estimated to require about three times more energy than traditional cloud tasks \cite{Thomas2023cloudusesmassive}. Consider as an example the latest breakthroughs brought about by generative AI: large language models and text-to-image models. The number of parameters in such models are in the billions and their training requires thousands of deep learning GPU units and millions of GPU hours \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. With more and more AI applications under development, the AI infrastructure is undergoing a similar rise with many GPU-based AI servers being sold to satisfy the demand. Naturally, the rise in data center energy consumption is only expected to grow. Globally, data center energy consumption rose from 200 TWh in 2015 to an estimated 220-320 TWh in 2021\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This trend is illustrated in Figure~\ref{fig:dataCenterEnergy}. To face this expected increase in the energy demands to host machine learning processes in data centers companies such as Microsoft to consider nuclear energy to power their data centers\footnote{See \url{https://www.theverge.com/2023/9/26/23889956/microsoft-next-generation-nuclear-energy-smr-job-hiring}}.}
 
-Complicating matters, unlike state-of-the-art machine learning models (e.g., transformer models) that are mostly trained once on a large amount of data, EAI systems will use models that require constant retraining and re-evaluation, such as neural architecture search \cite{real2019regularized}. Another key contributor to the energy consumption of EAI systems emerged due to recent techniques that increased data sample complexity from precisely located sensor measurements to full camera images, scaling up the number of computations required \cite{krizhevsky2012imagenet}.
+
+
+\myhl{The remarkable progress witnessed across various domains, attributed to the exponential growth of AI applications, comes at a significant cost. These advancements require substantial computational power for cutting-edge machine learning algorithms to process, analyze, and learn from extensive data. This often necessitates numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations heavily depend on existing infrastructure or cloud computing services in data centers for the energy-intensive computational workloads during the learning and deployment phases. Consequently, there has been a clear spike in energy consumption in data centers and associated hardware, such as Graphics Processing Units (GPUs). Training AI models in data centers is estimated to demand about three times more energy than traditional cloud tasks, underlining the strain on resources \cite{Thomas2023cloudusesmassive}.}
+
+\myhl{Consider, for instance, the latest breakthroughs ushered in by generative AI, including large language models (LLM) and text-to-image models. These models boast billions of parameters and necessitate thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more AI applications are developed, the demand for AI infrastructure is surging, leading to a substantial increase in GPU-based AI servers being sold to meet this demand. Naturally, this escalation in demand translates to a parallel rise in data center energy consumption. Globally, data center energy consumption surged from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to data from the International Energy Agency \footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is visually depicted in Figure~\ref{fig:dataCenterEnergy}.}
+
+%In anticipation of the expected surge in energy demands to host machine learning processes in data centers, companies such as Microsoft are contemplating the utilization of nuclear energy to power their data centers. This underlines the urgent need for sustainable solutions to balance the incredible strides in AI with the environmental implications of such progress.
+
+
+
+This escalating energy usage has sparked growing concerns within the research community regarding the adverse environmental effects of AI and machine learning. Recent discussions on this matter, such as \cite{schwartz2019green}, \cite{vinuesa2020role},  \cite{Strubell2019EnergyPolicyConsiderations}, and \cite{Luccioni2023EstimatingCarbonFootprint}, delve into the efficiency of computation-intensive deep learning algorithms. %The staggering increase---more than 300,000 times over the last decade---in the number of computations required by these algorithms is notable \cite{schwartz2019green}. 
+Various metrics have been established to gauge the energy consumption of machine learning algorithms. These include assessing energy efficiency during development phases \cite{zhou2020hulk}, analyzing accuracy, model size, time, and CPU/GPU energy consumption for training and inference phases \cite{Dalgren2019GreenMLA}, as well as encompassing other system-level performance indicators like real-time metrics, instruction-level analysis, and hardware-level power estimation \cite{garcia2019estimation}. \myhl{Recent works focused on LLMs discussing various aspects such as hardware efficiency, model architectures and algorithms in relation to energy consumption \cite{Vries2023growingenergyfootprint} and provide comparisons including their power consumption and CO$_2$ emissions \cite{SIHCAI2023ArtificialIntelligenceIndex}.} Despite the burgeoning awareness surrounding AI's energy consumption, tangible actions remain scarce in addressing the underlying issues and proposing potential remedies.
+
+It is worth noting that, unlike state-of-the-art machine learning models (e.g., transformer models) that are mostly trained once on a large amount of data, EAI systems will use models that require constant retraining and re-evaluation, such as neural architecture search \cite{real2019regularized}. %Another key contributor to the energy consumption of EAI systems emerged due to recent techniques that increased data sample complexity from precisely located sensor measurements to full camera images, scaling up the number of computations required \cite{krizhevsky2012imagenet}.
 
 % SUBSECTION ========================================================================================
-\paragraph*{\textbf{Challenge 2} (C2): The Escalating Energy Demand of a Robotic Revolution}\label{sec:robots_challenge}
+\paragraph*{\textbf{Challenge 2} (C2): The escalating energy demand of a robotic revolution}\label{sec:robots_challenge}
 The continuous growth in the number of robots in operation is a notable trend amplified by the rise of Industry 4.0 and the implementation of smart factories, alongside the expanding utilization of robots in various service-oriented applications. Despite the advancements in robot technology that have yielded improved energy efficiency, the predominant focus remains on individual systems, often disregarding the collective impact of all active units.
 
 Over the past decade, the installation base of industrial robots has undergone a remarkable transformation, escalating from 1.2 million units in 2012 to approximately 3.5 million units in 2022, an astonishing surge constituting a 290 \% increase. According to data from the International Federation of Robotics (IFR), the annual growth rate within this time frame has consistently ranged between 12 \% and 15 \% \cite{IFR2019}. Extrapolation of this growth rate suggests that in the coming years, four million robots will be operational within factories across the globe. This trend is depicted in Fig.\ref{fig:ir_stock}\footnote{These projections closely align with the slightly more cautious estimates presented by \textit{The Boston Consulting Group} in \cite{sirkin2015}.}. Using the estimated install base and under the assumption of round-the-clock operation, we can approximate the forthcoming energy demand attributable to industrial robots---termed the \textit{World Robot Energy Consumption} (WREC), shown in Fig.~\ref{fig:ir_energy}. A description of how we arrived at these estimates is provided in the \nameref{sec:supplementary_materials} Sec.~\ref{sec:app_robot_ener_consumption}. To contextualize the WREC, in 2025 it constitutes 7.2 \% of Germany's installed electricity generation capacity \cite{fraunhofer2016}.
@@ -351,7 +386,7 @@ This final challenge broadens our perspective, encompassing the energetic expend
 
 % SUBSECTION ========================================================================================
 \paragraph*{\textbf{Tackling the challenges}}
-One idea seems to lurk behind the three challenges: \say{more EAI agents, more energy demand}. Indeed, the trends in Fig.~\ref{fig:energy_demands_AI_robotics} suggest that the CCE, BEE, and MIE expenditures will follow a similar pattern. Ongoing efforts to minimize BEE and improve the MIE include works like \cite{schroder2014, chalmers2015, mohammed2014, chemnitz2011}; which advocate strategies such as elastic actuation and optimized hardware selection and storage, energy sharing, and motion planning. As for CCE, it is important to define sample-efficient learning algorithms that account for the constant learning need in EAI agents. 
+One idea seems to lurk behind the three challenges: \emph{\say{more EAI agents, more energy demand}}. Indeed, the trends in Fig.~\ref{fig:energy_demands_AI_robotics} suggest that the CCE, BEE, and MIE expenditures will follow a similar pattern. Ongoing efforts to minimize BEE and improve the MIE include works like \cite{schroder2014, chalmers2015, mohammed2014, chemnitz2011}; which advocate strategies such as elastic actuation and optimized hardware selection and storage, energy sharing, and motion planning. As for CCE, it is important to define sample-efficient learning algorithms that account for the constant learning need in EAI agents. 
 
 Our stance is that achieving more efficient energy utilization in EAI goes beyond merely optimizing the bodies or learning strategies of individual agents; the true breakthrough lies in formulating strategies that harness the vast populations of robots to effectively utilize the diverse knowledge they accumulate. Such an approach could alleviate the CCE and MIE burdens by promoting and leveraging concurrent knowledge exchange, ultimately reducing the computational and mechanical energy expended in acquiring new skills. This uncharted terrain prompts consideration of the collective learning paradigm introduced in \cite{Haddadin2014SystemzumErstellen,Haddadin2015Systemgeneratingsets} as a means to harness scalability and facilitate knowledge exchange, thereby promoting energy efficiency in the realm of EAI.
 
@@ -693,7 +728,11 @@ As discussed in \cite{Kaelbling2020foundationefficientrobot}, efficient robotic 
 
 Our results suggest that utilizing the conventional paradigms of isolated, incremental, and transfer learning on many EAI agents does not lead to optimal energy utilization. This remains true even when multiple agents operate concurrently since, in the absence of true inter-agent knowledge exchange, energy requirements increase substantially as the number of EAI agents grows. Conversely, our simulation study highlighted that collective learning presents a solution to energy demands contingent on effectively sharing knowledge based on skill similarity. Notably, the CL paradigm showcased superior performance with increasing robot numbers, enabling concurrent acquisition of multiple skills.
 
-While collective learning holds great promise, it is crucial to recognize that the fundamental algorithms and infrastructure to make it a reality are either non-existent or undergoing active development. Additionally, contemporary state-of-the-art algorithms focused on proper incremental and transfer learning are still in their infancy. Nonetheless, given that collective learning not only tackles the formidable challenges posed by Embodied Artificial Intelligence but also presents a potential unified solution to broader learning challenges, we aspire to see the arguments presented in this discussion catalyze further research endeavors to bring collective learning to fruition.
+\myhl{While collective learning holds significant promise, it is crucial to recognize that the fundamental algorithms and infrastructure necessary to make it a reality are either nonexistent or in active development. Furthermore, contemporary state-of-the-art algorithms focusing on proper incremental and transfer learning are still in the early stages of development. However, although our primary focus has centered on how collective learning addresses the formidable energy challenges posed by EAI, it is essential to acknowledge that its potential extends far beyond this specific domain.}
+
+\myhl{The Collective learning paradigm is equally applicable to CAI agents. Indeed, recent developments have shed light on the potential of edge computing and federated learning, wherein computational tasks are distributed beyond the confines of centralized data centers to multiple CAI agents. Furthermore, foundational models developed through extensive research and learning now serve as the foundational blocks for solving more specific, nuanced tasks, remarking the power of true knowledge transfer.}
+
+\myhl{Much like in the context of EAI, the promise of collective learning for CAI becomes evident if efficient means to exchange and aggregate knowledge from CAI agents, each running its learning routines, are established. The synergies facilitated by the CL approach have the potential to significantly enhance the problem-solving capabilities and energy efficiency of CAI applications. This ultimately underscores the versatility and potential impact of collective learning across the spectrum of artificial intelligence domains. We hope the arguments in this discussion catalyze further research endeavors, ultimately bringing collective learning to fruition.}
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -713,13 +752,183 @@ Fig.~\ref{fig:power_per_episode} to Fig.~\ref{fig:cobot_watt_per_kg}
 %                                                 |                                                 |
 %                                                 |                                                 |
 % ===================================================================================================
-\renewcommand\refname{References}
-\bibliography{bib/References.bib}%,
+\renewcommand\refname{References and Notes}
+\bibliography{bib/References.bib}
 \bibliographystyle{Science}
+
 %\begin{thebibliography}{10}
 %	
+%	\bibitem{Szczepanski2019Economicimpactsartificial}
+%	M.~Szczepanski, Economic impacts of artificial intelligence ({AI}) (2019).
+%	
+%	\bibitem{Strubell2019EnergyPolicyConsiderations}
+%	E.~Strubell, A.~Ganesh, A.~McCallum, {\it Energy and Policy Considerations for
+%		Deep Learning in NLP\/}, {\it ACL\/} (2019).
+%	
+%	\bibitem{Cao2020TowardsAccurateReliable}
+%	Q.~Cao, A.~Balasubramanian, N.~Balasubramanian, {\it Towards Accurate and
+%		Reliable Energy Measurement of {NLP} Models\/}, {\it Proceedings of
+%		SustaiNLP: Workshop on Simple and Efficient Natural Language Processing\/}
+%	(Association for Computational Linguistics, Online, 2020), pp. 141--148.
+%	
+%	\bibitem{Chebotar2019Closingsimreal}
+%	Y.~Chebotar, {\it et~al.\/}, {\it Closing the sim-to-real loop: Adapting
+%		simulation randomization with real world experience\/}, {\it 2019
+%		International Conference on Robotics and Automation (ICRA)\/} (IEEE, 2019),
+%	pp. 8973--8979.
+%	
+%	\bibitem{Lehdonvirta2022futuresunpaidwork}
+%	V.~Lehdonvirta, L.~P. Shi, E.~Hertog, N.~Nagase, Y.~Ohta, {\it The future (s)
+%		of unpaid work: How susceptible do experts from different backgrounds think
+%		the domestic sphere is to automation?\/}, {\it Plos one\/} {\bf 18}, e0281282
+%	(2023).
+%	
+%	\bibitem{andrae2015global}
+%	A.~S. Andrae, T.~Edler, {\it On global electricity usage of communication
+%		technology: trends to 2030\/}, {\it Challenges\/} {\bf 6}, 117 (2015).
+%	
+%	\bibitem{Hintemann2022Cloudcomputingdrives}
+%	R.~Hintemann, S.~Hinterholzer, Cloud computing drives the growth of the data
+%	center industry and its energy consumption (2022).
+%	
+%	\bibitem{schwartz2019green}
+%	R.~Schwartz, J.~Dodge, N.~A. Smith, O.~Etzioni, Green ai (2019).
+%	
+%	\bibitem{vinuesa2020role}
+%	R.~Vinuesa, {\it et~al.\/}, {\it The role of artificial intelligence in
+%		achieving the {S}ustainable {D}evelopment {G}oals\/}, {\it Nature
+%		Communications\/} {\bf 11}, 1 (2020).
+%	
+%	\bibitem{zhou2020hulk}
+%	X.~Zhou, Z.~Chen, X.~Jin, W.~Y. Wang, {\it HULK: An Energy Efficiency Benchmark
+%		Platform for Responsible Natural Language Processing\/}, {\it arXiv preprint
+%		arXiv:2002.05829\/}  (2020).
+%	
+%	\bibitem{Dalgren2019GreenMLA}
+%	A.~Dalgren, Y.~Lundeg{\aa}rd, {\it GreenML : A methodology for fair evaluation
+%		of machine learning algorithms with respect to resource consumption\/}
+%	(2019).
+%	
+%	\bibitem{garcia2019estimation}
+%	E.~Garc{\'\i}a-Mart{\'\i}n, C.~F. Rodrigues, G.~Riley, H.~Grahn, {\it
+%		Estimation of energy consumption in machine learning\/}, {\it Journal of
+%		Parallel and Distributed Computing\/} {\bf 134}, 75 (2019).
+%	
+%	\bibitem{real2019regularized}
+%	E.~Real, A.~Aggarwal, Y.~Huang, Q.~V. Le, {\it Regularized evolution for image
+%		classifier architecture search\/}, {\it Proceedings of the aaai conference on
+%		artificial intelligence\/} (2019), pp. 4780--4789.
+%	
+%	\bibitem{krizhevsky2012imagenet}
+%	A.~Krizhevsky, I.~Sutskever, G.~E. Hinton, {\it Imagenet classification with
+%		deep convolutional neural networks\/}, {\it Advances in neural information
+%		processing systems\/} {\bf 25}, 1097 (2012).
+%	
+%	\bibitem{IFR2019}
+%	{\relax International Federation of Robotics}, {\it World Robotics 2019
+%		Industrial Robots\/} (IFR Statistical Department, 2019).
+%	
+%	\bibitem{sirkin2015}
+%	H.~L. Sirkin, M.~Zinser, J.~Rose, How robots will redefine competitiveness
+%	(2015). Retrieved March 8, 2016 from: \url{https://goo.gl/YxPfyF}.
+%	
+%	\bibitem{fraunhofer2016}
+%	{\relax Fraunhofer ISE}, Net installed electricity generation capacity in
+%	germany. Retrieved March 9, 2016 from:
+%	\url{https://www.energy-charts.de/power_inst.htm}.
+%	
+%	\bibitem{tobe2015}
+%	F.~Tobe, Why co-bots will be a huge innovation and growth driver for robotics
+%	industry (2015). Retrieved April 5, 2016 from: \url{http://goo.gl/hRG5Du}.
+%	
+%	\bibitem{IFR2015}
+%	{\relax International Federation of Robotics}, Service robot statistics.
+%	Retrieved April 5, 2016 from:
+%	\url{http://www.ifr.org/service-robots/statistics/}.
+%	
+%	\bibitem{schroder2014}
+%	S.~Schr\"oder, Optimized movements: Ballet of the bots (2014). Retrieved March
+%	8, 2016 from: \url{http://goo.gl/0Ir231}.
+%	
+%	\bibitem{chalmers2015}
+%	{\relax Chalmers University of Technology}, Smooth robot movements reduce
+%	energy consumption by up to 40 percent (2015). Retrieved March 8, 2016 from:
+%	\url{www.sciencedaily.com/releases/2015/08/150824064923.htm}.
+%	
+%	\bibitem{mohammed2014}
+%	A.~Mohammed, B.~Schmidt, L.~Wang, L.~Gao, {\it Minimizing Energy Consumption
+%		for Robot Arm Movement\/}, {\it Procedia CIRP\/} {\bf 25}, 400 (2014).
+%	
+%	\bibitem{chemnitz2011}
+%	M.~Chemnitz, G.~Schreck, J.~Krüger, {\it Analyzing energy consumption of
+%		industrial robots\/}, {\it Emerging Technologies Factory Automation (ETFA),
+%		2011 IEEE 16th Conference on\/} (2011), pp. 1--4.
+%	
+%	\bibitem{Haddadin2014SystemzumErstellen}
+%	S.~Haddadin, System zum erstellen von steuerungsdatens\"atzen f\"ur roboter
+%	(2014). German Patent {DE} 10 2014 112 639 B4 2018.02.08.
+%	
+%	\bibitem{Haddadin2015Systemgeneratingsets}
+%	S.~Haddadin, System for generating sets of control data for robots (2015).
+%	European Patent {EP} 3 189 385 {B}1.
+%	
+%	\bibitem{Garavan2012CollectiveLearning}
+%	T.~N. Garavan, R.~Carbery, {\it Collective Learning\/} (Springer US, Boston,
+%	MA, 2012), pp. 646--649.
+%	
+%	\bibitem{levine2018learning}
+%	S.~Levine, P.~Pastor, A.~Krizhevsky, J.~Ibarz, D.~Quillen, {\it Learning
+%		hand-eye coordination for robotic grasping with deep learning and large-scale
+%		data collection\/}, {\it The International journal of robotics research\/}
+%	{\bf 37}, 421 (2018).
+%	
+%	\bibitem{rudin2022learning}
+%	N.~Rudin, D.~Hoeller, P.~Reist, M.~Hutter, {\it Learning to walk in minutes
+%		using massively parallel deep reinforcement learning\/}, {\it Conference on
+%		Robot Learning\/} (PMLR, 2022), pp. 91--100.
+%	
+%	\bibitem{flairop2023}
+%	K.~I. f\"ur Technologie, {FLAIROP: Federated Learning for Robotic Picking},
+%	\url{https://flairop.com/} (2023).
+%	
+%	\bibitem{Kaelbling2020foundationefficientrobot}
+%	L.~P. Kaelbling, {\it The foundation of efficient robot learning\/}, {\it
+%		Science\/} {\bf 369}, 915 (2020).
+%	
+%	\bibitem{statista_ir_cobot_share}
+%	Statista, Share of traditional and collaborative robot unit sales worldwide
+%	from 2018 to 2022 (2020).
+%	
+%	\bibitem{montaqim2015}
+%	A.~Montaqim, Top 9 industrial robot companies and how many robots they have
+%	around the world (2015). Retrieved March 8, 2016 from:
+%	\url{http://goo.gl/QEIBr2}.
+%	
+%	\bibitem{fanuc2015}
+%	{\relax FANUC America}, Fanuc announces record-breaking 400,000 robots sold
+%	worldwide (2015). Retrieved March 8, 2016 from:
+%	\url{http://www.fanucamerica.com/FanucAmerica-news/Press-releases/PressReleaseDetails.aspx?id=76}.
+%	
+%	\bibitem{yaskawa2014}
+%	{\relax Motoman}, 7 things you may not know about yaskawa (2014). Retrieved
+%	March 8, 2016 from:
+%	\url{http://www.motoman.com/blog/index.php/7-things-may-know-yaskawa/}.
+%	
+%	\bibitem{ABB2015}
+%	{\relax ABB}, {ABB Robotics} (2015). Retrieved March 8, 2016 from:
+%	\url{http://new.abb.com/products/robotics}.
+%	
+%	\bibitem{statista_ir_operational_stock}
+%	Statista, Operational stock of multipurpose industrial robots worldwide from
+%	2010 to 2020 (2023).
+%	
+%	\bibitem{Heredia2023BreakingEnergyConsumption}
+%	J.~Heredia, C.~Schlette, M.~B. Kj{\ae}rgaard, {\it Breaking Down the Energy
+%		Consumption of Industrial and Collaborative Robots: A Comparative Study\/},
+%	{\it IEEE International Conference on Emerging Technologies and Factory
+%		Automation\/} (IEEE, 2023).
+%	
 %\end{thebibliography}
-
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
