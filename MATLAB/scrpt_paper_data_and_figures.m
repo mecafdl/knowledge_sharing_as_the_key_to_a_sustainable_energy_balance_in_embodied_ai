@@ -28,16 +28,18 @@ set(leg,'Interpreter','latex')
 
 % (fig, ax, plt, leg, tx, text_width, k_scaling, k_width_height)
 
-fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+% fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 6, 1, 1)
 grid off
 leg.Location    = 'northwest'; 
-leg.Orientation = 'horizontal'; 
+leg.Orientation = 'vertical'; 
   
 % Figure saving
 SAVE_FIG = 0;
 if SAVE_FIG == 1
     %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\data_center_energy_consumption','-pdf')
     exportgraphics(gcf,'/home/diaz/Documents/Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/data_center_energy_consumption.png','Resolution',600)
+    exportgraphics(gcf,'/home/diaz/Desktop/repos//Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/data_center_energy_consumption.png','Resolution',600)
     close(gcf);
 end    
 
@@ -121,14 +123,14 @@ plt2 =  plot(irEnDemand_table.year,irEnDemand_table.rate12ppy,'k--');
 plt3 =  plot(irEnDemand_table.year,irEnDemand_table.rate25ppy,'k:');
 plt  = [plt1,plt2,plt3];
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('$PJ$/Year @ (24/7)','interpreter','Latex','FontSize', 20);
+ylabel('PJ/Year @ (24/7)','interpreter','Latex','FontSize', 20);
 leg = legend('Actual','12\%/year','25\%/year', 'FontSize', 20);
 set(leg,'Interpreter','latex')
 xlim([2009 2025])
-fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 6, 1, 1)
 grid off
 leg.Location    = 'northwest'; 
-leg.Orientation = 'horizontal'; 
+leg.Orientation = 'vertical'; 
 % leg.FontSize    = 50;
 % ax.FontSize     = 40; 
 % set(plt,'LineWidth',3)
@@ -139,6 +141,7 @@ if SAVE_FIG == 1
     %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\ir_energy_projections','-pdf')
     %exportgraphics(fig,'./figures/ir_energy_projections.pdf','Resolution',300)
     exportgraphics(fig,'./figures/ir_energy_projections.png','Resolution',600)
+    exportgraphics(gcf,'/home/diaz/Desktop/repos//Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/ir_energy_projections.png','Resolution',600)
     close(fig);
 end    
 
@@ -192,15 +195,17 @@ ax  = gca;
 hold on
 plt =  plot(crStockEnergy_table.year,crStockEnergy_table.energy,'k-');
 xlabel('Year','interpreter','Latex','FontSize', 20);
-ylabel('$PJ$/Year @ (24/7)','interpreter','Latex','FontSize', 20);
+ylabel('PJ/Year @ (24/7)','interpreter','Latex','FontSize', 20);
+xlim([2017 inf])
+ylim([0 inf])
 % leg = legend('60\%/year','80\%/year', 'FontSize', 20);
 leg = [];% legend('Estimate', 'FontSize', 20);
 set(leg,'Interpreter','latex')
 
-fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 8.8, 2, 0.5)
+fcn_scrpt_prepare_figure(fig, ax, plt, leg, [], 6, 1, 1)
 grid off
 leg.Location    = 'northwest'; 
-leg.Orientation = 'horizontal'; 
+leg.Orientation = 'vertical'; 
 % leg.FontSize    = 50;
 % ax.FontSize     = 40; 
 % set(plt,'LineWidth',3)
@@ -211,6 +216,7 @@ if SAVE_FIG == 1
     %export_fig('C:\Users\ge73nuk\LRZ Sync+Share\xtras\cb_energy_projections','-pdf')
     %exportgraphics(fig,'./figures/cb_energy_projections.pdf','Resolution',300)
     exportgraphics(fig,'./figures/cb_energy_projections.png','Resolution',600)
+    exportgraphics(gcf,'/home/diaz/Desktop/repos//Knowledge-sharing-as-the-key-to-a-sustainable-energy-balance-in-embodied-AI/fig/cb_energy_projections.png','Resolution',600)
     close(gcf);
 end
 

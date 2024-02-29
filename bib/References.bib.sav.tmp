@@ -618,10 +618,8 @@
   volume  = {24},
 }
 
-@Article{,
-}
-
 @TechReport{SIHCAI2023ArtificialIntelligenceIndex,
   author = {{Stanford Institute for Human-Centered Artificial Intelligence}},
   title  = {Artificial Intelligence Index Report 2023},
-  year  
+  year   = {2023},
+  s
