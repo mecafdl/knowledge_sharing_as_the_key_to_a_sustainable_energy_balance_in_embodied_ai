@@ -13,7 +13,7 @@
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.45\textwidth]{fig/power_per_episode.png}
-	\caption{Power consumption per episode.}
+	\caption{\textbf{Power consumption per episode.}}
 	\label{fig:power_per_episode}
 \end{figure}
 % ---
@@ -63,32 +63,32 @@ where $ \alpha>0$ models the rate at which a robot in isolation learns any given
 	\alpha = -\frac{1}{c_0}\text{log}(\epsilon).
 \end{equation}
 % ---
-Since in isolated learning $c^{(IsL)}_{j,k} = c_0$, the trial episodes required by one single robot to learn the skills in the cluster $\mathcal{Z}_k$ is given by
+Since in isolated learning $c^{(\text{IsL})}_{j,k} = c_0$, the trial episodes required by one single robot to learn the skills in the cluster $\mathcal{Z}_k$ is given by
 % ---
 \begin{equation}
 	%	\begin{split}
 		%		C^{(IsL)}_{k} &= \sum_{j=1}^{N_{\mathcal{Z}}} c^{(IsL)}_{j,k}= N_{\mathcal{Z}}  \cancelto{c_{0}}{c^{(IsL)}_{j,k}} = N_{\mathcal{Z}} c_0
 		%	\end{split}
-	C^{(IsL)}_{k} = \sum_{j=1}^{N_{\mathcal{Z}}} c^{(IsL)}_{j,k}= N_{\mathcal{Z}}  c^{(IsL)}_{j,k} = N_{\mathcal{Z}} c_0.
+	C^{(\text{IsL})}_{k} = \sum_{j=1}^{N_{\mathcal{Z}}} c^{(\text{IsL})}_{j,k}= N_{\mathcal{Z}}  c^{(\text{IsL})}_{j,k} = N_{\mathcal{Z}} c_0.
 \end{equation}
 %-- 
 Similarly, the total trial episodes to learn the universe of skills is simply
 % ---
 \begin{equation}
-	C^{(IsL)}_{\mathcal{S}} = N_\mathcal{K} N_{\mathcal{Z}} c_0.
+	C^{(\text{IsL})}_{\mathcal{S}} = N_\mathcal{K} N_{\mathcal{Z}} c_0.
 \end{equation}
 % ---
 
 \textbf{Multi agent case.} Suppose that a batch of $m$ robots is used to learn the same number of skills in parallel in a given cluster $\mathcal{Z}_k$. Such a strategy only distributes equally the total number of episodes by the number of available robots; i.e.
 % ---
 \begin{equation}
-	^{\lvert \lvert}C^{(IsL)}_k=  \overbrace{\frac{1}{m}C^{(IsL)}_k}^{\text{episodes per robot}}.
+	^{\lvert \lvert}C^{(\text{IsL})}_k=  \overbrace{\frac{1}{m}C^{(\text{IsL})}_k}^{\text{episodes per robot}}.
 \end{equation}
 % ---
 
 % ---------------------------------------------------------------------------------------------------
 \paragraph{\textbf{Incremental Learning (IL)}}
-It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$ ---the self loops--- but also retains and uses the acquired knowledge to learn subsequent skills. The effect of incremental learning on the knowledge collection rate can be modeled to be directly proportional to the number of learned skills as
+It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be be leveraged by an agent in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self loops---but also retains and uses the acquired knowledge to learn subsequent skills. The effect of incremental learning on the knowledge collection rate can be modeled to be directly proportional to the number of learned skills as
 % ---
 \begin{equation}\label{eq:f_function_incremental}
 	f_{j,k}\left(N_{\zeta_k}\right) = -\alpha\left(\eta N_{\zeta_k} + 1 \right), 
@@ -109,26 +109,26 @@ again with a factor $\delta>0$ controlling the rate at which the exponential con
 Essentially, such choice of $\delta$ implies that the remaining knowledge in a cluster after seeing all its skills is negligible. Via the exchange factors $(\eta,\delta)$, in incremental learning the knowledge about every new skill gets gradually increased by leveraging previous knowledge, resulting in
 % ---
 \begin{equation*}\label{eq:remaining_knowledge__IL}
-	\bar{\sigma}^{(IL)}_{i,j}(n) = e^{-\alpha  \left(\eta N_{\zeta_k}+1\right) n} e^{-\delta N_{\zeta_k}}.
+	\bar{\sigma}^{(\text{IL})}_{i,j}(n) = e^{-\alpha  \left(\eta N_{\zeta_k}+1\right) n} e^{-\delta N_{\zeta_k}}.
 \end{equation*}
 % ---
 As the complexity $c_{j,k}$ of a skill can also be interpreted as the number of trial episodes required for the remaining knowledge to go below a threshold $\epsilon$; i.e.
 % ---
 \begin{equation*}
-	\bar{\sigma}^{(IL)}_{i,j}(n) \Big \rvert_{n \ge c^{(IL)}_{j,k}} \leq \epsilon.
+	\bar{\sigma}^{(\text{IL})}_{i,j}(n) \Big \rvert_{n \ge c^{(\text{IL})}_{j,k}} \leq \epsilon.
 \end{equation*}
 % ---
-Then, under this scheme the complexity $c^{(IL)}_{j,k}$ to learn a new is skill in the cluster results in
+Then, under this scheme the complexity $c^{(\text{IL})}_{j,k}$ to learn a new is skill in the cluster results in
 % ---
 \begin{equation}\label{eq:complexity_IL}
-	c^{(IL)}_{j,k} = -\frac{\text{log}(\epsilon) - \text{log}\left(\bar{\sigma}^{(IL)}_{j,k}(0)\right)}{\alpha (\eta N_{\zeta_k}+ 1)} = -\frac{\text{log}(\epsilon) + \delta N_{\zeta_k}}{\alpha (\eta N_{\zeta_k}+ 1)}  .
+	c^{(\text{IL})}_{j,k} = -\frac{\text{log}(\epsilon) - \text{log}\left(\bar{\sigma}^{(IL)}_{j,k}(0)\right)}{\alpha (\eta N_{\zeta_k}+ 1)} = -\frac{\text{log}(\epsilon) + \delta N_{\zeta_k}}{\alpha (\eta N_{\zeta_k}+ 1)}  .
 \end{equation}
 % ---
 The total number of trial episodes $ C_k $ that an agent following an incremental learning strategy needs to learn the $N_{\mathcal{Z}_k}$ skills in a cluster $ \mathcal{Z}_k $ is given by
 % ---
 \begin{align}\label{eq:total_episodes_incremental}
 	\begin{split}
-		C^{(IL)}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(IL)}_{j,k}.
+		C^{(\text{IL})}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(\text{IL})}_{j,k}.
 	\end{split}
 \end{align}
 % ---
@@ -173,19 +173,19 @@ as $1$ represents all the knowledge in $\mathcal{S}$. Asm.~\ref{assumption:clust
 Consequently, the remaining knowledge when transfer and incremental learning are used in conjunction is
 % ---
 \begin{equation}\label{eq:remaining_knowledge__ITL}
-	\bar{\sigma}^{(TIL)}_{j,k}(n) = \left(1- \beta_k\right) e^{-\alpha  \left(\frac{ \eta N_{\zeta_k}+1}{1 - \beta_k}\right) n} e^{-\delta N_{\zeta_k}}.
+	\bar{\sigma}^{(\text{TIL})}_{j,k}(n) = \left(1- \beta_k\right) e^{-\alpha  \left(\frac{ \eta N_{\zeta_k}+1}{1 - \beta_k}\right) n} e^{-\delta N_{\zeta_k}}.
 \end{equation}
 % ---
 Similar to incremental learning, the complexity to learn a skill in transfer learning is
 \begin{equation}\label{eq:skill_complexity_TL}
-	c^{(TIL)}_{j,k} = -\frac{1 - \beta_{k}}{\alpha (\eta N_{\zeta_k}+ 1)}\left[\text{log}(\epsilon) + \delta N_{\zeta_k} - \text{log}(1 - \beta_{k})\right]
+	c^{(\text{TIL})}_{j,k} = -\frac{1 - \beta_{k}}{\alpha (\eta N_{\zeta_k}+ 1)}\left[\text{log}(\epsilon) + \delta N_{\zeta_k} - \text{log}(1 - \beta_{k})\right]
 \end{equation}
 % ---
 and the total number of episodes  $ C_k $ that an agent requires to learn the $N_{\mathcal{Z}_k}$ skills is merely their sum
 % ---
 \begin{align}\label{eq:total_episodes_transfer}
 	\begin{split}
-		C^{(TIL)}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(TIL)}_{j,k}.
+		C^{(\text{TIL})}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(TIL)}_{j,k}.
 	\end{split}
 \end{align}
 % --- 
@@ -200,7 +200,7 @@ Correspondingly, when using transfer learning in parallel $\beta_k$ is replaced 
 % ---
 \begin{align}
 	\begin{split}
-		{}^{\lvert \rvert}C^{(TIL)}_k &= \sum^{\frac{N_{\mathcal{Z}}}{m}}_{j=1} c^{(TIL)}_{j,k}.
+		{}^{\lvert \rvert}C^{(\text{TIL})}_k &= \sum^{\frac{N_{\mathcal{Z}}}{m}}_{j=1} c^{(\text{TIL})}_{j,k}.
 	\end{split}
 \end{align}
 % ---
@@ -306,7 +306,7 @@ In this scenario all $m$ agents are always concurrently learning skills from the
 	\hspace*{\fill}
 	\subfloat[]{\includegraphics[width= 0.7\textwidth]{fig/dynamics_collective_learning.png} \label{fig:dynamics_collective_learning}}
 	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning} Scenario 1: \subref{fig:cluster_learning_sequence} the skills of each cluster are learned by the $ m$ robots in succession, \subref{fig:dynamics_isolated_learning} isolated learning, \subref{fig:dynamics_incremental_learning} incremental learning,  \subref{fig:dynamics_incremental_transfer_learning} incremental + transfer learning, \subref{fig:dynamics_collective_learning} collective learning.}
+	\caption[] {\label{fig:collective_learning} \textbf{Scenario 1.} (\subref{fig:cluster_learning_sequence}) the skills of each cluster are learned by the $ m$ robots in succession, (\subref{fig:dynamics_isolated_learning}) isolated learning, (\subref{fig:dynamics_incremental_learning}) incremental learning,  (\subref{fig:dynamics_incremental_transfer_learning}) incremental + transfer learning, (\subref{fig:dynamics_collective_learning}) collective learning.}
 \end{figure}
 % ---
 
@@ -327,7 +327,7 @@ According to the International Federation of Robotics (IFR) the unit sales of co
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width= 0.45\textwidth]{fig/share_industrial_and_cobots.png} 
-	\caption{Unit sales share industrial robots to cobots }
+	\caption{\textbf{Unit sales share industrial robots to cobots.} Cobots have been steadily gaining representation in the robotics market.}
 	\label{fig:industrial_cobot_share}
 \end{figure}
 % ---
@@ -349,7 +349,7 @@ The unit sales are congruent with the the estimated operational stock of industr
 		\label{fig:cobot_stock}
 	\end{subfigure}
 	\hspace*{\fill}	
-	\caption[] {\label{fig:robot_forecasts} Forecasts for robot operational stock. \subref{fig:ir_stock} industrial robots install base forecast and \subref{fig:cobot_stock} cobots install base forecast.}	
+	\caption[] {\label{fig:robot_forecasts} \textbf{Forecasts for robot operational stock.} (\subref{fig:ir_stock}) industrial robots install base forecast and (\subref{fig:cobot_stock}) cobots install base forecast.}	
 \end{figure*}
 % ---
 % ===================================================================================================
@@ -380,7 +380,7 @@ According to \cite{montaqim2015} and available press releases of different robot
 		\includegraphics[width=\textwidth]{industrial_robots_average_power_per_category} \label{fig:ir_average_power}
 	\end{subfigure}
 	\hspace*{\fill}
-	\caption[] {\label{fig:ir_statistics} Industrial robots statistics. \subref{fig:manufacturers_pie} Percentage of installed industrial robots per manufacturer and \subref{fig:ir_average_power} average power consumption of industrial robots per category.}
+	\caption[] {\label{fig:ir_statistics} \textbf{Industrial robots statistics.} (\subref{fig:manufacturers_pie}) Percentage of installed industrial robots per manufacturer and (\subref{fig:ir_average_power}) average power consumption of industrial robots per category.}
 \end{figure*}
 % ---
 
@@ -392,7 +392,7 @@ Since Fanuc, Yaskawa, and ABB make for two-thirds of the total install base of i
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.45\textwidth]{cobot_watt_per_kg.png}
-	\caption{Power consumption per payload for different cobots.}
+	\caption{\textbf{Power consumption per payload for different cobots.} The average power consumption can be estimated at around 40 W.}
 	\label{fig:cobot_watt_per_kg}
 \end{figure}
 %---
