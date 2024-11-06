@@ -34,7 +34,7 @@ f = @(eta, N_zeta) eta.*N_zeta+1;
 g = @(delta, N_zeta) exp(-delta*N_zeta);
 
 %% number of robots available
-numberOfRobots = 32;
+maxNumberOfRobots = 128;
 % skill_labels = cell(N_Z/m,1);
 % for i=1:N_Z/m
 %     skill_labels{i,1} = ['s_{',num2str(i),'}'];
@@ -292,86 +292,100 @@ plot(episodes,refsigma,'--',LineWidth=2)
 clc
 close all
 
+
+% Alpha_robots  = diag(alpha_min + (alpha_max-alpha_min).*rand(maxNumberOfRobots,1));
+
+
+
 warning("<<ALL>> m robots placed in one cluster at a time concurrently exchanging knowledge")
 pause(2)
 clear c_jk_cl_episodes
-entry = 1;
-% Loop over robots
-for numberOfRobots = 32% [2,4,8,16,32,64,128]   
-    Alpha   = diag(alpha_min + (alpha_max-alpha_min).*rand(numberOfRobots,1));
-    A_full  = ones(numberOfRobots) - eye(numberOfRobots);
-    A       = A_full;
-    fig     = figure('color','w');
-    
-    % Coupling
-    gamma_0 = 0.05;
-    Gamma   = 0.25*eta_0.*randn(numberOfRobots,numberOfRobots) + gamma_0;
-    Gamma   = (Gamma + transpose(Gamma))./2;
-    Gamma   = Gamma - diag(Gamma).*eye(numberOfRobots);
-    
-    r       = double(gamma_0==0) + double(gamma_0~=0)*numberOfRobots;
-    c_jk_cl = zeros(skillsPerCluster, totalClusters);
-    % Loop over clusters
-    for k = 1:totalClusters
-        disp(['Cluster: ',num2str(k),' with No. Robots: ', num2str(numberOfRobots), ' --------------------'])
-        subplot(1,totalClusters,k)
-        beta_k = (k-1)/totalClusters.* rand(numberOfRobots,1);
-        % Loop over skills
-        for learnedSkills = 0:skillsPerCluster/numberOfRobots-1    
-            j          = learnedSkills+1;
-            sigmaBar_0 = (1 - beta_k).*g(delta, r*learnedSkills).*ones(numberOfRobots,1);
-            eta_robots = abs(0.1*eta_0.*randn(numberOfRobots,1) + eta_0);
-            h          = -Alpha.*((1 - beta_k).^(-1)).*f(eta_robots, r*learnedSkills).*eye(numberOfRobots);
-            % F        = a*eye(m) + gamma.*A;
-            % lambda_F = eig(F);
-            % disp(lambda_F)
-            % if any(real(lambda_F)>0)
-            %     warning('Unstable!!!')
-            %     return
-            % end
-            %sigmaBar   = transpose(ode4(@(n,sigmaBar) F*sigmaBar, n, sigmaBar_0));
-            % remainingKnowledge   = transpose(ode4(@(n,sigmaBar) fcn_knowledge_integration(sigmaBar, numberOfRobots, diag(a), gamma_0.*A), episodes, sigmaBar_0));
-            remainingKnowledge   = transpose( ...
-                ode4(@(n,sigmaBar) fcn_collective_knowledge_dynamics(sigmaBar, numberOfRobots, h, Gamma), episodes, sigmaBar_0));
-            %c_jk_cl(j, k)  = episodes(min(find(remainingKnowledge(1,:)<epsilon)));
-            c_jk_cl(j, k) = ceil(mean(episodes(cell2mat(arrayfun(@(i) min(find(remainingKnowledge(i,:)<epsilon)),1:numberOfRobots,'UniformOutput',false)))));
-            %semilogy(episodes,remainingKnowledge,'LineWidth',2)
-            % semilogy(episodes,remainingKnowledge,'k-','LineWidth',1)
-            loglog(episodes,mean(remainingKnowledge,1),'k-','LineWidth',1)
-            loglog(episodes,remainingKnowledge,'k-','LineWidth',1)
-            % plot(c_jk_cl(j, k),max(mean(remainingKnowledge,1)),'ko','LineWidth',1)
-            % plot(episodes,remainingKnowledge,'LineWidth',2)
-            xlim([0 episodes(end)])
-            ylim([1E-3 1E0])
-            % xticks([0 50 100])
-            xticks([10^0 10^1 10^2])
-            xticklabels({'1','10', '$c_0$'})
-            yticks([1E-3 1E-2 1E-1 1E0])
-            yticklabels({'','$\epsilon$', '', '1'})
-            set(gca,'TickLabelInterpreter','latex')
-            hold on
+
+
+
+for scenario = 1:5
+    entry = 1;
+    % Loop over robots
+    for numberOfRobots = [2,4,8,16,32,64,128]   
+        %Alpha   = Alpha_robots(1:numberOfRobots,1:numberOfRobots);
+        Alpha  = diag(alpha_min + (alpha_max-alpha_min).*rand(numberOfRobots,1)); 
+        A_full  = ones(numberOfRobots) - eye(numberOfRobots);
+        A       = A_full;
+        fig     = figure('color','w');
+        
+        % Coupling
+        gamma_0 = 0.05;
+        Gamma   = 0.25*eta_0.*randn(numberOfRobots,numberOfRobots) + gamma_0;
+        Gamma   = (Gamma + transpose(Gamma))./2;
+        Gamma   = Gamma - diag(Gamma).*eye(numberOfRobots);
+        
+        r       = double(gamma_0==0) + double(gamma_0~=0)*numberOfRobots;
+        c_jk_cl = zeros(skillsPerCluster, totalClusters);
+        % Loop over clusters
+        for k = 1:totalClusters
+            disp(['Cluster: ',num2str(k),' with No. Robots: ', num2str(numberOfRobots), ' --------------------'])
+            subplot(1,totalClusters,k)
+            beta_k = (k-1)/totalClusters.* rand(numberOfRobots,1);
+            % Loop over skills
+            for learnedSkills = 0:skillsPerCluster/numberOfRobots-1    
+                j          = learnedSkills+1;
+                sigmaBar_0 = (1 - beta_k).*g(delta, r*learnedSkills).*ones(numberOfRobots,1);
+                eta_robots = abs(0.1*eta_0.*randn(numberOfRobots,1) + eta_0);
+                h          = -Alpha.*((1 - beta_k).^(-1)).*f(eta_robots, r*learnedSkills).*eye(numberOfRobots);
+                % F        = a*eye(m) + gamma.*A;
+                % lambda_F = eig(F);
+                % disp(lambda_F)
+                % if any(real(lambda_F)>0)
+                %     warning('Unstable!!!')
+                %     return
+                % end
+                %sigmaBar   = transpose(ode4(@(n,sigmaBar) F*sigmaBar, n, sigmaBar_0));
+                % remainingKnowledge   = transpose(ode4(@(n,sigmaBar) fcn_knowledge_integration(sigmaBar, numberOfRobots, diag(a), gamma_0.*A), episodes, sigmaBar_0));
+                remainingKnowledge   = transpose( ...
+                    ode4(@(n,sigmaBar) fcn_collective_knowledge_dynamics(sigmaBar, numberOfRobots, h, Gamma), episodes, sigmaBar_0));
+                %c_jk_cl(j, k)  = episodes(min(find(remainingKnowledge(1,:)<epsilon)));
+                c_jk_cl(j, k) = ceil(mean(episodes(cell2mat(arrayfun(@(i) min(find(remainingKnowledge(i,:)<epsilon)),1:numberOfRobots,'UniformOutput',false)))));
+                %semilogy(episodes,remainingKnowledge,'LineWidth',2)
+                % semilogy(episodes,remainingKnowledge,'k-','LineWidth',1)
+                loglog(episodes,mean(remainingKnowledge,1),'k-','LineWidth',1)
+                loglog(episodes,remainingKnowledge,'k-','LineWidth',1)
+                % plot(c_jk_cl(j, k),max(mean(remainingKnowledge,1)),'ko','LineWidth',1)
+                % plot(episodes,remainingKnowledge,'LineWidth',2)
+                xlim([0 episodes(end)])
+                ylim([1E-3 1E0])
+                % xticks([0 50 100])
+                xticks([10^0 10^1 10^2])
+                xticklabels({'1','10', '$c_0$'})
+                yticks([1E-3 1E-2 1E-1 1E0])
+                yticklabels({'','$\epsilon$', '', '1'})
+                set(gca,'TickLabelInterpreter','latex')
+                hold on
+            end
+            p = area(episodes,  epsilon*ones(numel(episodes),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
+            plot(episodes,epsilon*ones(numel(episodes),1),'k:','LineWidth',2);
+            title(['$(r_i,\mathcal{Z}_{',num2str(k),'}$)'],'FontSize',25,'Interpreter','latex')
+            xlabel('Episodes','FontSize',25)
+            ylabel(['$\bar{\boldmath{\sigma}}^{(\mathrm{CL})}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
         end
-        p = area(episodes,  epsilon*ones(numel(episodes),1),'FaceColor',[0 1 0],'FaceAlpha',0.25,'EdgeColor','w');
-        plot(episodes,epsilon*ones(numel(episodes),1),'k:','LineWidth',2);
-        title(['$(r_i,\mathcal{Z}_{',num2str(k),'}$)'],'FontSize',25,'Interpreter','latex')
-        xlabel('Episodes','FontSize',25)
-        ylabel(['$\bar{\boldmath{\sigma}}^{(\mathrm{CL})}_{j,',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+        for ax=1:totalClusters
+            fcn_scrpt_prepare_graph_science_std([], fig.Children(ax), [], [], [], 18, 3, 0.25)
+        end
+        fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
+        pause(1)
+        tightfig(fig);
+        
+    
+        SAVE_FIG = 0;
+        if numberOfRobots == 32 && SAVE_FIG == 1
+            exportgraphics(gcf, fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_collective_learning.png'),'Resolution',600)
+            close(gcf);
+        else
+            close(fig)
+        end        
+    
+        c_jk_cl_episodes(entry,:,scenario) = [sum(c_jk_cl,1), sum(c_jk_cl,'all')] ;
+        entry                     = entry + 1; 
     end
-    for ax=1:totalClusters
-        fcn_scrpt_prepare_graph_science_std([], fig.Children(ax), [], [], [], 18, 3, 0.25)
-    end
-    fcn_scrpt_prepare_graph_science_std(fig, [], [], [], [], 18, 3, 0.25)
-    pause(1)
-    tightfig(fig);
-
-SAVE_FIG = 1;
-if numberOfRobots == 32 && SAVE_FIG == 1
-    exportgraphics(gcf, fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','dynamics_collective_learning.png'),'Resolution',600)
-    close(gcf);
-end        
-
-    c_jk_cl_episodes(entry,:) = [sum(c_jk_cl,1), sum(c_jk_cl,'all')] ;
-    entry                     = entry + 1; 
 end
 %% Alternative robot distribution: EQUAL robots per cluster
 close all
@@ -562,25 +576,112 @@ if SAVE_FIG == 1
     close(gcf);
 end    
 %%
+clc
+close all
+y = rand(1,10); % your mean vector;
+x = 1:numel(y);
+std_dev = 1;
+curve1 = y + std_dev;
+curve2 = y - std_dev;
+x2 = [x, fliplr(x)];
+inBetween = [curve1, fliplr(curve2)];
+fill(x2, inBetween, 'g');
+hold on;
+plot(x, y, 'r', 'LineWidth', 2);
+
+%% Total number of episodes
+close all
+clc
+
+c_jk_cl_episodes_mean = c_jk_cl_episodes(:,end,3);
+c_jk_cl_episodes_std = ceil(std(c_jk_cl_episodes,[],3));
+x = 1:7;
+curve1 = c_jk_cl_episodes_mean(:,end) + c_jk_cl_episodes_std(:,end);
+curve2 = c_jk_cl_episodes_mean(:,end) - c_jk_cl_episodes_std(:,end);
+x2 = [x, fliplr(x)];
+inBetween = [curve1', fliplr(curve2)'];
+fill(x2, inBetween, 'g');
+hold on;
+
+%%
+close all
+patch([x fliplr(x)], [curve2'  fliplr(curve1')], [0.6  0.7  0.8],'FaceColor',[0.5 0.5 0.5],'FaceAlpha',0.25,'EdgeColor','w');
+hold on
+plot(x, c_jk_cl_episodes_mean(:,end), 'k', 'LineWidth', 1);
+set(gca, 'YScale', 'log')
+
+
+%%
+
+% factor = [2,4,8,16,32,64,128]'*105E3;
+fig = figure('color','w');
+% p0 = semilogy([2,4,8,16,32,64,128],c_jk_iso_episodes(:,end),'o-');
+% hold on
+% p1 = plot([2, 4, 8, 16, 32, 64, 128],c_jk_il_episodes(:,end),'o-');
+% p2 = plot([2, 4, 8, 16, 32, 64, 128],c_jk_til_episodes(:,end),'o-');
+% p3 = plot([2, 4, 8, 16, 32, 64, 128],c_jk_cl_episodes(:,end),'o-');
+% p4 = plot(   [4, 8, 16, 32, 64, 128],c_jk_cl_dist_episodes,'o-');
+p0 = semilogy(1:7,ceil(c_jk_iso_episodes(:,end)),'o-');
+hold on
+p1 = plot(1:7,ceil(c_jk_il_episodes(:,end)),'o-');
+p2 = plot(1:7,ceil(c_jk_til_episodes(:,end)),'o-');
+p3 = plot(1:7,c_jk_cl_episodes(:,end),'o-');
+p4 = plot(2:7,c_jk_cl_dist_episodes,'o-');
+
+plot(5*ones(size(1E1:100:1E5)),1E0:100:1E5,'k--','LineWidth',3)
+% xticks([2,4,8,16,32,64,128])
+xticks([1:7])
+xticklabels({'2','4','8','16','32','64','128'})
+% xlabel('m','FontSize',25)
+% ylabel('$C_\mathcal{S}$','FontSize',25,'Interpreter','latex')
+xlabel('Number of robots','FontSize',25)
+ylabel('Complexity [episodes]','FontSize',25)
+% leg = legend('IsL','IL','TIL','CL','CL2');
+leg = legend('IsL','IL','TIL','CL','CL$_\mathrm{distributed}$');
+fcn_scrpt_prepare_graph_science_std(fig, gca, [p0, p1, p2, p3, p4], leg, [], 18/2, 3, 1)
+leg.Location = 'northeast';
+leg.Box = 'on';
+fig = gcf;           % generate a figure
+tightfig(fig);
+pause(1)
+
+SAVE_FIG = 0;
+if SAVE_FIG == 1
+    exportgraphics(gcf, fullfile(fileparts(matlab.desktop.editor.getActiveFilename), ...
+        'figures','total_episodes_per_n_robots.png'),'Resolution',600)
+    close(gcf);
+end  
+%%
 fig.Units = 'centimeters';        % set figure units to cm
 % f.Position = [1203 646 478 174];
 fig.PaperUnits = 'centimeters';   % set pdf printing paper units to cm
 fig.PaperSize = fig.Position(3:4);  % assign to the pdf printing paper the size of the figure
 print(fig,'-dpdf','-r600','-painters',fullfile(fileparts(matlab.desktop.editor.getActiveFilename),'figures','total_energy_per_n_robots'));
 disp('Printing done!')
+%%
 
+y = rand(1,10); % your mean vector;
+x = 1:numel(y);
+std_dev = 1;
+curve1 = y + std_dev;
+curve2 = y - std_dev;
+x2 = [x, fliplr(x)];
+inBetween = [curve1, fliplr(curve2)];
+fill(x2, inBetween, 'g');
+hold on;
+plot(x, y, 'r', 'LineWidth', 2);
 %% Total energetic cost
 close all
 
 %factor = [2,4,8,16,32,64,128]'*105E3;
-factor = [2,4,8,16,32,64,128]'*(40 + 300 + 1416)*(60);
+factor = transpose([2,4,8,16,32,64,128])*(40 + 300 + 1416)*(60);
 fig = figure('color','w');
 p0 = semilogy([2,4,8,16,32,64,128],factor.*c_jk_iso_episodes(:,end),'o-');
 hold on
-p1 = plot([2, 4, 8, 16, 32, 64,128],factor.*c_jk_il_episodes(:,end),'o-');
-p2 = plot([2, 4, 8, 16, 32, 64,128],factor.*c_jk_til_episodes(:,end),'o-');
-p3 = plot([2, 4, 8, 16, 32, 64,128],factor.*c_jk_cl_episodes(:,end),'o-');
-p4 = plot(   [4, 8, 16, 32, 64,128],factor(2:end).*c_jk_cl_dist_episodes','o-');
+p1 = plot([2, 4, 8, 16, 32, 64, 128],factor.*c_jk_il_episodes(:,end),'o-');
+p2 = plot([2, 4, 8, 16, 32, 64, 128],factor.*c_jk_til_episodes(:,end),'o-');
+p3 = plot([2, 4, 8, 16, 32, 64, 128],factor.*c_jk_cl_episodes(:,end),'o-');
+p4 = plot(   [4, 8, 16, 32, 64, 128],factor(2:end).*c_jk_cl_dist_episodes','o-');
 % plot(32*ones(size(1E1:100:1E5)),1E1:100:1E5,'k--','LineWidth',3)
 % xticks([2,4,8,16,32,64,128])
 xlim([1 128])
