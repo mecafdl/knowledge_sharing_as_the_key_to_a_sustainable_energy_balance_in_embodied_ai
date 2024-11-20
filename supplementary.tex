@@ -13,7 +13,7 @@
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.45\textwidth]{fig/power_per_episode.png}
-	\caption{\textbf{Power consumption per episode.}}
+	\caption{\textbf{Power consumption per episode.} An episode is an attempt to accomplish a skill. For simplicity, the power to complete an episode is assumed constant.}	
 	\label{fig:power_per_episode}
 \end{figure}
 % ---
@@ -30,7 +30,7 @@ Consequently, the energy consumed by a robot learning a skill $ s_j $ is directl
 	E_j =\sum_{n=1}^{c_j} e_j(n) = e_0c_j.
 \end{equation}
 % ---
-The energy spent on learning $\mathcal{S}$ under the absence of knowledge transfer is
+The energy spent on learning $\mathcal{S}$ under the absence of knowledge sharing is
 % ---
 \begin{equation}\label{eq:total_energy}
 	E_{\mathcal{S}} = \sum_{j=1}^{{N_{\mathcal{S}}}} E_j = e_0 \sum_{j=1}^{{N_{\mathcal{S}}}} c_j%N_{\mathcal{T}} \cdot e_0 \cdot c_j 
