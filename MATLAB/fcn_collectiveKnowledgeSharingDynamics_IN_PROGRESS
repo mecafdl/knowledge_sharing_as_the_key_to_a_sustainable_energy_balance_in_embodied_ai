@@ -1,0 +1,67 @@
+            arguments
+                obj (1,1) ReachingExperiment
+                NameValueArgs.trainingGridSize
+            end
+            
+function d_coupledRemainingKnowledge = ...
+    fcn_collectiveKnowledgeSharingDynamics( ...
+        agentsRemainingKnowledge, ...
+        numberOfAgents, ...
+        selfKnowledgeDynamics, ...
+        gamma_0, ...
+        weightedAdjacencyMatrix, ...
+        EPISODIC)
+    integratedKnowledgeDynamics  = zeros(numberOfAgents,1);
+
+    if EPISODIC == 1
+        weightedAdjacencyMatrix = fcn_generateGamma(gamma_0, numberOfAgents);
+    end
+    % =====================================================================
+
+    for agent = 1:numberOfAgents
+        % integratedKnowledgeDynamics(agent) = ...
+        %     adjacencyMatrix(agent,:)*(agentsKnowledge - agentsKnowledge(agent)*ones(numberOfAgents,1));
+        % integratedKnowledgeDynamics(agent) = ...
+        %     adjacencyMatrix(agent,:)*(integrationFunction(agentsKnowledge,agentsKnowledge(agent)));
+        integratedKnowledgeDynamics(agent) = ...
+            weightedAdjacencyMatrix(agent,:)*(fcn_knowledgeIntegration(agentsRemainingKnowledge,agentsRemainingKnowledge(agent)));
+        % integratedKnowledgeDynamics(agent) = ...
+        %     sum(adjacencyMatrix(agent,:));
+    end
+    % integratedKnowledgeDynamics
+    degreeMatrix = diag(sum(weightedAdjacencyMatrix,2));
+    laplacianMatrix = degreeMatrix - weightedAdjacencyMatrix; 
+    aux = laplacianMatrix*agentsRemainingKnowledge;
+    %d_coupledKnowledge = selfKnowledgeDynamics*agentsKnowledge - laplacianMatrix*agentsKnowledge;
+    % d_coupledKnowledge = min(selfKnowledgeDynamics*agentsKnowledge - integratedKnowledgeDynamics,0);
+    % d_coupledKnowledge = selfKnowledgeDynamics*agentsKnowledge - integratedKnowledgeDynamics;
+    % d_coupledKnowledge = (selfKnowledgeDynamics - integratedKnowledgeDynamics)*agentsKnowledge;
+    % d_coupledKnowledge = (selfKnowledgeDynamics - integratedKnowledgeDynamics)*agentsKnowledge;
+    % d_coupledKnowledge = min(0,(diag(selfKnowledgeDynamics) - integratedKnowledgeDynamics)).*agentsKnowledge;
+    d_coupledRemainingKnowledge = (diag(selfKnowledgeDynamics) - integratedKnowledgeDynamics).*agentsRemainingKnowledge;
+    % Constraints to keep the remaining knowledge  in [0,1]
+    d_coupledRemainingKnowledge(agentsRemainingKnowledge<0) = 0;
+    if any(agentsRemainingKnowledge>1)
+        d_coupledRemainingKnowledge(agentsRemainingKnowledge>1) = 0;
+    end
+
+    % degreeMatrix = diag(sum(adjacencyMatrix,2));
+    % laplacianMatrix = degreeMatrix - adjacencyMatrix; 
+    % d_coupledKnowledge = selfKnowledgeDynamics*agentsKnowledge - laplacianMatrix*agentsKnowledge;
+
+end
+
+function distance = fcn_knowledgeIntegration(neighborsKnowledge,agentKnowledge)
+    alpha    = 2;
+    % distance = exp(-alpha*abs(neighborsKnowledge-agentKnowledge));
+    distance = exp(-alpha*(neighborsKnowledge-agentKnowledge).^2);
+end
+
+
+% function out = integrationFunction(neighborsKnowledge,agentKnowledge)
+%     % mean([agentsKnowledge, agentsKnowledge(agent)*ones(numberOfAgents,1)],2)
+% 
+%     distance = abs(neighborsKnowledge-agentKnowledge);
+% 
+%     out = exp(-3*distance);
+% end
