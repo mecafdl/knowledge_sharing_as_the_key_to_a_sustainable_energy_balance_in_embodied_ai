@@ -12,10 +12,10 @@ end
 clc
 close all
 % figure('color','w')
-clear the_mean
+clear mean_learned_skills
 for index = 1:9
-    the_data = cell2mat(arrayfun(@(i) learnedSkillsStorage{i}(:,index),1:10,'UniformOutput',false));
-    the_mean(:,index) = floor(100*(ceil(mean(the_data,2))./parameters.totalSkills));
+    the_learned_skills = cell2mat(arrayfun(@(i) learnedSkillsStorage{i}(:,index),1:10,'UniformOutput',false));
+    mean_learned_skills(:,index) = floor(100*(ceil(mean(the_learned_skills,2))./parameters.totalSkills));
     % b =plot(x,the_mean,'color',cmap(index,:),'Marker',allMarkers(index));
     % figure
     % b =bar(x,the_mean);
@@ -27,33 +27,146 @@ for index = 1:9
 end
 %%
 
-cmap = distinguishable_colors(9);
+cmap = flip(distinguishable_colors(9,{'w','k'}),1);
+legends = {...
+    '$\bar{\eta}_+,\bar{\gamma}_-$',...
+    '$\bar{\eta}_+,\bar{\gamma}_0$',...
+    '$\bar{\eta}_+,\bar{\gamma}_+$',...
+    '$\bar{\eta}_0,\bar{\gamma}_-$',...
+    '$\bar{\eta}_0,\bar{\gamma}_0$',...
+    '$\bar{\eta}_0,\bar{\gamma}_+$',...
+    '$\bar{\eta}_-,\bar{\gamma}_-$',...
+    '$\bar{\eta}_-,\bar{\gamma}_0$',...
+    '$\bar{\eta}_-,\bar{\gamma}_+$'};
+clc
+close all
+% fig = figure('color','w');
+tl = tiledlayout(3,3);
+tl.Title.String = "Total episodes for all skills";
+t.Title.FontWeight = 'bold';
+
+for index = 1:9
+    nexttile
+    upperBound  =  12800*ones(6,1);
+    lowerBound= parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
+    patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.5  0.5  0.5],'FaceAlpha',0.25,'EdgeColor','w');
+    hold on
+    the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
+    the_mean = ceil(mean(the_learned_skills,2));
+    the_std  = ceil(std(the_learned_skills,[],2));
+    upperBound  = the_mean + the_std;
+    lowerBound = the_mean - the_std;    
+    x        = 2:7;
+    patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0  0  0],'FaceColor',cmap(index,:),'FaceAlpha',0.1,'EdgeColor','w');
+    p(index) = plot(x, the_mean,'LineStyle','-', 'LineWidth', 3,'Color','k');%,cmap(index,:));
+    aux = scatter(x, the_mean,100,mean_learned_skills(:,index),'filled','MarkerEdgeColor',cmap(index,:));
+    
+    cb = colorbar;
+    clim(gca,[0, 100]);
+    ylabel(cb,'Success rate')
+    colormap jet
+    ylim([1 12800])
+    xticks([1:7])
+    xticklabels({'2','4','8','16','32','64','128'})
+    yticks([1E+0 1E+1 1E+2 1E+3 1E+4])
+    yticklabels({'10^0','10^1', '10^2', '10^3', '10^4'})
+    xlabel('Number of robots','FontSize',25)
+    ylabel('Complexity','FontSize',25)
+    set(gca, 'YScale', 'log')
+    
+    leg = legend(p(index),legends{index},'Interpreter','latex');
+    % axis square
+
+    fcn_scrpt_prepare_graph_science_std(gcf, gca, p(index), leg, [], 6, 1, 1)
+    leg.Location = 'northeast';
+    leg.Orientation = 'horizontal';
+    leg.Interpreter = 'latex';
+    leg.Box = 'on';
+    leg.FontSize = 15;
+end
+%%
+xticks([1:7])
+xticklabels({'2','4','8','16','32','64','128'})
+xlabel('Number of robots','FontSize',25)
+ylabel('Complexity [episodes for all skills]','FontSize',25)
+leg = legend(p,...
+    '$\bar{\eta}_+,\bar{\gamma}_-$',...
+    '$\bar{\eta}_+,\bar{\gamma}_0$',...
+    '$\bar{\eta}_+,\bar{\gamma}_+$',...
+    '$\bar{\eta}_0,\bar{\gamma}_-$',...
+    '$\bar{\eta}_0,\bar{\gamma}_0$',...
+    '$\bar{\eta}_0,\bar{\gamma}_+$',...
+    '$\bar{\eta}_-,\bar{\gamma}_-$',...
+    '$\bar{\eta}_-,\bar{\gamma}_0$',...
+    '$\bar{\eta}_-,\bar{\gamma}_+$');
+fcn_scrpt_prepare_graph_science_std(fig, gca, p, leg, [], 18/2, 3, 1)
+axis square
+leg.Location = 'northeast';
+leg.Orientation = 'horizontal';
+leg.Interpreter = 'latex';
+leg.Box = 'on';
+ylim([1 12800])
+xlim([2,7])
+% fig = gcf;           % generate a figure
+% tightfig(fig);
+box on
+set(gca, 'YScale', 'log')
+pause(1)
+
+SAVE_FIG = 0;
+if SAVE_FIG == 1
+    exportgraphics(gcf, fullfile(fileparts(matlab.desktop.editor.getActiveFilename), ...
+        'figures','total_episodes_per_n_robots_v1.png'),'Resolution',600)
+    close(gcf);
+end 
+
+%%
+
+cmap = flip(distinguishable_colors(9,{'w','k'}),1);
 % allMarkers = {'o','+','*','.','x','s','d','^','v','>','<','p','h'};
 allMarkers = {'o','*','x','s','d','^','v','>','<','p','h','.','+'};
 clc
 close all
 fig = figure('color','w');
 p   = NaN(1,9);
-% plot(x,parameters.totalSkills./[4,8,16,32,64,128].*parameters.fundamentalComplexity,'k--','LineWidth',3)
+% plot(x,parameters.totalSkills./[4,8,16,32,64,128].*parameters.fundamentalComplexity,'r:','LineWidth',5)
 % pp  = patchline(x,parameters.totalSkills./[4,8,16,32,64,128].*parameters.fundamentalComplexity,'linewidth',300,'linestyle','-','edgecolor','k','linewidth',3,'edgealpha',0.2);
 
+upperBound  =  12800*ones(6,1);
+lowerBound= parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
+ 
 % upperBound = parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
 % lowerBound = upperBound - 300;
-% patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.6  0.7  0.8],'FaceColor','r','FaceAlpha',0.25,'EdgeColor','w');
-
+patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.5  0.5  0.5],'FaceAlpha',0.25,'EdgeColor','w');
+% fill([x fliplr(x)], [lowerBound'  fliplr(upperBound')],'r','FaceAlpha',0.25,'EdgeColor','w');
 
 hold on
 for index = 1:9
-    the_data = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
-    the_mean = ceil(mean(the_data,2));
-    the_std  = ceil(std(the_data,[],2));
+    the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
+    the_mean = ceil(mean(the_learned_skills,2));
+    the_std  = ceil(std(the_learned_skills,[],2));
     upperBound  = the_mean + the_std;
     lowerBound = the_mean - the_std;    
     x        = 2:7;
-    patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.6  0.7  0.8],'FaceColor',cmap(index,:),'FaceAlpha',0.25,'EdgeColor','w');
-    p(index) = plot(x, the_mean, 'LineWidth', 2,'Color',cmap(index,:),'Marker',allMarkers(index),'MarkerFaceColor',cmap(index,:));
+    patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0  0  0],'FaceColor',cmap(index,:),'FaceAlpha',0.1,'EdgeColor','w');
+    % p(index) = plot(x, the_mean, 'LineWidth', 3,'Color',cmap(index,:),'Marker',allMarkers(index),'MarkerFaceColor',cmap(index,:));
+    p(index) = plot(x, the_mean,'LineStyle','-', 'LineWidth', 3,'Color',cmap(index,:));
     % aux = scatter(x, the_mean, 'Marker',allMarkers(index),'MarkerFaceColor',cmap(index,:));
+    % aux = scatter(x, the_mean,50,mean_learned_skills(:,index));
+    aux = scatter(x, the_mean,100,mean_learned_skills(:,index),'filled','MarkerEdgeColor',cmap(index,:));
 end
+cb = colorbar;
+ylabel(cb,'Success rate')
+colormap jet
+
+% 
+% x = linspace(0,2*pi,50);
+% y = sin(x) + randi(50,1,50);
+% c = linspace(1,10,length(x));
+% scatter(x,y,[],c,'filled')
+% colorbar
+% colormap jet
+
 % plot(5*ones(size(1E1:100:1E5)),1E0:100:1E5,'k--','LineWidth',3)
 
 xticks([1:7])
@@ -76,6 +189,8 @@ leg.Location = 'northeast';
 leg.Orientation = 'horizontal';
 leg.Interpreter = 'latex';
 leg.Box = 'on';
+ylim([1 12800])
+xlim([2,7])
 % fig = gcf;           % generate a figure
 % tightfig(fig);
 box on
