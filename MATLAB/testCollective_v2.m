@@ -205,14 +205,23 @@ if SAVE_FIG == 1
 end 
 %%
 
-complexities = {c_jk_cl_dist_episodes_ParamSweep};
+complexities = c_jk_cl_dist_episodes_ParamSweep;
 
 % complexities = {c_jk_iso_parameters.episodes,c_jk_il_parameters.episodes,c_jk_til_parameters.episodes,c_jk_cl_parameters.episodes,c_jk_cl_dist_parameters.episodes};
 
-cmap = rand(size(complexities{1},2),3);
+% cmap = rand(size(complexities{1},2),3);
+cmap = flip(distinguishable_colors(10,{'w','k'}),1);
 clc
 close all
 fig = figure('color','w');
+
+
+upperBound  =  12800*ones(6,1);
+lowerBound= parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
+ 
+% upperBound = parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
+% lowerBound = upperBound - 300;
+patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.5  0.5  0.5],'FaceAlpha',0.25,'EdgeColor','w');
 p = NaN(1,size(complexities{1},2));
 hold on
 for index = 1:size(complexities{1},2)
@@ -235,32 +244,39 @@ for index = 1:size(complexities{1},2)
     % % p(index) = plot(x, the_mean(:,end), 'o-', 'LineWidth', 1,'Color',cmap(index,:),'MarkerFaceColor',cmap(index,:));        
     
     x = 2:7;
-    p(index) = plot(x, complexities{1}(:,index), 'LineWidth', 1,'Color',cmap(index,:),'MarkerFaceColor',cmap(index,:));        
+    p(index) = plot(x, complexities{1}(:,index),'-','LineWidth', 1,'Color',cmap(index,:),'Marker','o','MarkerFaceColor',cmap(index,:));        
 end
 % plot(5*ones(size(1E1:100:1E5)),1E0:100:1E5,'k--','LineWidth',3)
 xticks([1:7])
 xticklabels({'2','4','8','16','32','64','128'})
 xlabel('Number of robots','FontSize',25)
-ylabel('Complexity (episodes per skill)','FontSize',25)
-leg = legend(p,...
-    '$\bar{\eta}_+,\bar{\gamma}_-$',...
-    '$\bar{\eta}_+,\bar{\gamma}_0$',...
-    '$\bar{\eta}_+,\bar{\gamma}_+$',...
-    '$\bar{\eta}_0,\bar{\gamma}_-$',...
-    '$\bar{\eta}_0,\bar{\gamma}_0$',...
-    '$\bar{\eta}_0,\bar{\gamma}_+$',...
-    '$\bar{\eta}_-,\bar{\gamma}_-$',...
-    '$\bar{\eta}_-,\bar{\gamma}_0$',...
-    '$\bar{\eta}_-,\bar{\gamma}_+$');
+ylabel('Complexity (episodes for all skills)','FontSize',25)
+title('$\bar{\eta} =-0.1 $','FontSize',25,'Interpreter','latex')
+% leg = legend(p,...
+%     '$\bar{\eta}_+,\bar{\gamma}_-$',...
+%     '$\bar{\eta}_+,\bar{\gamma}_0$',...
+%     '$\bar{\eta}_+,\bar{\gamma}_+$',...
+%     '$\bar{\eta}_0,\bar{\gamma}_-$',...
+%     '$\bar{\eta}_0,\bar{\gamma}_0$',...
+%     '$\bar{\eta}_0,\bar{\gamma}_+$',...
+%     '$\bar{\eta}_-,\bar{\gamma}_-$',...
+%     '$\bar{\eta}_-,\bar{\gamma}_0$',...
+%     '$\bar{\eta}_-,\bar{\gamma}_+$');
+aux =round(linspace(-0.2,1,10),2);
+leg    = legend(p,arrayfun(@(i) num2str(aux(i)),1:10,'UniformOutput',false));
 fcn_scrpt_prepare_graph_science_std(fig, gca, p, leg, [], 18/2, 3, 1)
 axis square
 leg.Location = 'northeast';
 leg.Interpreter = 'latex';
 leg.Box = 'on';
+leg.Interpreter = 'latex';
+leg.Box = 'on';
+ylim([1 12800])
 % fig = gcf;           % generate a figure
 % tightfig(fig);
 box on
 set(gca, 'YScale', 'log')
+grid off
 pause(1)
 
 SAVE_FIG = 0;
