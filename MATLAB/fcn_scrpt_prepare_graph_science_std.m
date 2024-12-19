@@ -51,6 +51,8 @@ function fcn_scrpt_prepare_graph_science_std(fig, ax, plt, leg, tx, text_width, 
         for i = 1:numel(plt)
             if strcmp(get(plt(i),'Type'),'graphplot')
                 set(plt(i),'NodeFontSize',10*k_scaling)
+            elseif strcmp(get(plt(i),'Type'),'image')
+                continue
             else
                 set(plt(i),'LineWidth',0.5*k_scaling);
             end
