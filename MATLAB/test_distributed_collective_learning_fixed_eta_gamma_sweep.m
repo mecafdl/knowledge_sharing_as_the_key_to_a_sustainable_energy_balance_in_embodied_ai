@@ -88,10 +88,13 @@ axis square
 clc
 close all
 
-eta_mean   = -0.05;
-gamma_mean = +0.5;
+parameters.episodes =0:0.1:500;
+
+eta_mean       = -0.1;
+gamma_mean     = +0.5;
+numberOfRobots = 8;
 [totalComplexity, learnedSkills, clusterKnowledge] = ...
-    simulateDistributedCollectiveKnowledgeDynamics(eta_mean, gamma_mean, parameters, 8);
+    simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
 title(gca,['$\bar{\eta}=',num2str(eta_mean),'~\bar{\gamma}=',num2str(gamma_mean),'$'],'Interpreter','latex','FontSize',15)
 %% Plot the gridded data as a mesh and the scattered data as dots.
 
