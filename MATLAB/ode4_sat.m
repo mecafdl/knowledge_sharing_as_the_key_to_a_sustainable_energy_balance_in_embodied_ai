@@ -61,6 +61,8 @@ for i = 2:N
   F(:,3) = feval(odefun,ti+0.5*hi,yi+0.5*hi*F(:,2),varargin{:});  
   F(:,4) = feval(odefun,tspan(i),yi+hi*F(:,3),varargin{:});
   Y(:,i) = yi + (hi/6)*(F(:,1) + 2*F(:,2) + 2*F(:,3) + F(:,4));
+
+  % Saturation of the remaining knowledge. It should be within [0,1].
   Y((Y(:,i)<0),i) = 0;
   Y((Y(:,i)>1),i) = 1;
 end

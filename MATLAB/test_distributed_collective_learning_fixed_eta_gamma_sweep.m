@@ -47,8 +47,8 @@ xticks([1:10:121])
 yticks([1:10:121])
 xticklabels(tickText)
 yticklabels(tickText)
-xlabel('$\bar{\gamma}$','Interpreter','latex','FontSize',15)
-ylabel('$\bar{\eta}$','Interpreter','latex','FontSize',15)
+xlabel('$\bar{\gamma}$','Interpreter','latex','FontSize',20)
+ylabel('$\bar{\eta}$','Interpreter','latex','FontSize',20)
 title('Success rate for $m=8$ robots','Interpreter','latex','FontSize',15)
 axis square
 
@@ -85,17 +85,74 @@ title('Total complexity $m=8$ robots','Interpreter','latex','FontSize',15)
 axis square
 
 %%
+
+parameters.knowledgeLowerBound   = 0.01;
+parameters.fundamentalComplexity =  100;
+parameters.episodes              = 0:0.1:500;
+parameters.totalSkills           =  512;
+parameters.totalSkillClusters    = 4;
+parameters.skillsPerCluster      = 128;
+parameters.alpha_min             = 0.0461;
+parameters.alpha_max             = 0.0691;
+parameters.delta                 = 0.0360;
+parameters.eta_0                 =-0.1000;
+parameters.eta_std               = 0;% 0.1;
+parameters.gamma_0               = 10;
+parameters.gamma_std             = 0;%0.1;
+parameters.maxNumberOfRobots     = 128;
+parameters.totalSimulationScenarios = 5;
+parameters.cl_distributed        = 1;
+parameters.enableSharing         = 1;
+parameters.randCommInterrupt     = 1;
+%%
 clc
 close all
 
-parameters.episodes =0:0.1:500;
+parameters.randCommInterrupt = 0;
+
+parameters.episodes =0:0.1:1000;
 
 eta_mean       = -0.1;
-gamma_mean     = +0.5;
+gamma_mean     = +0.4;
+
 numberOfRobots = 8;
+b = @(clusterTrasferrableKnowledgeFraction,numberOfRobots) (clusterTrasferrableKnowledgeFraction-1).*((numberOfRobots/parameters.totalSkillClusters-1) + (parameters.totalSkillClusters-1)*numberOfRobots/parameters.totalSkillClusters.*clusterTrasferrableKnowledgeFraction);
+a = mean([parameters.alpha_min,parameters.alpha_max]);
+% gamma_mean     = (a/b(1 - numberOfRobots/parameters.totalSkills,numberOfRobots))*(parameters.eta_0*(parameters.totalSkills-numberOfRobots) + 1);
+
 [totalComplexity, learnedSkills, clusterKnowledge] = ...
     simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
-title(gca,['$\bar{\eta}=',num2str(eta_mean),'~\bar{\gamma}=',num2str(gamma_mean),'$'],'Interpreter','latex','FontSize',15)
+title(gca,['$\bar{\eta}=',num2str(eta_mean),'~|~\bar{\gamma} \in [-0.2, 10.4]$'],'Interpreter','latex','FontSize',15)
+%%
+
+clc
+close all
+[skillsGrid, betaGrid]=meshgrid(0:1:parameters.totalSkills-numberOfRobots,0:0.01:(1-numberOfRobots/parameters.totalSkills));
+
+gammaBoundary = (a./b(betaGrid(:),numberOfRobots)).*(eta_mean.*skillsGrid(:) + 1);
+gammaBoundary = reshape(gammaBoundary,size(skillsGrid,1),size(skillsGrid,2));
+
+
+for gammaIter = 0.1:0.1:10
+close all
+clc
+figure('Color','w');
+surf(skillsGrid, betaGrid, gammaBoundary,EdgeColor = 'none',FaceAlpha=1,FaceColor='interp');
+hold on
+surf(skillsGrid, betaGrid, gammaIter*ones(size(gammaBoundary)),EdgeColor = 'none',FaceAlpha=1,FaceColor='r')
+% contour(skillsGrid, betaGrid, gammaBoundary)
+xlabel('$\kappa$',Interpreter='latex',FontSize=15)
+ylabel('$\beta$',Interpreter='latex',FontSize=15)
+zlabel('$\gamma_\mathrm{min}$',Interpreter='latex',FontSize=15)
+title(['$\gamma=',num2str(gammaIter),'$'],Interpreter='latex',FontSize=15)
+axis tight;                              % Adjust to fit the data
+axis vis3d;                              % Lock aspect ratio for proper visualization
+
+view(0,90)
+drawnow
+exportgraphics(gcf,'stability_region.gif','Append',true,'Resolution',300)
+pause(1)
+end
 %% Plot the gridded data as a mesh and the scattered data as dots.
 
 mesh(xq,yq,zq,'FaceColor','interp')
