@@ -87,9 +87,9 @@ axis square
 %%
 
 parameters.knowledgeLowerBound   = 0.01;
-parameters.fundamentalComplexity =  100;
+parameters.fundamentalComplexity = 100;
 parameters.episodes              = 0:0.1:500;
-parameters.totalSkills           =  512;
+parameters.totalSkills           = 512;
 parameters.totalSkillClusters    = 4;
 parameters.skillsPerCluster      = 128;
 parameters.alpha_min             = 0.0461;
