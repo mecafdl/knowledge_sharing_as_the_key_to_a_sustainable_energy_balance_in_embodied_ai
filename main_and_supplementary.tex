@@ -35,7 +35,7 @@
 \usepackage{amssymb}
 \usepackage{cancel}
 \usepackage{dirtytalk}
-%\usepackage{fourier}
+\usepackage{fourier}
 \usepackage{siunitx}
 \usepackage{tcolorbox}
 \usepackage{wrapfig}
@@ -56,6 +56,25 @@
 \usepackage{xcolor}
 \usepackage{ulem}
 \usepackage{xr}
+
+\usepackage[nolist]{acronym}
+\newacro{ai}[AI]{artificial intelligence}
+\newacro{dai}[DAI]{disembodied artificial intelligence}
+\newacro{eai}[EAI]{embodied artificial intelligence}
+
+\newacro{gpu}[GPU]{graphics processing unit}
+\newacro{cce}[CCE]{computation and communication expenditure}
+\newacro{bee}[BEE]{basal energy expenditure}
+\newacro{mie}[MIE]{motion and interaction expenditure}
+
+
+\newacro{isl}[IsL]{isolated learning}
+\newacro{il}[IL]{incremental learning}
+\newacro{tl}[TL]{transfer learning}
+\newacro{til}[TIL]{transfer with incremental learning}
+\newacro{cl}[CL]{collective learning}
+\newacro{dcl}[DCL]{distributed collective learning}
+
 \externaldocument{supplementary_materials}
 
 
@@ -82,16 +101,13 @@
 \let\textcircledold\textcircled
 
 \renewcommand{\textcircled}[1]{\raisebox{.5pt}{\textcircledold{\raisebox{-.45pt} {#1}}}}
-\newcommand{\pigraph}{$\pi$-graph}
 \newcommand*{\important}[1]{\textcolor{red}{\danger~\textbf{IMPORTANT:~}} \textcolor{red}{#1}}
 \newcommand*{\pending}[1]{\textcolor{blue}{$\bigstar$~\textbf{PENDING~#1}}}
 \newcommand\mybox[2][]{\tikz[overlay]\node[fill=blue!100,inner sep=4pt, anchor=text, rectangle, rounded corners=1mm,#1] {#2};\phantom{#2}}
 
-\newcommand{\TODO}[1]{\mybox[fill=yellow]{\textcolor{blue}{\Large \textbf{TODO}}:~\textcolor{blue}{\textbf{\emph{#1}}}}}
+\newcommand{\TODO}[1]{\mybox[fill=yellow]{\textcolor{blue}{\warning~\Large \textbf{TODO}}:~\textcolor{blue}{\textbf{\emph{#1}}}}}
 \newcommand{\xmark}{\ding{55}}%
 \newcommand{\textcircledD}[1]{\raisebox{.9pt}{\textcircled{\raisebox{+.5pt} {\footnotesize#1}}}}
-\newcommand{\hu}[1]{\textcolor{orange}{[Hu: #1]}}
-\newcommand{\kuehn}[1]{\textcolor{blue}{[Kuehn: #1]}}
 \newcommand{\diaz}[1]{\textcolor{blue}{[Diaz: #1]}}
 \newcommand{\haddadin}[1]{\textcolor{red}{[Haddadin: #1]}}
 \newcommand{\del}[1]{\textcolor{orange}{\xout{#1}}}
@@ -202,16 +218,25 @@
 % as shown.  We would also prefer that you don't change the type-size
 % settings shown here.
 
+%\author
+%{\textbf{Authors:} Fernando D\'iaz Ledezma and Sami Haddadin$^{\ast}$
+%	\\
+%	\normalsize{\textbf{Affiliations:} Chair of Robotics and Systems Intelligence,}\\
+%	\normalsize{MIRMI - Munich Institute of Robotics and Machine Intelligence,}\\
+%	\normalsize{Technical University of Munich, Georg-Brauchle-Ring 60-62, M\"unchen, 80992, Germany}\\
+%	\\
+%	\normalsize{$^\ast$To whom correspondence should be addressed; E-mail: haddadin@tum.de}
+%}
+
+
 \author
 {\textbf{Authors:} Fernando D\'iaz Ledezma and Sami Haddadin$^{\ast}$
 	\\
-	\normalsize{\textbf{Affiliations:} Chair of Robotics and Systems Intelligence,}\\
-	\normalsize{MIRMI - Munich Institute of Robotics and Machine Intelligence,}\\
-	\normalsize{Technical University of Munich, Georg-Brauchle-Ring 60-62, M\"unchen, 80992, Germany}\\
+	\normalsize{\textbf{Affiliations:} \normalsize{TUM - Technical University of Munich}}\\
+	\normalsize{MBZUAI - Mohamed bin Zayed University of Artificial Intelligence}\\
 	\\
 	\normalsize{$^\ast$To whom correspondence should be addressed; E-mail: haddadin@tum.de}
 }
-
 % Include the date command, but leave its argument blank.
 
 \date{}
@@ -236,7 +261,7 @@
 % Place your abstract within the special {sciabstract} environment.
 \begin{sciabstract}
 	\textbf{Abstract:} %The current learning paradigms of classical artificial intelligence (AI) consume significant amounts of energy due to high computational loads and limited utilization of acquired knowledge. As AI and robotics merge to form embodied AI (EAI) systems, their energy demand will continue to rise as data acquisition and learning rely on constant interaction with the physical environment. This study examines the fundamental energy requirements of EAI systems and discusses the energy challenges associated with maintaining current learning paradigms. Consequently, we position collective learning, a paradigm shift that enables efficient learning in EAI agents by actively sharing, aggregating, and utilizing previous and current knowledge across systems, as the key to reducing energy consumption and facilitating the acquisition of new skills in shorter timeframes.
-	The current learning paradigms in disembodied artificial intelligence (AI) are characterized by substantial energy consumption, primarily due to intensive computational processes and limited utilization of acquired knowledge. As AI converges with robotics to form embodied AI (EAI) systems, their energy demands are poised to escalate further because data acquisition and learning necessitate continuous interaction with the physical environment. This study delves into the core energy requirements of EAI systems and explores the energy-related challenges linked to maintaining existing learning paradigms. Consequently, we advocate for collective learning, a paradigm shift that promotes efficient learning in EAI agents by actively sharing, aggregating, and leveraging past and current knowledge across systems. This approach is pivotal for reducing energy consumption and expediting the acquisition of new skills.
+	The current learning paradigms in \ac{dai} are characterized by substantial energy consumption, primarily due to intensive computational processes and limited utilization of acquired knowledge. As \ac{ai} converges with robotics to form \ac{eai} systems, their energy demands are poised to escalate further because data acquisition and learning necessitate continuous interaction with the physical environment. This study delves into the core energy requirements of \ac{eai} systems and explores the energy-related challenges linked to maintaining existing learning paradigms. Consequently, we advocate for collective learning, a paradigm shift that promotes efficient learning in \ac{eai} agents by actively sharing, aggregating, and leveraging past and current knowledge across systems. This approach is pivotal for reducing energy consumption and expediting the acquisition of new skills.
 \end{sciabstract}
 
 %\textbf{One-Sentence Summary:} Embracing collective learning in (embodied) AI reduces energy consumption and accelerates skill acquisition by orders of magnitude.
@@ -273,53 +298,50 @@
 %                                                 |                                                 |
 % ===================================================================================================
 \section*{Introduction}\label{sec:intro}
-As research and development in artificial intelligence (AI) progresses, particularly in the field of machine learning, AI-powered technology permeates many aspects of human life. We can expect, for instance, smart factories to become the norm, healthcare services to harness the analytical and predictive capabilities of AI, and households to evolve into predominantly automated environments. The future will also witness the widespread presence of modern robots in various sectors such as industry, logistics, service, and healthcare. These robots will possess local as well as network computing and communication capabilities that enable them to operate in diverse environments while gathering and exchanging information. AI will be an inherent component of these robots, empowering them to obtain new skills and disseminate their acquired knowledge across different systems. The more these intelligent robotic agents integrate synergistically into varied environments, the more they will take over diverse tasks while actively cooperating with humans. As AI and robotics become increasingly ubiquitous, numerous challenges are expected to arise. %Given the pervasive presence of these systems, paying particular attention to the challenges posed by their energy demands is essential.
-Paying particular attention to the challenges posed by their energy demands is essential.
+As research and development in \ac{ai} progresses, particularly in the field of machine learning, AI-powered technology permeates many aspects of human life. We can expect, for instance, smart factories to become the norm, healthcare services to harness the analytical and predictive capabilities of \ac{ai}, and households to evolve into predominantly automated environments. The future will also witness the widespread presence of modern robots in various sectors such as industry, logistics, service, and healthcare. These robots will possess local as well as network computing and communication capabilities that enable them to operate in diverse environments while gathering and exchanging information. \ac{ai} will be an inherent component of these robots, empowering them to obtain new skills and disseminate their acquired knowledge across different systems. The more these intelligent robotic agents integrate synergistically into varied environments, the more they will take over diverse tasks while actively cooperating with humans. As \ac{ai} and robotics become increasingly ubiquitous, numerous challenges are expected to arise. In particular, the challenges posed by their energy demands deserves special attention.
 
-\paragraph*{\textbf{Challenge 1} (C1): Energy for AI infrastructure}
-The remarkable progress witnessed across various domains, attributed to the exponential growth of AI applications, comes at a significant cost. These advancements require substantial computational power for cutting-edge machine-learning algorithms to process, analyze, and learn from extensive data. This often necessitates numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations heavily depend on existing infrastructure or cloud computing services in data centers for energy-intensive computational workloads during the learning and deployment phases. Consequently, there has been a clear spike in energy consumption in data centers and associated hardware, such as Graphics Processing Units (GPUs). Training AI models in data centers is estimated to demand about three times more energy than traditional cloud tasks, underlining the strain on resources \cite{Thomas2023cloudusesmassive}.
+\paragraph*{\textbf{Challenge 1} (C1): Energy for \ac{ai} infrastructure}
+The remarkable progress witnessed across various domains, attributed to the exponential growth of \ac{ai} applications, comes at a significant cost. These advancements require substantial computational power for cutting-edge machine-learning algorithms to process, analyze, and learn from extensive data. This often necessitates numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and corporations heavily depend on existing infrastructure or cloud computing services in data centers for energy-intensive computational workloads during the learning and deployment phases. Consequently, there has been a clear spike in energy consumption in data centers and associated hardware, such as a \ac{gpu}. Training \ac{ai} models in data centers is estimated to demand about three times more energy than traditional cloud tasks, underlining the strain on resources \cite{Thomas2023cloudusesmassive}.
 % ---
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[b]{0.30\textwidth}
 		\subcaption{}
 		\includegraphics[width= \textwidth]{data_center_energy_consumption.png} \label{fig:dataCenterEnergy}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[b]{0.30\textwidth}
 		\subcaption{}
 		\includegraphics[width=\textwidth]{ir_energy_projections.png} \label{fig:ir_energy}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[t]{0.30\textwidth}
+	\begin{subfigure}[b]{0.30\textwidth}
 		\subcaption{}
 		\includegraphics[width=\textwidth]{cb_energy_projections.png} \label{fig:cobot_energy}
 	\end{subfigure}	
 	\hspace*{\fill}
-	\caption[] {\label{fig:energy_demands_AI_robotics} \textbf{Energy demands in AI and robotics.} (\subref{fig:dataCenterEnergy}) Global electricity demand of data centers, adapted from \cite{andrae2015global}. The estimated World Robot Energy Consumption of (\subref{fig:ir_energy}) industrial robots and (\subref{fig:cobot_energy}) collaborative robots.}
+	\caption[] {\label{fig:energy_demands_AI_robotics} \textbf{Energy demands in \ac{ai} and robotics.} (\subref{fig:dataCenterEnergy}) Global electricity demand of data centers, adapted from \cite{andrae2015global}. The estimated World Robot Energy Consumption of (\subref{fig:ir_energy}) industrial robots and (\subref{fig:cobot_energy}) collaborative robots.}
 \end{figure*}
 % ---
 
-Consider, for instance, the latest breakthroughs ushered in by generative AI, including large language models (LLM) and text-to-image models. These models boast billions of parameters and necessitate thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more AI applications are developed, the demand for AI infrastructure surges, leading to a substantial increase in GPU-based AI servers being sold to meet this demand. Naturally, this escalation in demand translates to a parallel rise in data center energy consumption. Globally, data center energy consumption surged from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to data from the International Energy Agency \footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is shown in Fig.~\ref{fig:dataCenterEnergy}.
+Consider, for instance, the latest breakthroughs ushered in by generative \ac{ai}, including large language models (LLM) and text-to-image models. These models boast billions of parameters and necessitate thousands of deep learning \ac{gpu} units and millions of \ac{gpu} hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more \ac{ai} applications are developed, the demand for \ac{ai} infrastructure surges, leading to a substantial increase in \ac{gpu}-based \ac{ai} servers being sold to meet this demand. Naturally, this escalation in demand translates to a parallel rise in data center energy consumption. Globally, data center energy consumption surged from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to data from the International Energy Agency \footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is shown in Fig.~\ref{fig:dataCenterEnergy}.
 
 \paragraph*{\textbf{Challenge 2} (C2): The escalating energy demand of a robotic revolution}\label{sec:robots_challenge}
 The continuous growth in the number of robots in operation is a notable trend amplified by the rise of Industry 4.0 and the implementation of smart factories, alongside the expanding utilization of robots in various service-oriented applications. This rapid proliferation of robots has even been referred to as the \textit{cambrian explosion} of robotics \cite{Pratt2015Iscambrianexplosion}. Despite the advancements in robot technology that have yielded improved energy efficiency, the predominant focus remains on individual systems, often disregarding the aggregated impact of all active units.
 
-Over the past decade, the installation base of industrial robots has undergone a remarkable transformation, escalating from 1.2 million units in 2012 to approximately 3.5 million units in 2022, an astonishing surge constituting a 290 \% increase. According to data from the International Federation of Robotics (IFR), the annual growth rate within this time frame has consistently ranged between 12 \% and 15 \% \cite{IFR2019WorldRobotics2019}. Extrapolation of this growth rate suggests that in the coming years, four million robots will be operational within factories across the globe\footnote{These projections closely align with the slightly more cautious estimates presented by \textit{The Boston Consulting Group} in \cite{Sirkin2015HowRobotsWill}.}. %This trend is depicted in Fig.\ref{fig:ir_stock}
-Using the estimated install base and under the assumption of round-the-clock operation, we can approximate the forthcoming energy demand attributable to industrial robots---termed the \textit{World Robot Energy Consumption} (WREC), shown in Fig.~\ref{fig:ir_energy}. To contextualize the significance of the WREC, in 2025, it constitutes 7.2 \% of Germany's installed electricity generation capacity \cite{FraunhoferISENetinstalledelectricity}. A description of how we arrived at these estimates is provided in Sec.~\ref{sec:app_robot_ener_consumption}.
+Over more than an decade, the installation base of industrial robots has undergone a remarkable transformation. According to data from the International Federation of Robotics (IFR), this installation base escalated from 1.2 million units in 2012 to approximately 4.2 million units in 2023, an astonishing surge constituting a 350 \% increase with an average annual growth rate close to 12 \% \cite{IFR2024WorldRobotics2024}. Extrapolation of this trend suggests that in the coming years, six million robots will be operational within factories across the globe\footnote{These projections closely align with the slightly more cautious estimates presented by \textit{The Boston Consulting Group} in \cite{Sirkin2015HowRobotsWill}.}. Using the estimated install base and under the assumption of round-the-clock operation, we can approximate the forthcoming energy demand attributable to industrial robots---termed the \textit{World Robot Energy Consumption} (WREC), shown in Fig.~\ref{fig:ir_energy}. To contextualize the significance of the WREC, in 2025, it constitutes 7.2 \% of Germany's installed electricity generation capacity \cite{FraunhoferISENetinstalledelectricity}. A description of how we arrived at these estimates is provided in Sec.~\ref{sec:app_robot_ener_consumption}.
 
-The far-reaching influence of collaborative and service robots echoes the significance observed among their industrial counterparts. Collaborative robots (cobots), for instance, have undergone a paradigm shift, progressing from accounting for a mere 6 \% of the market in 2017 to constituting around one-quarter of annual installations \cite{tobe2015}, as illustrated in Fig.~\ref{fig:industrial_cobot_share}. %Drawing from analogous assumptions applied to industrial robots (see Sec.~\ref{sec:app_cobot_ener_consumption}), Fig.~\ref{fig:cobot_stock} and \ref{fig:cobot_energy} lay out the projected growth trajectory and the corresponding energy consumption within this robot category. 
-Drawing from analogous assumptions applied to industrial robots, Fig.~\ref{fig:cobot_energy} depicts the projected growth trajectory and the corresponding energy consumption within this robot category. Concurrently, the domain of service robots is experiencing an analogous surge. For instance, the International Federation of Robotics estimated sales of approximately 35 million privately used service robots in 2018 \cite{IFR2015}. These robots find utility across various fields, including logistics, defense, public relations, medical applications, and beyond, underlining their alignment with the escalating trends observed among industrial and collaborative robots. Concurrently, the domain of service robots is experiencing an analogous surge. For instance, the IFR estimated sales of approximately 35 million privately used service robots in 2018 \cite{IFR2015}. These robots find utility across various fields, including logistics, defense, public relations, medical applications, and beyond, underlining their alignment with the escalating trends observed among industrial and collaborative robots.
+The far-reaching influence of collaborative and service robots echoes the significance observed among their industrial counterparts. Collaborative robots (cobots), for instance, have undergone a paradigm shift, progressing from accounting for a mere 6 \% of the market in 2017 to constituting around one-quarter of annual installations \cite{tobe2015}, as illustrated in Fig.~\ref{fig:industrial_cobot_share}. Drawing from analogous assumptions applied to industrial robots, Fig.~\ref{fig:cobot_energy} depicts the projected growth trajectory of cobots and its associated energy consumption. Concurrently, the domain of service robots is experiencing an analogous surge. For instance, estimates project the that the service robotics market will reach 56 billion euros in 2025 \cite{statista_service_robots}. These robots find utility across various fields, including logistics, defense, public relations, medical applications, and beyond, underlining their alignment with the escalating trends observed among industrial and collaborative robots.
 
 \paragraph*{\textbf{Challenge 3} (C3): Energy for manufacturing}
-Another aspect that often escapes attention is the energetic expenditure associated with manufacturing the hardware required for AI and robotics. This energy demand entails two primary facets. First, it involves the energy outlay for procuring the materials for robot manufacturing and the associated computational hardware (e.g., processors, GPUs, and AI servers). Second, it pertains to the energy consumption intrinsic to the manufacturing process. Given the direct correlation between energy demand and the number of AI-powered robots produced, an exponential rise in the latter directly corresponds to escalated energy consumption for their production. The assessment and formulation of strategies to address this aspect constitute the crux of this challenge. While an immediate solution may not be evident, and since substantial energy savings in raw material procurement may be impractical, significant potential lies in the recycling of electronic components of computer and robot hardware as a means of conserving energy\footnote{An example of such an endeavor is the international competition \textit{Robothon\textsuperscript{\textregistered} - The Grand Challenge}, see~\url{https://automatica-munich.com/en/munich-i/robothon/}.}.%\footnote{An example of such an endeavor is the international competition  \textit{Robothon\textsuperscript{\textregistered} - The Grand Challenge} where hardware and software are developed to autonomously disassemble and sort electronic waste, see~\url{https://automatica-munich.com/en/munich-i/robothon/}.}. %Notably, the prospect of future intelligent robotic agents autonomously fabricating other robots intertwines this challenge directly with the two challenges above.
+Another aspect that often escapes attention is the energetic expenditure associated with manufacturing the hardware required for AI and robotics. This energy demand entails two primary facets. First, it involves the energy outlay for procuring the materials for robot manufacturing and the associated computational hardware (e.g., processors, \ac{gpu}s, and \ac{ai} servers). Second, it pertains to the energy consumption intrinsic to the manufacturing process. Given the direct correlation between energy demand and the number of \ac{ai}-powered robots produced, an exponential rise in the latter directly corresponds to escalated energy consumption for their production. The assessment and formulation of strategies to address this aspect constitute the crux of this challenge. While an immediate solution may not be evident, and since substantial energy savings in raw material procurement may be impractical, significant potential lies in the recycling of electronic components of computer and robot hardware as a means of conserving energy\footnote{An example of such an endeavor is the international competition \textit{Robothon\textsuperscript{\textregistered} - The Grand Challenge}, see~\url{https://automatica-munich.com/en/munich-i/robothon/}.}.
 
-\paragraph*{\textbf{Aim and contribution}}
-This work focuses on the energetic challenges of implementing current learning paradigms from (disembodied) artificial intelligence on the anticipated exponential numbers of future robotic agents. Particularly, we stress that inefficient knowledge utilization exacerbates these challenges, resulting in a rapidly escalating energy demand. Our study favors adopting a learning strategy that explicitly leverages interconnection and knowledge sharing among intelligent robotic systems. Consequently, we propose collective learning as the optimal paradigm to facilitate faster and more efficient learning, thereby mitigating the energetic challenges in AI for physical systems. Specifically, we examine the ideal knowledge-sharing dynamics that a group of robots must exhibit to effectively realize the benefits of a collective learning strategy.
+%\paragraph*{\textbf{Aim and contribution}}
+%\myhl{This work provides a perspective on the challenges linked to the energetic demand associated with implementing current learning paradigms from (disembodied) artificial intelligence on the anticipated exponential numbers of future robotic agents. Particularly, we stress that inefficient knowledge utilization exacerbates these challenges, resulting in a rapidly escalating energy demand. Our study favors adopting a learning strategy that explicitly leverages interconnection and knowledge sharing among intelligent robotic systems. Consequently, we propose collective learning as the optimal paradigm to facilitate faster and more efficient learning, thereby mitigating the energetic challenges in AI for physical systems. Specifically, we examine the ideal knowledge-sharing dynamics that a group of robots must exhibit to effectively realize the benefits of a collective learning strategy.}
 
 %\noindent \rule{\textwidth}{5pt}
-\section*{Energy expenditure in EAI}
+\paragraph*{Energy expenditure in \ac{eai}}
 % ---
 \begin{figure*}[t!]
 	\centering
@@ -345,92 +367,109 @@ This work focuses on the energetic challenges of implementing current learning p
 	}
 \end{figure*}
 % ---
-To address the energy demands of AI and robotics, we differentiate between classical \textit{disembodied AI} (DAI) and \textit{embodied AI} (EAI), as illustrated in Fig.~\ref{fig:cai_and_eai_general}. We consider DAI as the set of methods and algorithms that tackle purely computational problems, detached from embodied systems and lacking interaction with the physical world (see Fig.~\ref{fig:cai}). In DAI, data collection occurs passively through various edge devices, with a prototypical DAI agent not directly involved in generating or collecting training data. The energetic demands of DAI applications primarily stem from learning, i.e., training the models, and deployment, i.e., running inference and prediction \cite{Vries2023growingenergyfootprint}. %Additionally, as already mentioned, manufacturing the required computation and communication hardware for DAI is often an overlooked source of energy consumption. 
+To address the energy demands of AI and robotics, we differentiate between classical \acl{dai} and \acl{eai}, as illustrated in Fig.~\ref{fig:cai_and_eai_general}. We consider \ac{dai} as the set of methods and algorithms that tackle purely computational problems, detached from embodied systems and lacking interaction with the physical world (see Fig.~\ref{fig:cai}). In \ac{dai}, data collection occurs passively through various edge devices, with a prototypical \ac{dai} agent not directly involved in generating or collecting training data. The energetic demands of \ac{dai} applications primarily stem from learning, i.e., training the models, and deployment, i.e., running inference and prediction \cite{Vries2023growingenergyfootprint}.
 
-For DAI applications targeting diverse tasks or systems, successful knowledge transfer relies on the adequacy of the learning paradigm and both model and training data carrying enough information about the problem. However, in the absence of any of these factors, retraining, sometimes from scratch, becomes necessary, leading to highly energy-inefficient learning processes. Even if learning occurs only once, the ongoing deployment of the model can demand significant energy due to constant computationally intensive execution \cite{Vries2023growingenergyfootprint}. Thus, depending on the application, the energetic cost of learning and deployment in DAI can outweigh the benefits \cite{Strubell2019EnergyPolicyConsiderations}. This also applies to recent breakthroughs, such as transformer models for Natural Language Processing, whose results also come accompanied by energetic challenges \cite{Cao2020TowardsAccurateReliable}.
+For \ac{dai} applications targeting diverse tasks or systems, successful knowledge transfer relies on the adequacy of the learning paradigm and both model and training data carrying enough information about the problem. However, in the absence of any of these factors, retraining, sometimes from scratch, becomes necessary, leading to highly energy-inefficient learning processes. Even if learning occurs only once, the ongoing deployment of the model can demand significant energy due to constant computationally intensive execution \cite{Vries2023growingenergyfootprint}. Thus, depending on the application, the energetic cost of learning and deployment in \ac{dai} can outweigh the benefits \cite{Strubell2019EnergyPolicyConsiderations}. This also applies to recent breakthroughs, such as transformer models for Natural Language Processing, whose results come accompanied by energetic challenges \cite{Cao2020TowardsAccurateReliable}.
 
-%With the evolution towards EAI, i.e., the integration of AI and robotics \cite{Pfeifer2004Embodiedartificialintelligence}, the energy usage spectrum broadens. Since the real world cannot be faithfully replicated in virtual environments, and despite the considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}, learning and deployment in EAI necessitates constant energy-expending interaction with the physical environment for active data generation. As shown in Fig.~\ref{fig:eai}, this is achieved through physical agents; e.g., robots, vehicles, drones, etc. Learning and mastering a skill in the physical world implies its constant and repeated execution, expending energy on motion and interaction during each run. Consider, for example, autonomous driving, where the vehicle is a rather rudimentary form of an EAI agent operating primarily in a structured human-made environment. Apart from consuming energy by simply fulfilling its purpose (i.e., autonomous movement), the vehicle consumes additional energy on motion to collect the necessary data to retrain and improve the policy model. Another, perhaps inconspicuous, example is that of household robots. In their way to automate a high percentage of domestic chores in the chores term \cite{Lehdonvirta2022futuresunpaidwork}, they will undergo constant retraining due to the inconspicuous changing dynamics of household environments. 
-The evolution towards EAI, the integration of AI and robotics \cite{Pfeifer2004Embodiedartificialintelligence}, expands the energy usage spectrum. Unlike virtual environments, the real world cannot be faithfully replicated, despite considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}. Learning and deployment in EAI demand constant energy-expending interaction with the physical environment for active data generation, as depicted in Fig.~\ref{fig:eai}, facilitated by physical agents like robots, vehicles, and drones. Mastering skills in the physical realm requires continuous and repeated execution, consuming energy for motion and interaction in each instance. Take autonomous driving, for example, where vehicles function as rudimentary EAI agents in structured human-made environments. Besides energy for autonomous movement, vehicles expend additional energy on motion to collect data necessary for retraining and improving the policy model. Another example is household robots, aiming to automate a high percentage of domestic chores \cite{Lehdonvirta2022futuresunpaidwork}. They undergo constant retraining due to the subtle and changing dynamics of household environments.
+The evolution towards \ac{eai}, the integration of \ac{ai} and robotics \cite{Pfeifer2004Embodiedartificialintelligence}, expands the energy usage spectrum. Unlike virtual environments, the real world cannot be faithfully replicated, despite considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}. Learning and deployment in \ac{eai} demand constant energy-expending interaction with the physical environment for active data generation, as depicted in Fig.~\ref{fig:eai}, facilitated by physical agents like robots, vehicles, and drones. Mastering skills in the physical realm requires continuous and repeated execution, consuming energy for motion and interaction in each instance. Take autonomous driving, for example, where vehicles function as rudimentary \ac{eai} agents in structured human-made environments. Besides energy for autonomous movement, vehicles expend additional energy on motion to collect data necessary for retraining and improving the policy model. Another example is the usage of household robots to automate a high percentage of domestic chores \cite{Lehdonvirta2022futuresunpaidwork}. Such robots will undergo constant retraining due to the subtle and changing dynamics of household environments.
 % ---
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
 	\includegraphics[width=0.95\textwidth]{embodied_ai_learning_pipeline.png}
 	\hspace*{\fill}
-	\caption[] {\label{fig:embodied_ai_pipeline} \textbf{Standard skill execution pipeline of isolated EAI agents.} {Three fundamental energy expenditure categories are identified during the learning or execution of a skill by an EAI agent.}}
+	\caption[] {\label{fig:embodied_ai_pipeline} \textbf{Standard skill execution pipeline of a prototypical \ac{eai} agents.} {Three fundamental energy expenditure categories are identified during the learning or execution of a skill by an \ac{eai} agent.}}
 \end{figure*}
 % ---
 
-Unlike the standard energy for learning and deployment classification in DAI, the analysis of the energetic requirements in EAI requires an alternative perspective. A closer look at the standard skill execution pipeline of a prototypical EAI agent (Fig.~\ref{fig:embodied_ai_pipeline}) allows the identification of essential energetic expenditure categories, namely:
+Unlike the standard energy for learning and deployment classification in \ac{dai}, the analysis of the energetic requirements in \ac{eai} requires a different perspective. A closer look at the standard skill execution pipeline of a prototypical \ac{eai} agent ---Fig.~\ref{fig:embodied_ai_pipeline}---allows the identification of essential energetic expenditure categories, namely:
 % ---
 \begin{enumerate}
-	\item Computation and Communication Expenditure (CCE): Coincident with DAI, it refers to the energy used by the computation and communication processes required by planning, querying, exploration, and training routines.
-	\item Basal Energy Expenditure (BEE): This body-related energy is associated with the execution of basic functions of the EAI agent. For example, operating energy, gravity compensation, and proprioceptive intelligence algorithms in robots, hovering in drones, running on-board system standby in autonomous vehicles, etc.
-	\item Motion and Interaction Expenditure (MIE): Defines the energy expended on physical interactions, namely, executing a particular skill in a certain form. For example, taking an object from an initial to a target location within a given time following a particular trajectory.
+	\item \Ac{cce}: Coincident with \ac{dai}, it refers to the energy used by the computation and communication processes required by planning, querying, exploration, and training routines.
+	\item \Ac{bee}: This body-related energy is associated with the execution of basic functions of the \ac{eai} agent. For example, operating energy, gravity compensation, and proprioceptive intelligence algorithms in robots, hovering in drones, running on-board system standby in autonomous vehicles, etc.
+	\item \Ac{mie}: Defines the energy expended on physical interactions, namely, executing a particular skill in a certain form. For example, taking an object from an initial to a target location within a given time following a particular trajectory.
 \end{enumerate}
 % ---
 
-An important fact in EAI is the existence of a lower bound on the energy required to carry out a skill that is independent of the agent. Consider a generic skill $\tau$---such as a pick-and-place operation---and suppose the optimal trajectory $p^\star$ for moving an object from its origin to its destination is known. The intrinsic properties of the object and the optimal path $p^\star$ uniquely define the minimum energy requirement $E^\star_{\tau}$ needed to perform skill $\tau$. The implication is that the total energy expended by any agent in the process of mastering or executing a skill is higher than $E^\star_{\tau}$ as a result of the required computational ($E_\text{CCE}$), body-related ($E_\text{BEE}$), and physical interaction ($E_\text{MIE}$) energy expenditures; i.e.,
+An important fact in \ac{eai} is the existence of a lower bound on the energy required to carry out a skill that is independent of the agent. Consider a generic skill $\tau$---such as a pick-and-place operation---and suppose the optimal trajectory $p^\star$ for moving an object from its origin to its destination is known. The intrinsic properties of the object and the optimal trajectory $p^\star$ uniquely define the minimum energy requirement $E^\star_{\tau}$ needed to perform skill $\tau$. The implication is that the total energy expended by any agent in the process of mastering or executing a skill is higher than $E^\star_{\tau}$ as a result of the required computational ($E_\text{CCE}$), body-related ($E_\text{BEE}$), and physical interaction ($E_\text{MIE}$) energy expenditures; i.e.,
 % ---
 \begin{equation}\label{eq:skill_energy_in_eai}
 	E_{\tau} =  \underbrace{E_\text{BEE}}_{\text{Body-dependent energy}} + \underbrace{E_\text{CCE} + E_\text{MIE}}_{\text{Learning energy}} \gg \underbrace{E^\star_{\tau}}_{\text{Skill energy}} .
 \end{equation}
 % ---
-It is worth mentioning that if Eq.~\eqref{eq:skill_energy_in_eai} was used to describe the energy consumption of a task in DAI, $E_\text{BEE}$ could be associated with the edge devices and $E_\text{CCE}$ would represent the primary source of energy consumption. Crucially, the expenditures $E^\star_{\tau}$ and $E_\text{MIE}$ do not exist in DAI since physical interaction is absent.
+It is worth mentioning that if Eq.~\eqref{eq:skill_energy_in_eai} was used to describe the energy consumption of a task in \ac{dai}, $E_\text{BEE}$ could be associated with the edge devices and $E_\text{CCE}$ would represent the primary source of energy consumption. Crucially, the expenditures $E^\star_{\tau}$ and $E_\text{MIE}$ do not exist in \ac{dai} since physical interaction is absent.
 
+%\paragraph*{\textbf{Aim and contribution}}
+%This work provides a perspective on the challenges linked to the energetic demand associated with implementing current learning paradigms from (disembodied) artificial intelligence on the anticipated exponential numbers of future robotic agents. Particularly, we stress that inefficient knowledge utilization exacerbates these challenges, resulting in a rapidly escalating energy demand. Our study favors adopting a learning strategy that explicitly leverages interconnection and knowledge sharing among intelligent robotic systems. Consequently, we propose collective learning as the optimal paradigm to facilitate faster and more efficient learning, thereby mitigating the energetic challenges in AI for physical systems. Specifically, we examine the ideal knowledge-sharing dynamics that a group of robots must exhibit to effectively realize the benefits of a collective learning strategy.
+
+% ===================================================================================================
+\paragraph*{\textbf{Problem statement}}
+The rapid proliferation of robotic agents, driven by advances in artificial intelligence (AI) and machine learning, poses a critical challenge: the escalating energy demand associated with current learning paradigms. Traditional \ac{ai} learning strategies, designed primarily for disembodied systems, fail to leverage knowledge utilization in large-scale robotic deployments. This inefficiency exacerbates energy consumption, particularly as robots increasingly rely on interaction-intensive learning and adaptation processes.
+
+A fundamental question arises:
+% ---
+\begin{tcolorbox}
+%	\begin{assumption}\label{question:research_question}
+		How can robotic systems learn efficiently while minimizing energy costs?
+%	\end{assumption}
+\end{tcolorbox}
+% ---
+\noindent To address this, we argue that a paradigm shift is necessary---one that explicitly leverages interconnection and knowledge sharing among intelligent robotic systems. \Ac{cl} emerges as a promising solution, enabling robots to acquire and disseminate skills more efficiently, thus reducing redundant computations and overall energy consumption. This work explores the optimal knowledge-sharing dynamics required for a group of robots to fully realize the benefits of collective learning, paving the way for more sustainable \ac{ai}-driven robotics.
+
+
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
 \section*{Related works}
-The trends depicted in Fig.~\ref{fig:energy_demands_AI_robotics} suggest that the energy expenditures for computation and communication, basal functions, and motion and interaction will likely follow a similar pattern. The implication is straightforward: as the number of AI applications and robotic systems increases, so does their associated energy demand. Consequently, the energy requirements of disembodied and embodied AI have recently received significant attention within the AI and robotics research communities.
+The trends depicted in Fig.~\ref{fig:energy_demands_AI_robotics} suggest that the energy expenditures for computation and communication, basal functions, and motion and interaction will likely follow a similar pattern. The implication is straightforward: as the number of \acl{ai} applications and robotic systems increases, so does their associated energy demand. Consequently, the energy requirements of \acl{dai} and \acl{eai} have recently received significant attention within the \acl{ai} and robotics research communities.
 
-The escalating energy consumption of AI, particularly of machine learning, has raised concerns about its adverse environmental impact. Most research in this area focuses on the computational and infrastructural requirements for training and running modern learning algorithms---such analyses directly correlate with the computational and communication energy expenditure. Recent works on this matter have delved into the efficiency of computation-intensive deep learning algorithms \cite{Schwartz2019GreenAI,Vinuesa2020roleartificialintelligence,Strubell2019EnergyPolicyConsiderations,Luccioni2023EstimatingCarbonFootprint}. In parallel, various metrics have been established to gauge the energy consumption of machine learning algorithms. These include assessing energy efficiency during development phases \cite{Zhou2020HULKEnergyEfficiency}, analyzing accuracy, model size, time, and CPU/GPU energy consumption for training and inference phases \cite{Dalgren2019GreenMLmethodology}, as well as encompassing other system-level performance indicators like real-time metrics, instruction-level analysis, and hardware-level power estimation \cite{GarciaMartin2019Estimationenergyconsumption}. Recent works on large language models have discussed various aspects such as hardware efficiency, model architectures, and algorithms in relation to energy consumption \cite{Vries2023growingenergyfootprint} and provide comparisons including their power consumption and CO$_2$ emissions \cite{SIHCAI2023ArtificialIntelligenceIndex}.
+The escalating energy consumption of \acl{ai}, particularly of machine learning, has raised concerns about its adverse environmental impact. Most research in this area focuses on the computational and infrastructural requirements for training and running modern learning algorithms---such analyses directly correlate with the computational and communication energy expenditure. Recent works on this matter have delved into the efficiency of computation-intensive deep learning algorithms \cite{Schwartz2019GreenAI,Vinuesa2020roleartificialintelligence,Strubell2019EnergyPolicyConsiderations,Luccioni2023EstimatingCarbonFootprint}. In parallel, various metrics have been established to gauge the energy consumption of machine learning algorithms. These include assessing energy efficiency during development phases \cite{Zhou2020HULKEnergyEfficiency}, analyzing accuracy, model size, time, and CPU/\ac{gpu} energy consumption for training and inference phases \cite{Dalgren2019GreenMLmethodology}, as well as encompassing other system-level performance indicators like real-time metrics, instruction-level analysis, and hardware-level power estimation \cite{GarciaMartin2019Estimationenergyconsumption}. Recent works on large language models have discussed various aspects such as hardware efficiency, model architectures, and algorithms in relation to energy consumption \cite{Vries2023growingenergyfootprint} and provide comparisons including their power consumption and CO$_2$ emissions \cite{SIHCAI2023ArtificialIntelligenceIndex}.
 
-Despite growing awareness of AI's energy consumption, tangible actions to address underlying issues and propose remedies remain scarce and predominantly focus on DAI applications. Yet, it is crucial to recognize the challenges posed by EAI systems. Unlike state-of-the-art machine learning models (e.g., transformer models) that are mostly trained once on a large amount of data, EAI agents have a constant need for energy-consuming retraining and evaluation processes. From the EAI perspective, ongoing efforts to minimize BEE and improve the MIE advocate strategies such as elastic actuation and optimized hardware selection and storage, energy sharing, and motion planning \cite{CUT2015Smoothrobotmovements, Mohammed2014MinimizingEnergyConsumption, Chemnitz2011Analyzingenergyconsumption,Vasarhelyi2023OverviewEnergiesProblems,Sekala2024SelectedIssuesMethods}.
+Despite growing awareness of \ac{ai}'s energy consumption, tangible actions to address underlying issues and propose remedies remain scarce and predominantly focus on \ac{dai} applications. Yet, it is crucial to recognize the challenges posed by \ac{eai} systems. Unlike state-of-the-art machine learning models (e.g., transformer models) that are mostly trained once on a large amount of data, \ac{eai} agents have a constant need for energy-consuming retraining and evaluation processes. From the \ac{eai} perspective, ongoing efforts to minimize \ac{bee} and improve the \ac{mie} advocate strategies such as elastic actuation and optimized hardware selection and storage, energy sharing, and motion planning \cite{CUT2015Smoothrobotmovements, Mohammed2014MinimizingEnergyConsumption, Chemnitz2011Analyzingenergyconsumption,Vasarhelyi2023OverviewEnergiesProblems,Sekala2024SelectedIssuesMethods}.
 
-As for CCE, it is essential to design better hardware for more efficient parallel computing and to decentralize the computation, leveraging the local processing capabilities of edge devices and robots. These capabilities have been highlighted in concepts such as the Internet of Robotic Things \cite{Vermesan2020InternetRoboticThings,Sekala2024SelectedIssuesMethods}. Perhaps even more relevant is to define sample-efficient algorithms with optimized models that account for the recurrent learning, inference, and prediction processes in EAI agents. We believe that achieving greater energy efficiency in AI requires a broader perspective than just enhancing hardware and optimizing the individual agents' learning strategies. The actual key to a significant breakthrough lies in tapping into the vast reservoir of knowledge accumulated by EAI systems.
+As for \ac{cce}, it is essential to design better hardware for more efficient parallel computing and to decentralize the computation, leveraging the local processing capabilities of edge devices and robots. These capabilities have been highlighted in concepts such as the Internet of Robotic Things \cite{Vermesan2020InternetRoboticThings,Sekala2024SelectedIssuesMethods}. Perhaps even more relevant is to define sample-efficient algorithms with optimized models that account for the recurrent learning, inference, and prediction processes in \ac{eai} agents. We believe that achieving greater energy efficiency in AI requires a broader perspective than just enhancing hardware and optimizing the individual agents' learning strategies. The actual key to a significant breakthrough lies in tapping into the vast reservoir of knowledge accumulated by \ac{eai} systems.
 
-Persistently using learning paradigms that fail to actively encourage and systematically utilize knowledge exchange among agents has a detrimental effect on energy consumption. Promoting and leveraging concurrent knowledge exchange can alleviate the burdens associated with the CCE and MIE expenditures in embodied AI since it can reduce the computational and mechanical energy required to acquire new skills. To explore this uncharted terrain, we propose considering the collective learning paradigm introduced in \cite{Haddadin2014SystemzumErstellen,Haddadin2015Systemgeneratingsets} as a means to harness scalability and facilitate knowledge exchange, thereby enhancing energy efficiency in the domain of EAI.
+Persistently using learning paradigms that fail to actively encourage and systematically utilize knowledge exchange among agents has a detrimental effect on energy consumption. Promoting and leveraging concurrent knowledge exchange can alleviate the burdens associated with the \ac{cce} and \ac{mie} expenditures in \ac{eai} since it can reduce the computational and mechanical energy required to acquire new skills. To explore this uncharted terrain, we propose considering the \ac{cl} paradigm introduced in \cite{Haddadin2014SystemzumErstellen,Haddadin2015Systemgeneratingsets} as a means to harness scalability and facilitate knowledge exchange, thereby enhancing energy efficiency in the domain of \acl{eai}.
 % ---
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
 	\includegraphics[width=14cm]{closed_loop_collective_dynamics.png}
 	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning_system} \textbf{A collective learning system.} {A multi-agent system with appropriate learning algorithm(s) and inter-agent knowledge sharing can learn a universe of skills exponentially fast, as reflected by the exponential collection of the knowledge required to learn the skills.}}
+	\caption[] {\label{fig:collective_learning_system} \textbf{A \acl{cl} system.} {A multi-agent system with appropriate learning algorithm(s) and inter-agent knowledge sharing can learn a universe of skills exponentially fast, as reflected by the exponential collection of the knowledge required to learn the skills.}\pending{Consider sending this figure to the supplementary materials.}}
 \end{figure*}
 % ---
 
-The collective learning (CL) concept encapsulates the dynamic, progressive creation and augmentation of knowledge through interactive processes. In this framework, knowledge from individuals is actively exchanged, spread, and enhanced, fostering a deeper, more comprehensive understanding that evolves over time \cite{Garavan2012CollectiveLearning}. Fundamental aspects of CL that are particularly relevant to EAI agents include the aggregation of skills, knowledge, and behaviors. This concept is loosely related to collective intelligence and swarm intelligence \cite{Beni2004SwarmIntelligenceSwarm,Blum2015SwarmIntelligenceOptimization,Dorigo2021SwarmRoboticsPast} (which mostly focus on the emergence of coordinated behavior through a set of basic interaction rules), collaborative, federated, and distributed learning \cite{Technologie2023FLAIROPFederatedLearning,Anjos2023SurveyCollaborativeLearning,Xianjia2021Federatedlearningrobotic,Sartoretti2019DistributedLearningDecentralized,Sartoretti2018DistributedLearningDecentralized,Wang2022DistributedReinforcementLearning} (concepts dealing mainly with decentralizing computation and access to data), networked robotics \cite{Kumar2008NetworkedRobots} (whose scope is centered on the coordination and collaboration of multiple robotic agents), and fleet learning \cite{Wang2023RobotFleetLearning} (an approach more akin to parallel learning). Arguably, the many contributions in these areas have addressed various underlying principles of collective systems \cite{Kernbach2013HandbookCollectiveRobotics}.
-Nevertheless, these approaches do not target the hypothesized exponential learning resulting from collective learning \cite{Haddadin2019Breakingwallcollective}. Furthermore, the specific algorithms required to effectively realize collective learning---in particular, for knowledge acquisition, transfer,  distribution, and integration---are still nonexistent or currently under development \cite{Haddadin2022collectivelearningtheory}. Despite this, the expectation is that an appropriate learning algorithm that can leverage the body of knowledge accumulated by a multi-agent system (a collective) can shape the knowledge acquisition dynamics of the whole system, positively impacting the learning time and energy efficiency of new skills, see Fig.~\ref{fig:collective_learning_system}.
-
-% \redtext{Nevertheless, the specific algorithms required to effectively realize collective intelligence via CL are still nonexistent or currently under development \cite{Haddadin2019Breakingwallcollective,Haddadin2022collectivelearningtheory}. Despite this, the expectation is that an appropriate learning algorithm that can leverage the body of knowledge accumulated by a multi-agent system (a collective) can shape the knowledge acquisition dynamics of the whole system, positively impacting the learning time and energy efficiency of new skills, see Fig.~\ref{fig:collective_learning_system}.}
-
-%Towards collective intelligence, enable learning, transfer of knoledgfe and knowlefdge sharing fgor collective elarning
-
-%\paragraph*{Disambiguation on collective learning}
-
-%However, it is essential to clarify the focus of this article: we do not delve into the specifics of algorithms required for CL, as many of them are, despite vast progress in machine learning still nonexistent or under development, nor do we explore the necessary advancements in processing and communication infrastructure to enable CL.		
-%Collective intelligence emerges from AI agents working together, akin to human group wisdom, while swarm intelligence, inspired by social insects, involves simple robots achieving complex tasks through local rules without central control. Collaborative learning sees multiple agents solving problems together, with federated learning allowing for privacy-preserving, decentralized AI model training across devices. Distributed learning trains AI models across several nodes to manage large data and complex models, enhancing overall performance. Networked robotics involves robots connected over a network, coordinating tasks more efficiently than individually, applicable in search and rescue, surveillance, and environmental monitoring. Collective learning in AI and robotics enhances problem-solving capabilities and adaptability in intelligent systems, playing a crucial role in advancing the fields. One could argue that recent contributions have partially addressed aspects of the CL paradigm, as exemplified by works such as \cite{Levine2018Learninghandeye, Rudin2022Learningwalkminutes}. However, it is essential to clarify the focus of this article: we do not delve into the specifics of algorithms required for CL, as many of them are, despite vast progress in machine learning still nonexistent or under development, nor do we explore the necessary advancements in processing and communication infrastructure to enable CL.
-
+The \ac{cl} concept encapsulates the dynamic, progressive creation and augmentation of knowledge through interactive processes. In this framework, knowledge from individuals is actively exchanged, spread, and enhanced, fostering a deeper, more comprehensive understanding that evolves over time \cite{Garavan2012CollectiveLearning}. Fundamental aspects of \ac{cl} that are particularly relevant to \ac{eai} agents include the aggregation of skills, knowledge, and behaviors. This concept is loosely related to collective intelligence and swarm intelligence \cite{Beni2004SwarmIntelligenceSwarm,Blum2015SwarmIntelligenceOptimization,Dorigo2021SwarmRoboticsPast} (which mostly focus on the emergence of coordinated behavior through a set of basic interaction rules), collaborative, federated, and distributed learning \cite{Technologie2023FLAIROPFederatedLearning,Anjos2023SurveyCollaborativeLearning,Xianjia2021Federatedlearningrobotic,Sartoretti2019DistributedLearningDecentralized,Sartoretti2018DistributedLearningDecentralized,Wang2022DistributedReinforcementLearning} (concepts dealing mainly with decentralizing computation and access to data), networked robotics \cite{Kumar2008NetworkedRobots} (whose scope is centered on the coordination and collaboration of multiple robotic agents), and fleet learning \cite{Wang2023RobotFleetLearning} (an approach more akin to parallel learning). Arguably, the many contributions in these areas have addressed various underlying principles of collective systems \cite{Kernbach2013HandbookCollectiveRobotics}.
+Nevertheless, these approaches do not target the hypothesized exponential learning resulting from \ac{cl} \cite{Haddadin2019Breakingwallcollective}. Furthermore, the specific algorithms required to effectively realize \ac{cl}---in particular, for knowledge acquisition, transfer,  distribution, and integration---are still nonexistent or currently under development \cite{Haddadin2022collectivelearningtheory}. Despite this, the expectation is that an appropriate learning algorithm that can leverage the body of knowledge accumulated by a multi-agent system (a collective) can shape the knowledge acquisition dynamics of the whole system, positively impacting the learning time and energy efficiency of new skills, see Fig.~\ref{fig:collective_learning_system}.
+¸
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
 \section*{Modeling the dynamics of skill knowledge}\label{sec:knowledge_dynamics_model}
 Understanding the energy and time demands represented by a team of $m$ robots learning a universe $\mathcal{S}=\left\lbrace s_1,s_2,\ldots s_j,\ldots, s_{N_\mathcal{S}}\right\rbrace$ of skills, with $|\mathcal{S}| = N_\mathcal{S}$, requires looking at how knowledge about a skill is gained and what effect it can have on the acquisition of any new skill knowledge. 
 
-To start, we consider that the \emph{complexity} $c_j$ of a skill $ s_j $ is the number of trial episodes $n$ needed to successfully learn the skill, i.e., all actions and states visited by an EAI agent until a stopping criterion is reached. Additionally, %where the system resembles the following behavior.
+To start, we consider that the \emph{complexity} $c_j$ of a skill $ s_j $ is the number of trial episodes $n$ needed to successfully learn the skill, i.e., all actions and states visited by an \ac{eai} agent until a stopping criterion is reached. Additionally,
 % ---
-% \begin{tcolorbox}
-% 	\begin{assumption}\label{assumption:time}
-% 		Given a large enough number of robots performing a large number of skills, on average, the power $P_0$ required by any given robot during learning and the time $\Delta t$ allocated to the execution of every trial episode $n$ are approximately constant, see Fig.~\ref{fig:power_per_episode}.
-% 	\end{assumption}
-% \end{tcolorbox}
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:power_and_episode_time}
 		the average behavior of a system where both $m$ and $N_\mathcal{S}$ are large can be described by the power $P_0$ required by any agent during learning and the mean execution time $\Delta t$ of every trial episode $n$, with both approximately constant; see Fig.~\ref{fig:power_per_episode}.
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent As a consequence of Asm.~\ref{assumption:power_and_episode_time}, and according to Eqs.~\eqref{eq:energy_per_episode},\eqref{eq:energy_per_skill}, and \eqref{eq:total_energy} in Sec.~\ref{sec:power_per_episode}, the energy demand of an EAI agent learning a skill (or set of skills) is proportional to the skill(s) complexity.
+\noindent As a consequence of Asm.~\ref{assumption:power_and_episode_time}, and according to Eqs.~\eqref{eq:energy_per_episode},\eqref{eq:energy_per_skill}, and \eqref{eq:total_energy} in Sec.~\ref{sec:power_per_episode}, the energy demand of an \ac{eai} agent learning a skill (or set of skills) is proportional to the skill(s) complexity.
 
 % ===================================================================================================
 \paragraph*{Similarity and knowledge}
-Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ skills that share high similarity; i.e., a \emph{cluster} of similar skills, see Fig.~\ref{fig:skill_similarity}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes already learned skills from $\mathcal{Z}_k$. Furthermore, we make the assumption that  
+Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highly similar skills; that is, a \emph{cluster} of similar skills, see Fig.~\ref{fig:skill_similarity}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes the skills from $\mathcal{Z}_k$ that a given agent has already learned. Furthermore, we make the assumption that  
 %---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:skill_clustering} if the similarity among a set of skills is significant, exchanging acquired knowledge from these skills expedites the overall learning process.
@@ -462,19 +501,18 @@ Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowled
 		\includegraphics[width=\textwidth]{knowledge_idealization.png} \label{fig:knowledge_idealization}
 	\end{subfigure}
 	\hspace*{\fill}
-	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$, (\subref{fig:knowledge_idealization}) remaining knowledge to learn a new skill $s_{j,k}$.}	
+	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$, (\subref{fig:knowledge_idealization}) \myhl{remaining knowledge to learn a new skill $s_{j,k}$}\pending{Remove minus sign from figure}.}	
 \end{figure*}
 % ---
 % ===================================================================================================
 \paragraph*{Leveraging the acquired knowledge}
-To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce a hypothetical upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j,k} $, an EAI agent can access and use the knowledge contained in $\mathcal{\zeta}_k$, then two effects take place:
+To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce a hypothetical upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j,k} $, an \ac{eai} agent can access and use the knowledge contained in $\mathcal{\zeta}_k$, then two effects take place:
 % ---
 \begin{enumerate}
 	\item There is less remaining knowledge, reflected in the initial value; i.e., $\bar{\sigma}_{j,k}(0) < 1$
-	\item The knowledge acquisition rate increases
+	\item The knowledge acquisition rate increases\footnote{This can also be interpreted as an increase in the depletion rate of the remaining knowledge.}
 \end{enumerate}
 % ---
-%associated complexity $ c_{j,k} $ is necessarily smaller than the fundamental complexity $c_{0}$; i.e. $c_{j,k} < c_0~\forall j>1$.
 These effects signify that the remaining knowledge scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$. Consequently, the complexity $c_{j,k}$ of said skill is smaller than the fundamental complexity $c_0$. Additionally, without loss of generality, under knowledge exchange, we can consider that
 % ---
 \begin{tcolorbox}
@@ -485,66 +523,48 @@ These effects signify that the remaining knowledge scales down as a function of 
 \noindent An idealization of the behavior satisfying Asm.~\ref{assumption:exponential_decrease} and Eq.~\eqref{eq:sigma_bar_conditions} can be modeled via a differential equation depending on the trial episodes $n$ and parameterized by the number of already learned skills $N_{\zeta_k}$. As such,
 % ---
 \begin{definition}\label{assumption:ode_model} the remaining knowledge function $\bar{\sigma}_{j,k}$ is modeled as the first order dynamical system
-	\begin{subequations}\label{eq:simple_knowledge_dynamics}
-		\begin{empheq}[left=\empheqlbrace]{align}
-			\dot{\bar{\sigma}}_{j,k}\left(n\right) &  = -f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right),\\
-			\bar{\sigma}_{j,k}(0) &  =  g_{j,k} \left(N_{\zeta_k}\right).
-		\end{empheq}
-	\end{subequations}
+%	\begin{subequations}\label{eq:simple_knowledge_dynamics}
+%		\begin{empheq}[left=\empheqlbrace]{align}
+%			\dot{\bar{\sigma}}_{j,k}\left(n\right) &  = -f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right),\\
+%			\bar{\sigma}_{j,k}(0) &  =  g_{j,k} \left(N_{\zeta_k}\right).
+%		\end{empheq}
+%	\end{subequations}
+	\begin{equation}\label{eq:simple_knowledge_dynamics}
+		\dot{\bar{\sigma}}_{j,k}\left(n\right)=\begin{cases}
+			f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right), & \epsilon < \bar{\sigma}_{j,k}\left(n\right) < 1, \\
+			0, & \text{otherwise}.
+		\end{cases}
+	\end{equation}	
 \end{definition}
 % ---
-\noindent Its solution
+\noindent Considering its initial condition as $\bar{\sigma}_{j,k}(0) =  g_{j,k} \left(N_{\zeta_k}\right)$, the corresponding solution
 % ---
 \begin{equation}\label{eq:knowledge_exponential_form}
-	\bar{\sigma}_{j,k}(n) = g_{j,k}\left(N_{\zeta_k}\right) e ^{-f_{j,k}\left(N_{\zeta_k}\right) n} \in (0,1],
+	\bar{\sigma}_{j,k}(n) = g_{j,k}(N_{\zeta_k}) e ^{-f_{j,k}\left(N_{\zeta_k}\right) n} \in (0,1],
 \end{equation}
 % ---
-exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, i.e., the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$ in Fig.~\ref{fig:knowledge_idealization} indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.
-% ---
-%\begin{figure}[!t]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{fig/knowledge_idealization.png}
-%	\caption{Remaining knowledge to learn a new skill $s_{j,k}$.}
-%	\label{fig:knowledge_idealization}
-%\end{figure}
-% ---
+exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, namely, the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$---depicted as the green-shaded area in Fig.~\ref{fig:knowledge_idealization}---indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered as learned.
 
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
 \section*{Knowledge sharing under different learning paradigms}
-% ---
-\begin{figure*}[!t]
-	\centering
-	\hspace*{\fill}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width= \textwidth]{intra_skill_learning.png} \label{fig:intra_skill_learning}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{cluster_to_cluster_knowledge_transfer_parallel.png} \label{fig:cluster_to_cluster_knowledge_transfer_parallel}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{cl_example_figure.png} \label{fig:cl_example_figure}
-	\end{subfigure}	
-	\hspace*{\fill}
-	\caption[] {\label{fig:learning_paradigms_conceptual_figure} \textbf{The different learning paradigms.} (\subref{fig:intra_skill_learning}) Incremental learning benefits from the significant similarity of skills belonging to the same cluster. (\subref{fig:cluster_to_cluster_knowledge_transfer_parallel}) In transfer learning, knowledge is shared from different origin clusters to the target cluster. Notice that using many robots (e.g., two robots $r_1$ and $r_2$) without inter-agent knowledge exchange among them only subdivides the problem. (\subref{fig:cl_example_figure}) Exchange of knowledge between EAI agents enables collective learning.}
-\end{figure*}
-% ---
-
 For the upcoming analysis, we consider an idealized reference system in which many robots coexist, learning numerous skills. Such system exhibits
 % ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:average_behavior}
-		an average behavior that results from comparable EAI agents learning and executing the skills in $\mathcal{S}$ ordered and segregated according to their similarity.
+		an average behavior that results from comparable \ac{eai} agents learning and executing the skills in $\mathcal{S}$ ordered and segregated according to their similarity.
 	\end{assumption}
 \end{tcolorbox}
 %---
-\noindent Each of the EAI agents in the system
+\noindent Each of the \ac{eai} agents in the system
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:agent_similarity}
-		has the same capabilities, with highly similar BEE and MIE expenditures.
+		has the same capabilities, with highly similar \ac{bee} and \ac{mie} expenditures.
 	\end{assumption}
 \end{tcolorbox}
 %---
@@ -564,7 +584,7 @@ For the upcoming analysis, we consider an idealized reference system in which ma
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent Finally, the different learning paradigms that exploit the collected knowledge by the EAI agents rely on the assumption that
+\noindent Finally, the different learning paradigms that exploit the collected knowledge by the \ac{eai} agents rely on the assumption that
 % ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:enabling_agorithms}
@@ -573,84 +593,125 @@ For the upcoming analysis, we consider an idealized reference system in which ma
 \end{tcolorbox}
 % ---
 
+% ---
+\begin{figure*}[!t]
+	\centering
+	\hspace*{\fill}
+	\begin{subfigure}[t]{0.32\textwidth}
+		\subcaption{}
+		\includegraphics[width= \textwidth]{intra_skill_learning.png} \label{fig:intra_skill_learning}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.32\textwidth}
+		\subcaption{}
+		\includegraphics[width=\textwidth]{cluster_to_cluster_knowledge_transfer_parallel.png} \label{fig:cluster_to_cluster_knowledge_transfer_parallel}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.32\textwidth}
+		\subcaption{}
+		\includegraphics[width=\textwidth]{cl_example_figure.png} \label{fig:cl_example_figure}
+	\end{subfigure}	
+	\hspace*{\fill}
+	\caption[] {\label{fig:learning_paradigms_conceptual_figure} \textbf{The different learning paradigms.} (\subref{fig:intra_skill_learning}) Incremental learning benefits from the significant similarity of skills belonging to the same cluster. (\subref{fig:cluster_to_cluster_knowledge_transfer_parallel}) In transfer learning, knowledge is shared from different origin clusters to the target cluster. Notice that using many robots (e.g., two robots $r_1$ and $r_2$) without inter-agent knowledge exchange among them only subdivides the problem. (\subref{fig:cl_example_figure}) Exchange of knowledge between \ac{eai} agents enables collective learning.}
+\end{figure*}
+% ---
+
 % ===================================================================================================
 \paragraph*{Conventional learning paradigms} 
-%Now we briefly go over the fundamental aspects of the different learning paradigms considered for EAI, a detailed discussion is provided in \nameref{sec:materials_and_methods}. 
-When an EAI agent performs \textbf{isolated learning} (IsL), it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \textbf{incremental learning} (IL)---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---corresponds to the case where an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-loops---but also retains and uses the acquired knowledge to learn subsequent skills. \textbf{Transfer learning} (TL) alone refers to the use of acquired knowledge about a set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. TL represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that TL has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the parameter $\beta_k$. In general, IL and TL can always be combined; thus, we consider \textbf{transfer with incremental learning} (TIL) as the third learning paradigm.  %In all these paradigms, there is no exchange of knowledge among agents, which implies that employing $m$ agents in parallel to learn $m$ skills only subdivides the problem and does not provide an advantage. 
-A detailed discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods}.
+When an \ac{eai} agent performs \ac{isl}, it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---corresponds to the case where an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-loops---but also retains and uses the acquired knowledge to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the \emph{transferable knowledge fraction factor} $\beta_k \in [0,1)$. In general, \ac{il} and \ac{tl} can always be combined; as such, we consider \ac{til} as the third learning paradigm. A detailed discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods}.
 
 % ===================================================================================================
-\paragraph*{\textbf{Collective learning (CL)}}
-%This paradigm  goes beyond simple parallelization. In CL $m$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{m} $  develop and accumulate a common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective. Information flows vertically as previous knowledge is passed on and horizontally by sharing concurrent experience between agents. Knowledge can be replicated, complemented, and further developed via these mechanisms. \sout{We take from \cite{Garavan2012CollectiveLearning} two notions central in CL that apply to EAI agents: $(I)$ capability to restructure and meet changing conditions, and $(II)$ aggregation of skills, knowledge, and behaviors.} Moreover, to enable CL, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that enables agents to concurrently exchange and integrate the self-acquired and received knowledge to incrementally speed up the learning of all the agents as a whole. As a result, intra- and inter-cluster knowledge transfer is possible. Naturally, the CL paradigm involves a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy. 
-%\sout{One could argue that recent contributions have partially addressed aspects of the CL paradigm, as exemplified by works such as \cite{Levine2018Learninghandeye, Rudin2022Learningwalkminutes, Technologie2023FLAIROPFederatedLearning}. However, it is essential to clarify the focus of this article: we do not delve into the specifics of algorithms required for CL, as many of them are, despite vast progress in machine learning still nonexistent or under development, nor do we explore the necessary advancements in processing and communication infrastructure to enable CL.} Instead, our primary objective is to illustrate the overarching systemic behavior inherent in the CL paradigm, grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}; particularly, regarding its target knowledge-sharing dynamics.
-This paradigm goes beyond simple parallelization. In CL $m$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{m} $ develop and accumulate a common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on and horizontally by sharing concurrent experience between agents. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable CL, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allows agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the CL paradigm. 
+\paragraph*{\textbf{\Acl{cl}}}
+This paradigm goes beyond simple parallelization. In CL $m$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{m} $ develop and accumulate a common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on and horizontally by sharing concurrent experience between agents. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable \ac{cl}, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allows agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the \ac{cl} paradigm. 
 
-Rather than focusing on specific learning, communication, and scheduling algorithms to make CL possible, our primary objective is to illustrate the overarching ideal systemic behavior of a collective learning system (see Fig.~\ref{fig:collective_learning_system}). Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work we concentrate the discussion on the target knowledge-sharing dynamics of a collective learning system. Fig.~\ref{fig:cl_example_figure} illustrates the CL concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange. Similar to TL, if two robots exchange knowledge about skills with low similarity, i.e., skills in different clusters, then $\gamma$ is scaled by the inter-cluster transferability parameter $\beta$. In CL, the dynamics of the remaining knowledge is described by
+Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a collective learning system (see Fig.~\ref{fig:collective_learning_system}). Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents 
+is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills with low similarity, that is, skills in different clusters, then $\gamma$ is scaled by the inter-cluster transferable knowledge fraction factor $\beta$. In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
 % ---
-\begin{subequations}\label{eq:collective_knowledge_dynamics}
-	\begin{empheq}[left=\empheqlbrace]{align}
-		\dot{\bar{\bm{\sigma}}}^{(\text{CL})}_{j,k}\left(n\right) &= \left[  h_{j,k}\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B} \right] \bar{\bm{\sigma}}^{(\text{CL})}_{j,k}\left(n\right)\\
-		\bar{\bm{\sigma}}^{(\text{CL})}_{j,k}(0) &= g_{j,k}\left( N_{\zeta_k}, r\right) \bm{I},
-	\end{empheq}
-\end{subequations}
+%\begin{equation}\label{eq:collective_knowledge_dynamics}
+%	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
+%	\begin{cases}
+%		\left[  h_{j,k}\left(N_{\zeta_k},\alpha,\eta,\beta_k,r\right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right] \bar{\sigma}^{(\text{CL})}_{j,k}, & \epsilon < \bar{\sigma}_{j,k} < 1, \\
+%		0, & \text{otherwise};
+%	\end{cases}
+%\end{equation}
+\begin{equation}\label{eq:collective_knowledge_dynamics}
+	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
+	\begin{cases}
+		\left[-\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right] \bar{\sigma}^{(\text{CL})}_{j,k}, & \epsilon < \bar{\sigma}_{j,k} < 1, \\
+		0, & \text{otherwise};
+	\end{cases}
+\end{equation}
 % ---
-where the operator $\odot$ represents the Hadamard product of matrices. This expression models $r=m$ robots exchanging knowledge among each other. The vector $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $r_i$ exchanges knowledge with robot $r_j$ and $(\bm{A})_{i,j} = 0$ if it does not. The term $\gamma \in \mathbb{R}_+ $ weighs the knowledge exchange strength among robots. Since there may be robots learning skills in different clusters at the same time, the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, \beta_{k} \right \rbrace$, with
+\noindent with initial conditions $\bar{\sigma}^{(\text{CL})}_{j,k}(0) = g_{j,k}\left(r N_{\zeta_k}\right)$.
+
+The factor $\gamma \in \mathbb{R} $ weighs the knowledge exchange strength among robots. Since there may be robots learning skills in different clusters at the same time---what we call \ac{dcl}, the term
 % ---
 \begin{equation}
 	%\beta_{k} = 1/N_\mathcal{K}, 
-	\beta_{k} = r\frac{ N_{\zeta_k}}{N_\mathcal{S}}, 
+	\beta_{k} = \frac{ rN_{\zeta_k}}{N_\mathcal{S}}, 
 \end{equation}
 % ---
-scales down the knowledge contributions between robots from different clusters. The functions $ h(\cdot)$ and $g(\cdot)$ in Eq.~\eqref{eq:collective_knowledge_dynamics}, with the former defined as
+scales down the knowledge contributions between robots from different clusters. The functions
 % ---
 \begin{equation}\label{eq:f_function_collective}
-	h_{j,k}\left(N_{\zeta_k},r\right) = -\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right),
+	f(\cdot) = \left[-\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right]
 \end{equation}
 % --- 
-are dependent on the number of knowledge-exchanging robots, which directly impacts the number of skills that enter $\zeta_k$ after a learning cycle.
+\noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} and $g(\cdot)$ are dependent on the number $r$ of knowledge-exchanging robots, which directly impacts the number of learned skills that enter $\zeta_k$ after a learning cycle. \myhl{Note that the product $r N_{\zeta_k}$ represents the ideal number of learned skills about which an agent has knowledge at the end of a learning cycle. In case a given agent failed to successfully learned a skill, it might be substituted by the number of actually learned skills $\kappa \in (0, r N_{\zeta_k})$.}\\
+\pending{Perhaps rewrite to mention $\kappa$ in all eqs. instead of $r N_{\zeta_k}$.}
 
-The dynamics of the remaining knowledge for the considered learning paradigms are described by replacing in Eq.~\eqref{eq:simple_knowledge_dynamics} the expressions for the rate of remaining knowledge and the corresponding initial value as per Table~\ref{tab:learning_paradigms_expressions}; where
+The \emph{knowledge integration function} 
 % ---
-\begin{enumerate}
-	\item the constant $ \alpha>0$ models the rate at which a robot in isolation learns any given skill,
-	\item the constant $\eta>0$ represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$,
-	\item the factor $\delta>0$ controls the rate of exponential decrease in the initial remaining knowledge value, and
-	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
-\end{enumerate}
-% ---
-%\begin{table}[!ht]
-%	\caption{The dynamics of classical learning paradigms.\label{tab:learning_paradigms_expressions}}
+\begin{equation}\label{eq:knowledge_integration_function}
+	d(\bar{\sigma}_j,\bar{\sigma}_l) = e^{-a\left(\bar{\sigma}_l-\bar{\sigma}_j\right)^2}\in [0,1],
+\end{equation}
+% --- 
+\noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} accounts for the contribution of knowledge from other agents weighing it according to the relevance (similarity) of the shared knowledge. 
+%% ---
+%\begin{table}[!t]
+%	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
 %	\begin{center}
 %		\begin{adjustbox}{width=\textwidth}
-%			\begin{tabular}{ |c|c|c|c|c|} 
-%				\hline
-%				Learning type & IsL & IL & TIL & CL  \\
-%				\hline
-%				Rate $f_{j,k}\left(\cdot \right)$ & $ \alpha$ & $ \alpha\left(\eta N_{\zeta_k} + 1 \right)$ & $\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right)$ & $h_{j,k}\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B}$ \\[5ex]
-%				\hline
-%				Initial condition $g_{j,k}\left(\cdot \right)$  & $1$ & $e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta r N_{\zeta_k}} \bm{I}$\\[5ex]
-%				\hline
+%			\begin{tabular}{|l||*{4}{c|}}\hline
+%				Learning paradigm
+%				&\makebox[3em]{\ac{isl}}&\makebox[3em]{\ac{il}}&\makebox[3em]{\ac{til}}
+%				&\makebox[3em]{\ac{cl}}\\\hline\hline
+%				Rate $f_{j,k}\left(\cdot \right)$  &$ \alpha$ & $ \alpha\left(\eta N_{\zeta_k} + 1 \right)$ & $\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right)$ & $  h_{j,k}\left(N_{\zeta_k},\alpha,\eta,\beta_k,r\right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)$ \\\hline
+%				Initial condition $g_{j,k}\left(\cdot \right)$ &$1$ & $e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta \kappa} $ \\\hline
 %			\end{tabular}
 %		\end{adjustbox}
 %	\end{center}	
 %\end{table}
+%% ---
 % ---
-
-\begin{table}[!ht]
-\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
-\begin{center}
-\begin{adjustbox}{width=\textwidth}
-\begin{tabular}{|l||*{4}{c|}}\hline
-	Learning type
-	&\makebox[3em]{IsL}&\makebox[3em]{IL}&\makebox[3em]{TIL}
-	&\makebox[3em]{CL}\\\hline\hline
-	Rate $f_{j,k}\left(\cdot \right)$  &$ \alpha$ & $ \alpha\left(\eta N_{\zeta_k} + 1 \right)$ & $\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right)$ & $h_{j,k}\left(N_{\zeta_k},r\right) \bm{I} + \gamma \bm{A} \odot \bm{B}$ \\\hline
-	Initial condition $g_{j,k}\left(\cdot \right)$ &$1$ & $e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta r N_{\zeta_k}} \bm{I}$ \\\hline
-\end{tabular}
-\end{adjustbox}
-\end{center}	
+\begin{table}[!t]
+	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
+	\begin{center}
+		\begin{adjustbox}{width=\textwidth}
+			\begin{tabular}{|l||*{4}{c|}}\hline
+				Learning paradigm
+				&\makebox[3em]{\ac{isl}}&\makebox[3em]{\ac{il}}&\makebox[3em]{\ac{til}}
+				&\makebox[3em]{\ac{cl}}\\\hline\hline
+				Rate $f_{j,k}\left(\cdot \right)$  &$ \alpha$ & $ \alpha\left(\eta N_{\zeta_k} + 1 \right)$ & $\alpha \left( \frac{\eta N_{\zeta_k} + 1}{1 - \beta_k} \right)$ & $  \alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)$ \\\hline
+				Initial condition $g_{j,k}\left(\cdot \right)$ &$1$ & $e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta N_{\zeta_k}}$ & $(1-\beta_k) e^{-\delta \kappa} $ \\\hline
+			\end{tabular}
+		\end{adjustbox}
+	\end{center}	
 \end{table}
 % ---
+More generally, the dynamics of the remaining knowledge for the considered learning paradigms are described by replacing in Eq.~\eqref{eq:simple_knowledge_dynamics} the expressions for the rate of remaining knowledge and the corresponding initial value as per Table~\ref{tab:learning_paradigms_expressions}. In summary, the model parameters have the following interpretations:
+% ---
+\begin{enumerate}
+	\item The parameter $\alpha \sim \mathcal{U}(\alpha_{\text{min}},\alpha_{\text{max}}) \in \mathbb{R}_+$ accounts for different embodiments and models the \emph{base learning rate} at which a robot in isolation learns any given skill. According to Asm.~\ref{assumption:agent_similarity}, the range $[\alpha_{\text{min}},\alpha_{\text{max}}]$ is rather narrow.
+	\item The parameter $\delta \in (0,\delta_{\text{max}}]$ reflects the intrinsic intelligence of the system and controls the \emph{exponential depletion rate}  of the initial remaining knowledge.
+	\item The parameter $\eta \sim \mathcal{N}(\bar{\eta},\eta_{\Sigma})$ is the \emph{intra-cluster knowledge exchange factor}, it models the efficient use of experience (e.g. accessing memory) and represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$.
+	\item The parameter $\gamma \sim \mathcal{N}(\bar{\gamma},\gamma_\Sigma)$ is the \emph{inter-agent knowledge exchange factor}, it weighs the knowledge exchange between agents and accounts for different embodiments, false communication, and dissimilar knowledge.
+%	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
+\end{enumerate}
+% ---
+
+
+\important{Checked until here!}
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
@@ -659,9 +720,9 @@ The dynamics of the remaining knowledge for the considered learning paradigms ar
 %                                                 |                                                 |
 % ===================================================================================================
 \section*{Results}\label{sec_use_case}
-Let a skill learning scenario be defined via the tuple $\phi = \left(N_\mathcal{S}, N_\mathcal{K}, m, \bm{\rho} \right) \in \Phi$, where $N_\mathcal{S} > N_\mathcal{K}$, $m \gg 1$, and $\Phi$ represents the set of all possible combinations. The parameter vector $\bm{\rho} = \left[\alpha, \eta, \delta\right]$ defines the knowledge exchange efficiency of the particular scenario. Notice that the generality of $\Phi$ makes it representative of a variety of scenarios. It can very well be a smart factory setting where multiple robots learn different manufacturing tasks, a home crew of service robots learn different chores, or a fleet of underwater robots performing exploration, inspection, and maintenance routines. The different hypothetical scenarios posed by $\Phi$ allow contrasting the different learning paradigms regarding their associated energy demand (related to the CCE, BEE, and MIE expenditure categories).
+Let a skill learning scenario be defined via the tuple $\phi = \left(N_\mathcal{S}, N_\mathcal{K}, m, \bm{\rho} \right) \in \Phi$, where $N_\mathcal{S} > N_\mathcal{K}$, $m \gg 1$, and $\Phi$ represents the set of all possible combinations. The parameter vector $\bm{\rho} = \left[\alpha, \delta, \eta,  \gamma\right]$ defines the knowledge exchange efficiency of the particular scenario. Notice that the generality of $\Phi$ makes it representative of a variety of scenarios. It can very well be a smart factory setting where multiple robots learn different manufacturing tasks, a home crew of service robots learn different chores, or a fleet of underwater robots performing exploration, inspection, and maintenance routines. The different hypothetical scenarios posed by $\Phi$ allow contrasting the different learning paradigms regarding their associated energy demand (related to the \ac{cce}, \ac{bee}, and \ac{mie} expenditure categories).
 	
-Concretely, to resemble the conditions implied in Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, a prototypical $\phi_\text{SF}$ involves several robots performing multiple skills across different clusters. In our particular instance of $\phi_\text{SF}$ we have $m=32$ robots tasked with mastering a pool $\mathcal{S}$ of $N_\mathcal{S}= 512$ skills segregated into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ each. A given skill is considered learned when the remaining knowledge $\bar{\sigma}$ goes below the threshold $\epsilon = 0.01$. The fundamental complexity of all the skills in $\mathcal{S}$ is $c_0 = 100$ episodes. The elements of the vector $\bm{\rho}$ are chosen to be $\alpha =  0.0461$---in accordance to Eq.~\eqref{eq:isolated_learning_rate}, $\delta =  0.0360$---see Eq.~\eqref{eq:delta}, and $\eta= 0.1$. Via the conditions posed by $ \phi_\text{SF}$, we will show the advantages of using CL on reducing the complexity of skill learning and thereby reducing the energy consumed by learning the skills in $\mathcal{S} $.
+Concretely, to resemble the conditions implied in Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, a prototypical $\phi_\text{SF}$ involves several robots performing multiple skills across different clusters. In our particular instance of $\phi_\text{SF}$ we have $m=32$ robots tasked with mastering a pool $\mathcal{S}$ of $N_\mathcal{S}= 512$ skills segregated into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. A given skill, as per Eq.~\eqref{eq:simple_knowledge_dynamics}, is considered learned when the remaining knowledge $\bar{\sigma}$ goes below the threshold $\epsilon = 0.01$. The fundamental complexity of all the skills in $\mathcal{S}$ is $c_0 = 100$ episodes. \myhl{The elements of the vector $\bm{\rho}$ are chosen to be $\alpha =  0.0461$---in accordance to Eq.~\eqref{eq:isolated_learning_rate}, $\delta =  0.0360$---see Eq.~\eqref{eq:delta}, and $\eta= 0.1$.} \pending{Replace values specifying mean and std.} Via the conditions posed by $ \phi_\text{SF}$, we will show the advantages of using \ac{cl} on reducing the complexity of skill learning and thereby reducing the energy consumed by learning the skills in $\mathcal{S} $.
 
 The power-per-episode (see Asm.~\ref{assumption:power_and_episode_time}) is determined by the sum of the power required for basal processes, the power for motion and interaction, and the power for computation and communication, i.e.
 % ---
@@ -680,16 +741,33 @@ To assign a numerical value to $P_\text{BEE}$, and without loss of generality, w
 % ---
 % ===================================================================================================
 \paragraph*{The skill complexity of the different paradigms}
-The remaining knowledge for the four skills learned per robot is shown in Fig.~\ref{fig:collective_learning} in logarithmic scale. The $m$ robots are used to learn in parallel the $N_\mathcal{Z}$ skills of each cluster in succession, as shown in Fig.~\ref{fig:cluster_learning_sequence}. Notice that, as expected, IsL (Fig.~\ref{fig:dynamics_isolated_learning}) exhibits the worst performance, always requiring $c_0$ episodes to learn every skill. Since IL (Fig.~\ref{fig:dynamics_incremental_learning}) does not benefit from the knowledge from the previously visited clusters, a robot $r_i$ needs to start accumulating knowledge from the beginning every time it moves to a different cluster. This is not the case in TIL (Fig.~\ref{fig:dynamics_incremental_transfer_learning}), as the more clusters a robot has visited, the faster a new skill is learned. The speed of knowledge collection is exponentiated with CL (Fig.~\ref{fig:dynamics_collective_learning}) thanks to the exchange of knowledge among the $m$ robots. Compared to the other learning paradigms, with CL, the skills are learned within a few trial episodes in every cluster. 
+The remaining knowledge for the four skills learned per robot is shown in Fig.~\ref{fig:collective_learning} in logarithmic scale. The $m$ robots are used to learn in parallel the $N_\mathcal{Z}$ skills of each cluster in succession, as shown in Fig.~\ref{fig:cluster_learning_sequence}. Notice that, as expected, \ac{isl} (Fig.~\ref{fig:dynamics_isolated_learning}) exhibits the worst performance, always requiring $c_0$ episodes to learn every skill. Since \ac{il} (Fig.~\ref{fig:dynamics_incremental_learning}) does not benefit from the knowledge from the previously visited clusters, a robot $r_i$ needs to start accumulating knowledge from the beginning every time it moves to a different cluster. This is not the case in \ac{til} (Fig.~\ref{fig:dynamics_incremental_transfer_learning}), as the more clusters a robot has visited, the faster a new skill is learned. The speed of knowledge collection is exponentiated with \ac{cl} (Fig.~\ref{fig:dynamics_collective_learning}) thanks to the exchange of knowledge among the $m$ robots. Compared to the other learning paradigms, with \ac{cl}, the skills are learned within a few trial episodes in every cluster. 
 
-To assess how the number $m$ of robots affects the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills, we use the same parameters as before but vary $m \in \left \lbrace 2,4,8,16,32,64,128\right \rbrace$. Moreover, we considered an additional CL scenario in which, unlike the previous case, the total number of available robots is distributed equally among the clusters to benefit from transfer learning at an earlier time during learning. The results are shown in Fig.~\ref{fig:total_episodes_per_n_robots}. It can be seen that, at first, IL is better than the trivial IsL case; however, as the number of robots increases, the skill knowledge is divided among the available robots, which implies that less knowledge can be passed as the pool of learned sills $\zeta_k$ per robot gets smaller. This explains why the total number of trial episodes for IsL and IL approach each other in the limit. With a growing robot number, TIL exhibits a similar behavior. Less cluster knowledge can be collected by each robot and transferred to the next cluster. Indeed, TIL rapidly converges to IL and eventually to IsL. In CL, a similar effect shows that when all robots learn skills from the same clusters, as the number of robots grows, the total complexity approaches that of the same number of robots distributed across clusters.
+To assess how the number $m$ of robots affects the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills, we use the same parameters as before but vary $m \in \left \lbrace 2,4,8,16,32,64,128\right \rbrace$. Moreover, we considered an additional \ac{cl} scenario in which, unlike the previous case, the total number of available robots is distributed equally among the clusters to benefit from transfer learning at an earlier time during learning. The results are shown in Fig.~\ref{fig:total_episodes_per_n_robots}. It can be seen that, at first, \ac{il} is better than the trivial IsL case; however, as the number of robots increases, the skill knowledge is divided among the available robots, which implies that less knowledge can be passed as the pool of learned sills $\zeta_k$ per robot gets smaller. This explains why the total number of trial episodes for \ac{isl} and \ac{il} approach each other in the limit. With a growing robot number, \ac{til} exhibits a similar behavior. Less cluster knowledge can be collected by each robot and transferred to the next cluster. Indeed, \ac{til} rapidly converges to \ac{il} and eventually to \ac{isl}. In \ac{cl}, a similar effect shows that when all robots learn skills from the same clusters, as the number of robots grows, the total complexity approaches that of the same number of robots distributed across clusters.
+%% ---
+%\begin{figure*}[!h]
+%	\centering
+%	\hspace*{\fill}
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width= \textwidth]{total_episodes_per_n_robots.png} \label{fig:total_episodes_per_n_robots}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{0.45\textwidth}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{total_energy_per_n_robots.png} \label{fig:total_energy_per_n_robots}
+%	\end{subfigure}
+%	\hspace*{\fill}
+%	\caption[] {\label{fig:final_results} \textbf{The effect of the number of robots.} (\subref{fig:total_episodes_per_n_robots}) Total number of episodes to learn the universe of skills as a function of the available robots and (\subref{fig:total_energy_per_n_robots}) the total energy consumption.}
+%\end{figure*}
+%% ---
 % ---
-\begin{figure*}[!h]
+\begin{figure*}[!t]
 	\centering
 	\hspace*{\fill}
 	\begin{subfigure}[t]{0.45\textwidth}
 		\subcaption{}
-		\includegraphics[width= \textwidth]{total_episodes_per_n_robots.png} \label{fig:total_episodes_per_n_robots}
+		\includegraphics[width= \textwidth]{sf_learning_paradigms_complexity_tmp.png} \label{fig:total_episodes_per_n_robots}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[t]{0.45\textwidth}
@@ -697,13 +775,35 @@ To assess how the number $m$ of robots affects the total number of trial episode
 		\includegraphics[width=\textwidth]{total_energy_per_n_robots.png} \label{fig:total_energy_per_n_robots}
 	\end{subfigure}
 	\hspace*{\fill}
-	\caption[] {\label{fig:final_results} \textbf{The effect of the number of robots.} (\subref{fig:total_episodes_per_n_robots}) Total number of episodes to learn the universe of skills as a function of the available robots and (\subref{fig:total_energy_per_n_robots}) the total energy consumption.}
+	\caption[] {\label{fig:final_results} \textbf{The effect of the number of robots.} (\subref{fig:total_episodes_per_n_robots}) Total number of episodes to learn the universe of skills as a function of the available robots and (\subref{fig:total_energy_per_n_robots}) the total energy consumption.\pending{Replace with new figures}}
 \end{figure*}
 % ---
 
 % SUBSECTION ========================================================================================
 \paragraph*{Energy consumption}
 The results in Fig.~\ref{fig:total_episodes_per_n_robots} show the total number of episodes required by each of the $m$ robots to learn the skills. To compute the total energy demand, those numbers need to be scaled by the factor $m e_0$, which leads to the consumption shown in Fig.~\ref{fig:total_energy_per_n_robots}. Undoubtedly, CL shows that it has not only the best energy usage of all the paradigms but, unlike the rest, the more robots take part in learning the universe of skills, the better overall energy usage.
+% ---
+\begin{figure*}[t!]
+	\centering
+	\hspace*{\fill}
+	\includegraphics[width=\textwidth]{template_figure_dcl_cases.png}
+	\hspace*{\fill}
+	\caption[] {\label{fig:dcl_cases_matrix_tmp} \textbf{Total complexity of \ac{dcl} for different values of $\eta$ and $\gamma$.} \myhl{There exist nine possible combinations for the values of $\eta$ and $\gamma$. The success rate (i.e., the number of learned skills) is included.} \pending{Rethink this figure.}}
+\end{figure*}
+% ---
+
+% SUBSECTION ========================================================================================
+\paragraph*{Performance \acl{dcl}}
+\myhl{Using the same case of the smart factory, focusing on the performance of \ac{dcl} provides interesting insights. For example, Fig.~\ref{fig:dcl_categories_matrix_tmp} shows a matrix of nine different behaviors identified by varying qualitatively the values of the tuple $(\eta,\gamma)$. Out of this cases, their performance indicates that the \emph{ideal agent-collective behavior} and the \emph{compensating behavior} are desired.}
+% ---
+\begin{figure*}[t!]
+	\centering
+	\hspace*{\fill}
+	\includegraphics[width=14cm]{dcl_categories_matrix_tmp.png}
+	\hspace*{\fill}
+	\caption[] {\label{fig:dcl_categories_matrix_tmp} \textbf{Categorization of \ac{dcl} behavior.} \myhl{According to the values selected for $\eta$ and $\gamma$ in the \acl{dcl} scenario, nine general behaviors can be identified.} \pending{Rethink this figure.}}
+\end{figure*}
+% ---
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -714,6 +814,10 @@ The results in Fig.~\ref{fig:total_episodes_per_n_robots} show the total number 
 % ===================================================================================================
 \section*{Discussion}\label{sec:discussion}
 While the unprecedented strides in AI and robotics have revolutionized numerous sectors, the ongoing proliferation and associated energy consumption cannot be ignored. As the scope of AI continues to expand, a concerted effort is required to strike a balance between innovation and conscientious energy usage to steer AI toward sustainable operation. We introduced three principal energy expenditure categories to emphasize the significance of energy consumption in AI systems. We juxtaposed them with the grand challenges stemming from the escalating DAI applications and growing population of EAI agents. In particular, we underscored that mitigating energy consumption in EAI systems requires enhanced mechanical designs, efficient computation, and communication hardware, and a paramount emphasis on harnessing the simultaneous sharing, exchange, transfer, and accumulation of knowledge acquired by the various agents.
+
+\myhl{The parameter $\alpha$ plays a crucial role in ensuring the robustness of both the model and its results, allowing the system to remain effective even across a wide range of embodiments. Despite these variations---primarily captured by $\alpha$---the idealized collective effect persists, provided that the inter-agent exchange factor $\gamma$ is chose sensible according to the stability conditions discussed in the \nameref{sec:supplementary_materials}. Given our assumptions, one of the most important and intriguing findings is the identification of regimes where \ac{cl} significantly outperforms the conventional learning paradigms. Notably, this advantageous regime appears to coincide with the parameter ranges expected in real-world scenarios, highlighting the significance of the collective knowledge sharing paradigm.}
+
+\myhl{Various factors can influence the equations governing the system, including false communication, communication breaches, updates to the learning rate, and the correctness of transferred information. Each of these factors has the potential to alter key model parameters $(\alpha,\beta,\gamma,\eta)$, impacting overall system behavior. While the effects of embodiment distribution are primarily addressed by Assumptions~\ref{assumption:average_behavior} and \ref{assumption:agent_similarity}, the inter-agent exchange factor $\gamma$ can also serve as a means to model these variations.}
 
 % ===================================================================================================
 \paragraph*{Developing collective learning to address the energy challenges of EAI}
