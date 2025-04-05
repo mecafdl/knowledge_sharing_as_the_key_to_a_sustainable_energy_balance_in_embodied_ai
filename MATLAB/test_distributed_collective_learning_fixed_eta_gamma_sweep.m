@@ -1,3 +1,32 @@
+clearvars
+clc
+close all
+
+theCollective = RobotCollective(numberOfRobots = 8);
+
+% Set flags
+theCollective.RAND_COMM_INTERRUPT         = true; 
+theCollective.ENABLE_INCREMENTAL_LEARNING = 1; 
+theCollective.ENABLE_TRANSFER_LEARNING    = 1; 
+theCollective.ENABLE_COLLECTIVE_LEARNING  = 1; 
+theCollective.REPEATING_SKILLS            = true;
+
+% Define simulation episodes
+theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+
+% Define agent(s) learning factors
+theCollective.Eta_0       = +0.01;
+theCollective.Gamma_0     = +0.01;
+
+% Max. nummber of skills per product
+theCollective.MaxNumberOfSkillsPerProduct = 8;
+%% Simulate
+clc
+close all
+[totalComplexity, learnedSkills, clusterKnowledge, results] = ...
+    theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+
+%%
 clc
 clearvars
 
@@ -96,35 +125,178 @@ parameters.alpha_min             = 0.0461;
 parameters.alpha_max             = 0.0691;
 parameters.delta                 = 0.0360;
 parameters.eta_0                 =-0.1000;
-parameters.eta_std               = 0;% 0.1;
+parameters.eta_std               = 0.1;
 parameters.gamma_0               = 10;
-parameters.gamma_std             = 0;%0.1;
+parameters.gamma_std             = 0.1;
 parameters.maxNumberOfRobots     = 128;
 parameters.totalSimulationScenarios = 5;
 parameters.cl_distributed        = 1;
 parameters.enableSharing         = 1;
 parameters.randCommInterrupt     = 1;
+parameters.enableTransfer        = 1;
+
+%%
+close all 
+clc
+skillIndices  = randperm(parameters.totalSkills,parameters.totalSkills);
+skillClusters = reshape(skillIndices,parameters.skillsPerCluster,parameters.totalSkillClusters);
+
+
+for k = 1:parameters.totalSkillClusters
+    sample_indices = randperm(parameters.skillsPerCluster,10);
+    skillClusters(sample_indices,k);
+end
+parameters.skillClusters = skillClusters;
+%%
+clc
+productSkills = randi(parameters.totalSkills,1,numberOfRobots);
+
+% intersect(skillClusters(:,1),productSkills) 
+% intersect(skillClusters(:,2),productSkills) 
+% intersect(skillClusters(:,3),productSkills) 
+% intersect(skillClusters(:,4),productSkills)
+
+sum(ismember(skillClusters(:,1),productSkills))
+sum(ismember(skillClusters(:,2),productSkills))
+sum(ismember(skillClusters(:,3),productSkills))
+sum(ismember(skillClusters(:,4),productSkills))
 %%
 clc
 close all
 
-parameters.randCommInterrupt = 0;
+seenSkills = [];
+% numberOfSeenSkills = 0;
+% for iter=1:5
+% for iter=1:1000
 
-parameters.episodes =0:0.1:1000;
+clear numberOfNewSkills numberOfSeenSkills  skillsInCluster1 skillsInCluster2  skillsInCluster3 skillsInCluster4
+product = 1;
+while numel(seenSkills) < parameters.totalSkills
+    productSkills = randi(parameters.totalSkills,1,32);
+    % numberOfSeenSkills  = numberOfSeenSkills + sum(~ismember(productSkills,seenSkills));
+    % seenSkills = [seenSkills, productSkills(~ismember(productSkills,seenSkills))];
+    numberOfNewSkills(product) = numel(unique([seenSkills, productSkills])) - numel(seenSkills);
+    seenSkills = unique([seenSkills, productSkills]);
+    numberOfSeenSkills(product) = numel(seenSkills);
 
-eta_mean       = -0.1;
-gamma_mean     = +0.4;
+
+
+skillsInCluster1(product) = numel(intersect(seenSkills,skillClusters(:,1)))
+skillsInCluster2(product) = numel(intersect(seenSkills,skillClusters(:,2)))
+skillsInCluster3(product) = numel(intersect(seenSkills,skillClusters(:,3)))
+skillsInCluster4(product) = numel(intersect(seenSkills,skillClusters(:,4)))
+
+    % if numberOfSeenSkills ~= numel(seenSkillsAux)
+    %     disp('HERE')
+    % else
+    %    seenSkills = seenSkillsAux; 
+    % end
+    % if numel(seenSkills) == parameters.totalSkills
+    %     break
+    % end
+    product = product + 1;
+% numel(seenSkills)
+% numel(intersect(1:parameters.totalSkills,productSkills))
+% storedSklls = sum(ismember(productSkills,1:parameters.totalSkills));
+end
+figure('Color', 'w')
+plot(numberOfNewSkills,'r')
+hold on
+plot(numberOfSeenSkills,'b')
+plot(skillsInCluster1,'k')
+plot(skillsInCluster2,'k')
+plot(skillsInCluster3,'k')
+plot(skillsInCluster4,'k')
+legend('# new skills','# seen skills')
+xlabel('No. of products')
+ylabel('No. of skills learned')
+axis square
+
+%%
+
+B = unique(seenSkills); % which will give you the unique elements of A in array B
+Ncount = histc(seenSkills, B); % this willgive the number of occurences of each unique element
+
+%%
+clc
+close all
+
+parameters.randCommInterrupt   = 1;
+parameters.enableTransfer      = 1;
+parameters.enableSharing       = 1;
+parameters.episodes            = 1:.1:2*parameters.fundamentalComplexity;
+parameters.repeatingSkillsFlag = 1;
+
+
+% eta_mean       = -0.1;
+% gamma_mean     = +0.4;
+
+eta_mean       = +0.01;
+gamma_mean     = +0.10;
+
+parameters.numberOfRobots           = 8;
+parameters.numberOfRobotsPerCluster = repmat(parameters.numberOfRobots/parameters.totalSkillClusters,parameters.totalSkillClusters,1);
+
+% parameters.numberOfRobotsPerCluster = [2,4,8,2];
+
+parameters.maxNumberOfSkillsPerProduct = 8;
+
+% b = @(clusterTrasferrableKnowledgeFraction,parameters.numberOfRobots) (clusterTrasferrableKnowledgeFraction-1).*((parameters.numberOfRobots/parameters.totalSkillClusters-1) + (parameters.totalSkillClusters-1)*parameters.numberOfRobots/parameters.totalSkillClusters.*clusterTrasferrableKnowledgeFraction);
+% a = mean([parameters.alpha_min,parameters.alpha_max]);
+% gamma_mean     = (a/b(1 - numberOfRobots/parameters.totalSkills,numberOfRobots))*(parameters.eta_0*(parameters.totalSkills-numberOfRobots) + 1);
+
+% [totalComplexity, learnedSkills, clusterKnowledge] = ...
+%     simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
+[totalComplexity, learnedSkills, clusterKnowledge, results] = ...
+    simulateDistributedCollectiveKnowledgeDynamics(eta_0               = eta_mean, ...
+                                                   gamma_0             = gamma_mean, ...
+                                                   parameters          = parameters, ...
+                                                   maxNumberOfProducts = 1000);
+
+
+% title(gca,['$\bar{\eta}=',num2str(eta_mean),'~|~\bar{\gamma} \in [-0.2, 10.4]$'],'Interpreter','latex','FontSize',15)
+% title(gca,['$m =',num2str(numberOfRobots),'~|~\bar{\eta}=',num2str(eta_mean),'~|~\bar{\gamma} =', num2str(gamma_mean),'$'],'Interpreter','latex','FontSize',11)
+%%
+
+clc
+close all
+
+parameters.randCommInterrupt = 1;
+parameters.enableTransfer    = 1;
+parameters.enableSharing     = 1;
+parameters.episodes          = 1:1:2*parameters.fundamentalComplexity;
+
+% eta_mean       = -0.1;
+% gamma_mean     = +0.4;
+
+eta_mean       = +0.1;
+gamma_mean     = +0.1;
 
 numberOfRobots = 8;
 b = @(clusterTrasferrableKnowledgeFraction,numberOfRobots) (clusterTrasferrableKnowledgeFraction-1).*((numberOfRobots/parameters.totalSkillClusters-1) + (parameters.totalSkillClusters-1)*numberOfRobots/parameters.totalSkillClusters.*clusterTrasferrableKnowledgeFraction);
 a = mean([parameters.alpha_min,parameters.alpha_max]);
 % gamma_mean     = (a/b(1 - numberOfRobots/parameters.totalSkills,numberOfRobots))*(parameters.eta_0*(parameters.totalSkills-numberOfRobots) + 1);
 
-[totalComplexity, learnedSkills, clusterKnowledge] = ...
-    simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
-title(gca,['$\bar{\eta}=',num2str(eta_mean),'~|~\bar{\gamma} \in [-0.2, 10.4]$'],'Interpreter','latex','FontSize',15)
+% [totalComplexity, learnedSkills, clusterKnowledge] = ...
+%     simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
+totalComplexity ={};
+learnedSkills   ={};
+clusterKnowledge = {};
+for m = [4,8,16,32,64,128]
+    numberOfRobots = m;   
+    [totalComplexity{m}, learnedSkills{m}, clusterKnowledge{m}] = ...
+        simulateDistributedCollectiveKnowledgeDynamics(eta_mean, gamma_mean, parameters, numberOfRobots);
+    pause
+end
 %%
-
+clc
+close all
+figure('Color','w')
+for m = [4,8,16]
+    plot(totalComplexity{m})
+    hold on
+end
+%%
 clc
 close all
 [skillsGrid, betaGrid]=meshgrid(0:1:parameters.totalSkills-numberOfRobots,0:0.01:(1-numberOfRobots/parameters.totalSkills));
