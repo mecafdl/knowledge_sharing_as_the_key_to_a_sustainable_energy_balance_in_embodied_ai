@@ -2,14 +2,14 @@ clearvars
 clc
 close all
 
-theCollective = RobotCollective(numberOfRobots = 8);
+theCollective = RobotCollective(numberOfRobots = 32);
 
 % Set flags
 theCollective.RAND_COMM_INTERRUPT         = true; 
 theCollective.ENABLE_INCREMENTAL_LEARNING = 1; 
 theCollective.ENABLE_TRANSFER_LEARNING    = 1; 
 theCollective.ENABLE_COLLECTIVE_LEARNING  = 1; 
-theCollective.REPEATING_SKILLS            = true;
+theCollective.REPEATING_SKILLS            = 0;
 
 % Define simulation episodes
 theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
@@ -26,6 +26,66 @@ close all
 [totalComplexity, learnedSkills, clusterKnowledge, results] = ...
     theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
 
+
+%%
+close all
+clc
+
+
+robotArray = [8,16,32,64,128];
+cl_resutlts = cell(1,numel(robotArray));
+for r = robotArray
+    r
+
+
+    theCollective = RobotCollective(numberOfRobots = r);
+    
+    % Set flags
+    theCollective.RAND_COMM_INTERRUPT         = true; 
+    theCollective.ENABLE_INCREMENTAL_LEARNING = 1; 
+    theCollective.ENABLE_TRANSFER_LEARNING    = 1; 
+    theCollective.ENABLE_COLLECTIVE_LEARNING  = 1; 
+    theCollective.REPEATING_SKILLS            = true;
+    
+    % Define simulation episodes
+    theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+    
+    % Define agent(s) learning factors
+    theCollective.Eta_0       = +0.01;
+    theCollective.Gamma_0     = +0.01;
+    
+    % Max. nummber of skills per product
+    theCollective.MaxNumberOfSkillsPerProduct = 8;
+
+
+
+    [~, ~, ~, cl_resutlts{r}] = ...
+    theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+end
+%%
+clc
+close all
+figure('Color','w')
+
+for r = robotArray
+    loglog(cl_resutlts{r}.c_jk_cl_dist_episodes)
+    hold on
+end
+xlim([1, 500])
+ylim([1, 50])
+%%
+close all
+clc
+figure('Color', 'w')
+plot(1:theCollective.MaxNumberOfProducts, theCollective.NumberOfNewSkills,'r')
+hold on
+plot(1:theCollective.MaxNumberOfProducts, theCollective.NumberOfSeenSkills,'b')
+plot(1:theCollective.MaxNumberOfProducts, cumsum(theCollective.NumberOfNewSkills),'m--')
+plot(1:theCollective.MaxNumberOfProducts, theCollective.SkillsInCluster,'k')
+legend('No. new skills','No. learned skills','Skills per cluster')
+xlabel('No. of products')
+ylabel('No. of skills learned')
+axis square
 %%
 clc
 clearvars
