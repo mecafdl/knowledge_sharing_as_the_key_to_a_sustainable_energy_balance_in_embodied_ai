@@ -3,7 +3,7 @@ classdef RobotCollective < handle
         Alpha_max                   = 0.0691;
         Alpha_min                   = 0.0461;
         DISTRIBUTED_COLLECTIVE_LEARNING ...
-                                    = boolean(1);          % Implies agents are distributed across clusters
+                                    = boolean(1);              % Implies agents are distributed across clusters
         ClusterTransferableKnowledgeFraction ....
                                     = [];
         ClusterTransferableKnowledgeFractionPerAgent ....
@@ -45,6 +45,7 @@ classdef RobotCollective < handle
     end
 
     methods
+        %% Initialization function
         function obj = RobotCollective(NameValueArgs)
             arguments
                 NameValueArgs.numberOfRobots           = [];
@@ -97,20 +98,7 @@ classdef RobotCollective < handle
 
             ClusterSimilarityMatrixPerAgent     = [];% zeros(obj.NumberOfRobots,obj.NumberOfRobots);
             aux = eye(obj.TotalSkillClusters) + obj.ClusterSimilarityMatrix;
-            
-            % for c = 1:obj.TotalSkillClusters
-            %     theRow = aux(c,:);
-            %     for r = 1:obj.NumberOfRobotsPerCluster
-            %         ClusterSimilarityMatrixPerAgent_aux = [];
-            %         % theRow = aux(r,:);
-            %         for k = 1:obj.TotalSkillClusters
-            %             ClusterSimilarityMatrixPerAgent_aux = [ClusterSimilarityMatrixPerAgent_aux, ...
-            %                                                          repmat(theRow(c),1,obj.NumberOfRobotsPerCluster(k))];
-            %         end
-            %         ClusterSimilarityMatrixPerAgent = [ClusterSimilarityMatrixPerAgent;repmat(ClusterSimilarityMatrixPerAgent_aux,obj.NumberOfRobotsPerCluster(r),1)];
-            %     end
-            % end
-                
+                           
             for c = 1:obj.TotalSkillClusters
                 theRow = aux(c,:);
                 tmp  = repmat(theRow,obj.NumberOfRobotsPerCluster(c),1);
@@ -118,10 +106,8 @@ classdef RobotCollective < handle
                 ClusterSimilarityMatrixPerAgent = [ClusterSimilarityMatrixPerAgent;tmp];
             end
 
-            obj.ClusterSimilarityMatrixPerAgent = ClusterSimilarityMatrixPerAgent;
-
-            obj.ClusterTransferableKnowledgeFraction  = zeros(obj.TotalSkillClusters,1);
-
+            obj.ClusterSimilarityMatrixPerAgent      = ClusterSimilarityMatrixPerAgent;
+            obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
         end
         
         %% Generate plot canvas
@@ -132,7 +118,7 @@ classdef RobotCollective < handle
             plot(obj.Episodes,obj.KnowledgeLowerBound*ones(numel(obj.Episodes),1),'k:','LineWidth',2);
             set(gca, 'YScale', 'log')
             set(gca, 'XScale', 'log')
-            % title(['$\mathcal{Z}_{',num2str(k),'}$'],'FontSize',25,'Interpreter','latex')
+
             xlabel('Episodes','FontSize',25)
             ylabel('$\bar{\boldmath{\sigma}}^{(\mathrm{DCL})}_{j,k}$','FontSize',25,'Interpreter','latex')
             % Generate a colormap (e.g., 'parula', 'jet', 'hot', 'cool', etc.)
@@ -186,12 +172,10 @@ classdef RobotCollective < handle
             % Plot the mean curve
             plot(ax, obj.Episodes, meanCurve, 'b-', 'LineWidth', 0.5,'Color',selectedColors(skillsBatch,:));
 
-
+            % Plot knowledge plot for all skills
             % plot(ax, obj.Episodes, remainingKnowledge(remainingKnowledge(:,1)>obj.KnowledgeLowerBound,:), '-', 'LineWidth', 0.5,'Color',selectedColors(skillsBatch,:));
 
-
-            % set(gca, 'YScale', 'log')
-            % set(gca, 'XScale', 'log')
+            % Plot dotted line for the KnowledgeLowerBound
             plot(ax, obj.FundamentalComplexity*ones(100,1), linspace(obj.KnowledgeLowerBound,1,100),'k--')
         end        
         
@@ -222,46 +206,7 @@ classdef RobotCollective < handle
             end
             out = productSkills;
         end
-        
-        % function updateSkillPool(obj, NameValueArgs)
-        %     arguments
-        %         obj (1,1) RobotCollective
-        %         NameValueArgs.productSkills
-        %         NameValueArgs.skillsBatch
-        %         NameValueArgs.remainingKnowldge
-        % 
-        %     end   
-        %     productSkills = NameValueArgs.productSkills;
-        %     skillsBatch   = NameValueArgs.skillsBatch;
-        %     % Add the learned skills in the batch to the general pool of
-        %     % learned skills
-        % 
-        %     learnedProductSkills = productSkills(NameValueArgs.remainingKnowldge<obj.KnowledgeLowerBound);
-        % 
-        % 
-        %     obj.SkillsInAgent                   = [obj.SkillsInAgent,productSkills'];
-        %     obj.NumberOfNewSkills(skillsBatch)  = numel(unique([obj.SeenSkills, productSkills])) - numel(obj.SeenSkills); % The intersection of the sets
-        %     obj.SeenSkills                      = unique([obj.SeenSkills, productSkills]); % The union of the sets
-        %     obj.NumberOfSeenSkills(skillsBatch) = numel(obj.SeenSkills);
-        %     if obj.ENABLE_COLLECTIVE_LEARNING == 1
-        %         obj.NumberOfLearnedSkills  = numel(obj.SeenSkills).*ones(obj.NumberOfRobots,1);
-        %     else
-        %         obj.NumberOfLearnedSkills = reshape(arrayfun(@(i) numel(unique(obj.SkillsInAgent(i,:))),1:obj.NumberOfRobots),obj.NumberOfRobots,1);
-        %     end
-        % 
-        %     for k = 1:obj.TotalSkillClusters
-        %         obj.SkillsInCluster(k,skillsBatch) = numel(intersect(obj.SeenSkills,obj.SkillClusters(:,k)));
-        %     end
-        %     obj.ClusterTransferableKnowledgeFraction = obj.SkillsInCluster(:,skillsBatch)./obj.SkillsPerCluster;
-        %     disp(obj.ClusterTransferableKnowledgeFraction)
-        % 
-        %     scaledTransferableKnowledgePerCluster_aux = [];
-        %     for k = 1:obj.TotalSkillClusters
-        %         scaledTransferableKnowledgePerCluster_aux = [scaledTransferableKnowledgePerCluster_aux, ...
-        %                                                      repmat(obj.ClusterTransferableKnowledgeFraction(k),1,obj.NumberOfRobotsPerCluster(k))];
-        %     end
-        %     obj.ClusterTransferableKnowledgeFractionPerAgent = scaledTransferableKnowledgePerCluster_aux;
-        % end
+
         %% Log and update learned skills 
         function updateSkillPool(obj, NameValueArgs)
             arguments
@@ -290,7 +235,6 @@ classdef RobotCollective < handle
                 aux = obj.SkillsInAgent();
                 aux(isnan(aux)) = 0;
                 obj.NumberOfLearnedSkills = reshape(arrayfun(@(i) sum(unique(aux(i,:))~=0),1:obj.NumberOfRobots),obj.NumberOfRobots,1);                
-                % obj.NumberOfLearnedSkills = reshape(arrayfun(@(i) numel(unique(obj.SkillsInAgent(i,:))),1:obj.NumberOfRobots),obj.NumberOfRobots,1);
             end
 
             for k = 1:obj.TotalSkillClusters
@@ -406,50 +350,30 @@ classdef RobotCollective < handle
                 % fprintf('Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
                 cprintf('green','[INFO] Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
                 
-                % if (obj.UNEVEN_ROBOT_DISTRIBUTION == 0)
-                    % initialRemainingKnowledge = diag(1 - obj.ClusterTransferableKnowledgeFractionPerAgent)*(obj.incrementalLearningInitialRemainingKnowledge().*ones(obj.NumberOfRobots,1));
-                    
-                    if any(obj.SkillsRemainingKnowledge(productSkills)<=obj.KnowledgeLowerBound)
-                        disp('A skill was learned!')
-                    end
-                    
-                    if obj.ENABLE_INCREMENTAL_LEARNING
-                        initialRemainingKnowledge = diag(1 - obj.ClusterTransferableKnowledgeFractionPerAgent)*(obj.incrementalLearningInitialRemainingKnowledge().*obj.SkillsRemainingKnowledge(productSkills));
-                    else
-                        initialRemainingKnowledge = diag(1 - obj.ClusterTransferableKnowledgeFractionPerAgent)*(obj.incrementalLearningInitialRemainingKnowledge().*ones(numel(productSkills),1));
-                    end
+                if any(obj.SkillsRemainingKnowledge(productSkills)<=obj.KnowledgeLowerBound)
+                    disp('Skill(s) learned!')
+                end
+                
+                % The initial conditions change when incremental
+                % learning is active
+                if obj.ENABLE_INCREMENTAL_LEARNING
+                    initialRemainingKnowledge = diag(1 - obj.ClusterTransferableKnowledgeFractionPerAgent)*(obj.incrementalLearningInitialRemainingKnowledge().*obj.SkillsRemainingKnowledge(productSkills));
+                else
+                    initialRemainingKnowledge = diag(1 - obj.ClusterTransferableKnowledgeFractionPerAgent)*(obj.incrementalLearningInitialRemainingKnowledge().*ones(numel(productSkills),1));
+                end
 
-                    if  all(initialRemainingKnowledge)<=obj.KnowledgeLowerBound
-                        remainingKnowledge = obj.KnowledgeLowerBound*ones(obj.NumberOfRobots,numel(obj.Episodes));
-                    else
-                        remainingKnowledge = transpose( ...
-                            ode4_sat(@(n,sigmaBar) ...
-                                obj.collectiveKnowledgeSharingDynamicsEpisodic( ...
-                                    agentsRemainingKnowledge = sigmaBar, ...
-                                    isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, initialRemainingKnowledge)); 
-                    end
-                % elseif (obj.UNEVEN_ROBOT_DISTRIBUTION == 1) 
-                %     warning('Code under revision')
-                %     % if (skillsBatch < obj.NumberOfSkillBatches)
-                %     %     initialRemainingKnowledge = (1 - totalTransferrableKnowledgeFraction)*obj.initialCondition().*ones(obj.NumberOfRobots,1);
-                %     %     remainingKnowledge = transpose( ...
-                %     %         ode4_sat(@(n,sigmaBar) ...
-                %     %             fcn_collectiveKnowledgeSharingDynamicsEpisodic(...
-                %     %                 n, sigmaBar, ...
-                %     %                 totalTransferrableKnowledgeFraction), obj.Episodes, initialRemainingKnowledge));       
-                % 
-                %     % elseif (skillsBatch == obj.NumberOfSkillBatches)
-                %     %     initialRemainingKnowledge = (1 - totalTransferrableKnowledgeFraction)*obj.initialCondition().*ones(obj.TotalSkills-obj.NumberOfRobots*(obj.NumberOfSkillBatches-1),1);
-                %     %     remainingKnowledge = transpose( ...
-                %     %         ode4_sat(@(n,sigmaBar) ...
-                %     %             fcn_collectiveKnowledgeSharingDynamicsEpisodic(...
-                %     %                 n, sigmaBar, ...
-                %     %                 obj.totalSkills-obj.numberOfRobots*(numberOfSkillBatches-1), ...
-                %     %                 Alpha(1:obj.totalSkills-obj.numberOfRobots*(numberOfSkillBatches-1),1:obj.totalSkills-obj.numberOfRobots*(numberOfSkillBatches-1)), ...
-                %     %                 totalTransferrableKnowledgeFraction, ...
-                %     %                 obj, n), obj.episodes, initialRemainingKnowledge));  
-                %     % end
-                % end
+                % To speed up the simulation, once the KnowledgeLowerBound
+                % is reached, stop the integration
+                if  all(initialRemainingKnowledge)<=obj.KnowledgeLowerBound
+                    remainingKnowledge = obj.KnowledgeLowerBound*ones(obj.NumberOfRobots,numel(obj.Episodes));
+                else
+                    remainingKnowledge = transpose( ...
+                        ode4_sat(@(n,sigmaBar) ...
+                            obj.collectiveKnowledgeSharingDynamicsEpisodic( ...
+                                agentsRemainingKnowledge = sigmaBar, ...
+                                isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, initialRemainingKnowledge)); 
+                end
+
 
                 % Plot remaining knowlege curve
                 obj.plotRemainingKnowledgeCurves(remainingKnowledge = remainingKnowledge, skillsBatch = skillsBatch, figureHandle=fig, axisHandle= ax,lineColors=selectedColors);
@@ -493,15 +417,14 @@ classdef RobotCollective < handle
                 end
             end
               
-        
+            % Format plot
             fcn_scrpt_prepare_graph_science_std(fig, gca, [], [], [], 6, 1, 1)
             % pause(1)
             tightfig(fig);
             c_jk_cl_dist_episodes = (complexity_jk_CL_Distributed);
             learnedSkillsStorage  = obj.NumberOfLearnedSkills;
         
-        % =========================================================================
-            
+            % =============================================================            
             figure('Color', 'w')
             plot(1:obj.MaxNumberOfProducts, obj.NumberOfNewSkills,'r')
             hold on
@@ -521,8 +444,7 @@ classdef RobotCollective < handle
             results.SkillsInCluster       = obj.SkillsInCluster;
             results.skillsBatch           = skillsBatch;
         end
-    
-        
+
         %% Remaining knowledge dynamics functiion
         function d_coupledRemainingKnowledge = collectiveKnowledgeSharingDynamicsEpisodic( ...
                 obj, ...
@@ -656,8 +578,6 @@ classdef RobotCollective < handle
             Gamma   = Gamma.*commInterruptMatrix;
             % Gamma   = Gamma.*(full(sprandsym(Gamma))>-0.5);
         end        
-    end
-
-    
+    end    
 
 end
