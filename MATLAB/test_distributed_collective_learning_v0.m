@@ -23,7 +23,8 @@ close all
 % figure('color','w')
 clear learnedSkillsRate
 for index = 1:size(c_jk_cl_dist_episodes_ParamSweep{1},2)
-    the_learned_skills = cell2mat(arrayfun(@(i) learnedSkillsStorage{i}(:,index),1:10,'UniformOutput',false));
+    % the_learned_skills = cell2mat(arrayfun(@(i) learnedSkillsStorage{i}(:,index),1:10,'UniformOutput',false));
+    the_learned_skills = cell2mat(arrayfun(@(i) learnedSkillsStorage{i}(:,index),1:2,'UniformOutput',false));
     learnedSkillsRate(:,index) = floor(100*(ceil(mean(the_learned_skills,2))./parameters.totalSkills));
     % b =plot(x,the_mean,'color',cmap(index,:),'Marker',allMarkers(index));
     % figure
@@ -50,7 +51,7 @@ legends = {...
 clc
 close all
 % fig = figure('color','w');
-tl = tiledlayout(3,3);
+tl = tiledlayout(3,3,TileSpacing="tight");
 tl.Title.String = "Total episodes for all skills";
 t.Title.FontWeight = 'bold';
 
@@ -60,7 +61,8 @@ for index = 1:size(c_jk_cl_dist_episodes_ParamSweep{1},2)
     lowerBound= parameters.totalSkills./[4,8,16,32,64,128]'.*parameters.fundamentalComplexity;
     patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0.5  0.5  0.5],'FaceAlpha',0.25,'EdgeColor','w');
     hold on
-    the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
+    % the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
+    the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:2,'UniformOutput',false));
     the_mean   = ceil(mean(the_learned_skills,2));
     the_std    = ceil(std(the_learned_skills,[],2));
     upperBound = the_mean + the_std;
@@ -92,6 +94,7 @@ for index = 1:size(c_jk_cl_dist_episodes_ParamSweep{1},2)
     leg.Interpreter = 'latex';
     leg.Box = 'on';
     leg.FontSize = 15;
+    axis square
 end
 %%
 xticks([1:7])
