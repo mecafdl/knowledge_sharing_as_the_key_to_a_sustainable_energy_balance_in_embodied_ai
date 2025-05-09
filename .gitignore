@@ -1,3 +1,6 @@
+# Ignore Sync+Share folder
+.PowerFolder
+
 # Ignore the directory with MATLAB files
 #MATLAB/figures/
 /miscellaneous
