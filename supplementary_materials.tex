@@ -1,0 +1,174 @@
+% Use only LaTeX2e, calling the article.cls class and 12-point type.
+
+\documentclass[12pt]{article}
+
+% Users of the {thebibliography} environment or BibTeX should use the
+% scicite.sty package, downloadable from *Science* at
+% http://www.sciencemag.org/authors/preparing-manuscripts-using-latex 
+% This package should properly format in-text
+% reference calls and reference-list numbers.
+
+\usepackage{scicite}
+
+\usepackage{times}
+
+\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+
+\usepackage[]{graphicx}
+\graphicspath{ {./fig/} }
+\usepackage{subcaption}
+\usepackage[labelformat=simple]{subcaption}  
+\captionsetup[subfigure]{font={bf,small}, skip=1pt, margin=-0.1cm, singlelinecheck=false}
+\usepackage[labelfont=bf]{caption}
+\captionsetup{labelfont=bf}
+\captionsetup{font=footnotesize}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dirtytalk}
+%\usepackage{draftwatermark}
+\usepackage{fourier}
+\usepackage{siunitx}
+\usepackage{tcolorbox}
+\usepackage{soul}
+\usepackage{wrapfig}
+\usepackage{tikz}
+
+
+% Added by authors
+\usepackage{siunitx}
+\usepackage{tabularx,ragged2e,booktabs}
+\usepackage{multirow}
+\usepackage{lipsum}
+\usepackage{bm}
+\usepackage{mathtools}
+%\usepackage[labelfont=bf]{caption} 
+%\captionsetup[figure]{labelfont={bf},name={Fig.},labelsep=period}
+\captionsetup[figure]{name={Fig.},labelsep=period}
+\captionsetup[table]{name={Table},labelsep=period}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{ulem}
+\usepackage{xr}
+\externaldocument{main}
+
+
+%\captionsetup[figure]{name={Fig.}}
+
+
+%\captionsetup[subfigure]{font={bf,small}, singlelinecheck=false}
+% Use this to display line numnbers
+%\usepackage{lineno}
+%\linenumbers
+
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\renewcommand{\emph}[1]{\textit{#1}}
+\let\textcircledold\textcircled
+
+\renewcommand{\textcircled}[1]{\raisebox{.5pt}{\textcircledold{\raisebox{-.45pt} {#1}}}}
+\newcommand{\pigraph}{$\pi$-graph}
+\newcommand*{\important}[1]{\textcolor{red}{\danger~\textbf{IMPORTANT:~}} \textcolor{red}{#1}}
+\newcommand*{\pending}[1]{\textcolor{blue}{$\bigstar$~\textbf{PENDING~#1}}}
+\newcommand\mybox[2][]{\tikz[overlay]\node[fill=blue!100,inner sep=4pt, anchor=text, rectangle, rounded corners=1mm,#1] {#2};\phantom{#2}}
+\newcommand{\TODO}{\mybox[fill=yellow]{\textcolor{blue}{\Large \textbf{TODO}}}}
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\textcircledD}[1]{\raisebox{.9pt}{\textcircled{\raisebox{+.5pt} {\footnotesize#1}}}}
+\newcommand{\hu}[1]{\textcolor{orange}{[Hu: #1]}}
+\newcommand{\kuehn}[1]{\textcolor{blue}{[Kuehn: #1]}}
+\newcommand{\diaz}[1]{\textcolor{blue}{[Diaz: #1]}}
+\newcommand{\haddadin}[1]{\textcolor{red}{[Haddadin: #1]}}
+\newcommand{\del}[1]{\textcolor{orange}{\xout{#1}}}
+\newcommand{\new}[1]{\textcolor{orange}{#1}}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\renewcommand{\thesubfigure}{\textbf{\Alph{subfigure}}}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+
+\renewcommand{\figurename}{Fig.}
+
+% The preamble here sets up a lot of new/revised commands and
+% environments.  It's annoying, but please do *not* try to strip these
+% out into a separate .sty file (which could lead to the loss of some
+% information when we convert the file to other formats).  Instead, keep
+% them in the preamble of your main LaTeX source file.
+
+
+% The following parameters seem to provide a reasonable page setup.
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 1.0cm
+
+
+%The next command sets up an environment for the abstract to your paper.
+\newenvironment{sciabstract}{%
+\begin{quote} \bf}
+{\end{quote}}
+
+
+% Include your paper's title here
+\title{Collective knowledge sharing allows minimum learning time and sustainable energy balance in embodied AI}
+
+% Place the author information here.  Please hand-code the contact
+% information and notecalls; do *not* use \footnote commands.  Let the
+% author contact information appear immediately below the author names
+% as shown.  We would also prefer that you don't change the type-size
+% settings shown here.
+
+\author
+{Fernando D\'iaz Ledezma and Sami Haddadin$^{\ast}$
+\\
+\normalsize{Chair of Robotics and Systems Intelligence,}\\
+\normalsize{MIRMI - Munich Institute of Robotics and Machine Intelligence,}\\
+\normalsize{Technical University of Munich, Georg-Brauchle-Ring 60-62, M\"unchen, 80992, Germany}\\
+\\
+\normalsize{$^\ast$Corresponding author. Email: fernando.diaz@tum.de}
+}
+
+% Include the date command, but leave its argument blank.
+
+\date{}
+
+
+
+%%%%%%%%%%%%%%%%% END OF PREAMBLE %%%%%%%%%%%%%%%%
+
+
+
+\begin{document} 
+
+% Double-space the manuscript.
+
+\baselineskip24pt
+
+%%%%%% Main Text %%%%%%
+
+\newcommand{\beginsupplement}{%
+        \setcounter{table}{0}
+        \renewcommand{\thesection}{S\arabic{section}}
+        \renewcommand{\thetable}{S\arabic{table}}%
+        \setcounter{figure}{0}
+        \renewcommand{\thefigure}{S\arabic{figure}}%
+     }
+
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
+\newpage
+\beginsupplement
+\section*{Supplementary Materials}
+\input{supplementary.tex}
+
+
+
+
+\end{document}
