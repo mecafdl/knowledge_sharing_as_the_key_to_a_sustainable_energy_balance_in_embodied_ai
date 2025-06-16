@@ -1,3 +1,48 @@
+% %% - Functions folder in the same folder
+% clc
+% clearvars
+% 
+% cd(fileparts(matlab.desktop.editor.getActiveFilename)); % use this to CD
+% addpath(genpath(pwd))
+% 
+% % Threshold to consider a skill learned
+% parameters.knowledgeLowerBound = 0.01;
+% 
+% % Fundamental complexity (AKA max number of parameters.episodes to learn any skill)
+% parameters.fundamentalComplexity = 100;
+% % Trial parameters.episodes
+% % parameters.episodes  = 0:0.01:parameters.fundamentalComplexity; 
+% parameters.episodes  = 0:0.1:parameters.fundamentalComplexity; 
+% 
+% % Total number of skills
+% parameters.totalSkills = 8*64;
+% 
+% % Number of clusters
+% parameters.totalSkillClusters = 4;
+% 
+% % Number of skills per cluster
+% parameters.skillsPerCluster = parameters.totalSkills/parameters.totalSkillClusters;
+% 
+% % Base learning rate
+% parameters.alpha_min = -log(parameters.knowledgeLowerBound)/parameters.fundamentalComplexity;%0.05;
+% parameters.alpha_max = 1.5*parameters.alpha_min;
+% 
+% parameters.delta = -log(parameters.knowledgeLowerBound)/parameters.skillsPerCluster;%0.05;
+% 
+% parameters.eta_0   = 0.1;
+% parameters.eta_std = 0.3*parameters.eta_0;
+% 
+% parameters.gamma_0   = 4*0.05;
+% parameters.gamma_std = 0.5*parameters.gamma_0;
+% 
+% f = @(eta, N_zeta) eta.*N_zeta+1;
+% g = @(delta, N_zeta) exp(-delta*N_zeta);
+% 
+% % number of robots available
+% parameters.maxNumberOfRobots = 128;
+% parameters.totalSimulationScenarios = 5;
+
+
 classdef RobotCollective < handle
     properties
         Alpha_max                   = 0.0691;
@@ -221,8 +266,8 @@ classdef RobotCollective < handle
             % Add the learned skills in the batch to the general pool of
             % learned skills
 
-            succesfullyLearnedProductSkills = NameValueArgs.skillRemainingKnowledge<=obj.KnowledgeLowerBound;
-            productSkills(succesfullyLearnedProductSkills~=1) = NaN;
+            succesfullyLearnedProductSkills_id                   = NameValueArgs.skillRemainingKnowledge<=obj.KnowledgeLowerBound;
+            productSkills(succesfullyLearnedProductSkills_id~=1) = NaN;
 
 
             obj.SkillsInAgent                   = [obj.SkillsInAgent,productSkills'];
@@ -349,11 +394,7 @@ classdef RobotCollective < handle
 
                 % fprintf('Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
                 cprintf('green','[INFO] Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
-                
-                if any(obj.SkillsRemainingKnowledge(productSkills)<=obj.KnowledgeLowerBound)
-                    disp('Skill(s) learned!')
-                end
-                
+                                
                 % The initial conditions change when incremental
                 % learning is active
                 if obj.ENABLE_INCREMENTAL_LEARNING
@@ -373,7 +414,6 @@ classdef RobotCollective < handle
                                 agentsRemainingKnowledge = sigmaBar, ...
                                 isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, initialRemainingKnowledge)); 
                 end
-
 
                 % Plot remaining knowlege curve
                 obj.plotRemainingKnowledgeCurves(remainingKnowledge = remainingKnowledge, skillsBatch = skillsBatch, figureHandle=fig, axisHandle= ax,lineColors=selectedColors);
@@ -405,6 +445,12 @@ classdef RobotCollective < handle
                 % Simulate the smart factory ==============================
                 % productSkills = obj.getProductSkills();
                 obj.SkillsRemainingKnowledge(productSkills) = remainingKnowledge(:,end);
+                
+                % Message if there were skills learned
+                if any(obj.SkillsRemainingKnowledge(productSkills)<=obj.KnowledgeLowerBound)
+                    disp('Skill(s) learned!')
+                end
+
                 % obj.updateSkillPool(productSkills = productSkills(remainingKnowledge(:,end)<obj.KnowledgeLowerBound), skillsBatch = skillsBatch)
                 obj.updateSkillPool(productSkills = productSkills, skillsBatch = skillsBatch, skillRemainingKnowledge = remainingKnowledge(:,end))
                 % =========================================================================        
