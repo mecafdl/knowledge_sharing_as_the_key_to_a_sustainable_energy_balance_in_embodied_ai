@@ -1,29 +1,298 @@
 clearvars
 clc
 close all
+cd(fileparts(matlab.desktop.editor.getActiveFilename));
+%%
+close all
+clc
+cl_scenarios_results = runLearningScenarios();
+%%
+close all
+clc
 
-theCollective = RobotCollective(numberOfRobots = 32);
+theEtas   = [-0.1 0 0.1];
+theGammas = [-0.2 0 0.2];
+[X, Y]    = meshgrid(theEtas,theGammas);
+scenarios = [X(:) Y(:)];
+numberOfScenarios = size(scenarios,1);
+   
+% robotCollectivesSize = [4,8,16,32,64,128];
+robotCollectivesSize = 4:4:128;
+cl_scenarios_results = cell(numberOfScenarios,numel(robotCollectivesSize));
+
+tStart = tic;
+for scenarioIndex = 1:numberOfScenarios
+    for robotCollectiveIndex = 1:numel(robotCollectivesSize)  
+        close all
+        % Initialize a robot collective
+        theCollective = RobotCollective(numberOfRobots  = robotCollectivesSize(robotCollectiveIndex), ...
+                                        repeatingSkills = false);
+        theCollective.RAND_COMM_INTERRUPT         = true; 
+        theCollective.ENABLE_INCREMENTAL_LEARNING = true; 
+        theCollective.ENABLE_TRANSFER_LEARNING    = true; 
+        theCollective.ENABLE_COLLECTIVE_LEARNING  = true; 
+        
+        % Define simulation episodes
+        theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+        
+        % Define agent(s) learning factors
+        theCollective.Eta_0   = scenarios(scenarioIndex,1);
+        theCollective.Gamma_0 = scenarios(scenarioIndex,2);    
+        
+        % Max. nummber of skills per product
+        theCollective.MaxNumberOfSkillsPerProduct = robotCollectivesSize(robotCollectiveIndex);
+
+        cprintf('green',sprintf('[INFO] DCL: collective size %2i | eta_0 = %0.2f | gamma_0 = %0.2f ...\n', robotCollectivesSize(robotCollectiveIndex),theCollective.Eta_0,theCollective.Gamma_0))
+        pause(1)            
+    
+        [~, ~, ~, cl_scenarios_results{scenarioIndex, robotCollectiveIndex}] = ...
+        theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+
+        % c_jk_cl_dist_episodes(robotBatchIndex, scenario) = sum(c_jk_cl_dist);
+        % learnedSkillsStorage(robotBatchIndex, scenario) = learnedSkills
+    end
+end
+tEnd = toc(tStart);
+%%
+close all
+
+aux = arrayfun(@(r) sum(cl_scenarios_results{1,r}.c_jk_cl_dist_episodes),1:6)
+plot(aux)
+%%
+close all
+clc
+
+
+success_cmap = colormap('jet');
+% Create indices to pick colors evenly from the colormap
+success_colorIndices = linspace(0, size(success_cmap, 1), 100);
+% Interpolate the colormap to get the desired number of colors
+% selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
+
+
+
+cmap = flip(distinguishable_colors(9,{'w','k'}),1);
+legends = {...
+    '$\bar{\eta}_+,\bar{\gamma}_-$',...
+    '$\bar{\eta}_+,\bar{\gamma}_0$',...
+    '$\bar{\eta}_+,\bar{\gamma}_+$',...
+    '$\bar{\eta}_0,\bar{\gamma}_-$',...
+    '$\bar{\eta}_0,\bar{\gamma}_0$',...
+    '$\bar{\eta}_0,\bar{\gamma}_+$',...
+    '$\bar{\eta}_-,\bar{\gamma}_-$',...
+    '$\bar{\eta}_-,\bar{\gamma}_0$',...
+    '$\bar{\eta}_-,\bar{\gamma}_+$'};
+clc
+close all
+fig = figure('color','w');
+
+% tl = tiledlayout(3,3,TileSpacing="loose");
+% tl.Title.String = "Total episodes for all skills";
+% t.Title.FontWeight = 'bold';
+
+
+aux_index = 1;
+for index = [7,8,9,4,5,6,1,2,3]%1:9%size(c_jk_cl_dist_episodes_ParamSweep{1},2)
+    % ax =nexttile;
+    ax = subplot(3,3,aux_index);
+    
+    
+    % Color the N/A area
+    upperBound = 12800*ones(numel(robotCollectivesSize),1);
+    lowerBound = theCollective.TotalSkills./robotCollectivesSize'.*theCollective.FundamentalComplexity;
+    patch([robotCollectivesSize fliplr(robotCollectivesSize)], [lowerBound'  fliplr(upperBound')], [0.5  0.5  0.5],'FaceAlpha',0.25,'EdgeColor','w');
+    
+
+
+    hold on
+
+    % Compute the total no. of episodes used for learning the skills (even if unsuccessful)
+    totalLearningEpisodes   = arrayfun(@(r) sum(cl_scenarios_results{index,r}.c_jk_cl_dist_episodes),1:numel(robotCollectivesSize));
+    totalLearnedSkills      = arrayfun(@(r) mean(cl_scenarios_results{index,r}.learnedSkillsStorage),1:numel(robotCollectivesSize));
+    learnedSkillsPercentage = 100*totalLearnedSkills./theCollective.TotalSkills;%floor(100*(ceil(mean(totalLearnedSkills,2))./theCollective.TotalSkills));
+    % plot(x,totalComplexity,Color=cmap(index,:))
+    % plot(robotCollectivesSize,totalComplexity,Color=cmap(index,:))
+    
+    % hold on
+    % % the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:10,'UniformOutput',false));
+    % the_learned_skills = cell2mat(arrayfun(@(i) c_jk_cl_dist_episodes_ParamSweep{i}(:,index),1:2,'UniformOutput',false));
+    % the_mean   = ceil(mean(the_learned_skills,2));
+    % the_std    = ceil(std(the_learned_skills,[],2));
+    % upperBound = the_mean + the_std;
+    % lowerBound = the_mean - the_std;    
+    % x          = 2:7;
+    % patch([x fliplr(x)], [lowerBound'  fliplr(upperBound')], [0  0  0],'FaceColor',cmap(index,:),'FaceAlpha',0.1,'EdgeColor','w');
+    % p(index) = plot(x, the_mean,'LineStyle','-', 'LineWidth', 3,'Color','k');%,cmap(index,:));
+    % aux = scatter(x, totalComplexity, 100, learnedSkillsRate(:,index), 'filled', 'MarkerEdgeColor', cmap(index,:));
+    % interp1(1:size(success_cmap, 1), success_cmap, learnedSkillsRate)
+    % aux = scatter(x, totalComplexity, interp1(1:size(success_cmap, 1), success_cmap, learnedSkillsPercentage), 'filled', 'MarkerEdgeColor', cmap(index,:));
+    
+    % aux = scatter(x, totalComplexity,50, learnedSkillsPercentage, 'filled', 'MarkerEdgeColor', cmap(index,:));
+
+xx = 4:1:128;
+% yy = interp1(robotCollectivesSize, totalComplexity, xx,"linear");
+yy = interp1(robotCollectivesSize, totalLearningEpisodes, xx,"pchip");
+% yy = interp1(robotCollectivesSize, totalLearningEpisodes, xx,"makima");
+learnedSkillsPercentage2 = interp1(robotCollectivesSize, learnedSkillsPercentage, xx);
+
+
+% xx   = robotCollectivesSize;
+% yy   = totalLearningEpisodes;
+% learnedSkillsPercentage2 = learnedSkillsPercentage;
+
+
+% aux = scatter(xx, yy, 20, learnedSkillsPercentage2, 'filled');
+% aux = scatter(linspace(1,6,numel(xx)), yy, 20, learnedSkillsPercentage2, 'filled');
+
+
+    upperBound  =  12800*ones(size(xx))';
+    upperBound  = upperBound(:);
+    lowerBound  = theCollective.TotalSkills./xx'.*theCollective.FundamentalComplexity;
+    lowerBound  = lowerBound(:);
+    patch([xx fliplr(xx)], [lowerBound'  fliplr(upperBound')], [0.7  0.7  0.7],'FaceAlpha',0.25,'EdgeColor','w');
+
+
+    % surf(xx,yy,learnedSkillsPercentage2)
+
+
+X=[xx(:) xx(:)];           %// create a 2D matrix based on "X" column
+Y=[yy(:) yy(:)];           %// same for Y
+Z=zeros(size(X)); %// everything in the Z=0 plane
+C =[learnedSkillsPercentage2(:) learnedSkillsPercentage2(:)] ;         %// matrix for "CData"
+
+%// draw the surface (actually a line)
+hs=surf(X,Y,Z,C,'EdgeColor','interp','FaceColor','interp',LineWidth=2) ;
+
+
+
+    % patch(x,totalComplexity,learnedSkillsPercentage,'EdgeColor','interp');
+
+
+% hcb=colorbar('SouthOutside');
+% ax1Pos = ax1.Position;
+% pos = hcb.Position;
+% pos(4) = 0.5*pos(4);
+
+
+% ax = gca;
+
+
+% Store the original position of the axes
+axPos = ax.Position;
+% 
+% % Get and modify the colorbar's position
+% cPos = cb.Position;
+% cPos(3) = 0.02; % Set the width to 0.02 (adjust as needed)
+% c.Position = cPos;
+% 
+% % Restore the axes position to prevent resizing
+% ax.Position = axPos;
+
+
+
+% Add a horizontal colorbar
+c = colorbar('southoutside');
+c.Box = "off";
+% Get the current positions
+axPos = ax.Position;
+c.Position(3) = 0.1;
+cPos = c.Position;
+
+% Adjust the colorbar's position to be inside the axes
+cPos(1) = axPos(1) + 0.06; % Move up
+cPos(2) = axPos(2) + 0.04; % Move up
+cPos(4) = 0.005;           % Reduce height
+c.Position = cPos;
+clim(gca,[0, 100]);
+ylabel(c,'Success rate')
+colormap jet
+
+% Adjust the axes to accommodate the colorbar
+% ax.Position(4) = axPos(4) - 0.02; % Reduce height
+
+
+
+
+
+    % cb = colorbar;%('SouthOutside');
+    % cPos = cb.Position;
+    % cb.Box = "off";
+    % % cb.Direction = "" 
+    % % cb.Position(3) = 0.5*cb.Position(3);
+    % cb.Position(3)=0.004;
+    % cb.Position(4)=0.2;
+    % % ax.Position = axPos;
+    % 
+    % clim(gca,[0, 100]);
+    % ylabel(cb,'Success rate')
+    % colormap jet
+
+    xlim([4 128])
+
+        ylim([1 12800])
+    % xticks([1:6])
+    % xlim([1 6])
+    % xticklabels({'4','8','16','32','64','128'})
+    yticks([1E+0 1E+1 1E+2 1E+3 1E+4])
+    yticklabels({'10^0','10^1', '10^2', '10^3', '10^4'})
+    xlabel('Number of robots','FontSize',11)
+    ylabel('Total learning episodes','FontSize',11)
+    set(gca, 'YScale', 'log')
+    
+    % p = plot(NaN,'-','Color',cmap(index,:));
+    p = plot(NaN,NaN, 'Linestyle', 'none', 'Marker', 'none', 'Color', 'none');
+    leg = legend(p,legends{aux_index},'Interpreter','latex',fontsize=11);
+    leg.Box="off";
+
+    aux_index = aux_index + 1;
+    % leg = legend(p(index),legends{index},'Interpreter','latex');
+    % % axis square
+    % 
+    % fcn_scrpt_prepare_graph_science_std(gcf, gca, p(index), leg, [], 18, 1, 1)
+    % leg.Location = 'northeast';
+    % leg.Orientation = 'horizontal';
+    % leg.Interpreter = 'latex';
+    % leg.Box = 'on';
+    % leg.FontSize = 15;
+    axis square
+end
+
+%%
+f = gcf;
+exportgraphics(f,'Peppers300.png','Resolution',600)
+
+
+
+
+
+
+%%
+clc
+theCollective = RobotCollective(numberOfRobots = 8, repeatingSkills = false);
 
 % Set flags
 theCollective.RAND_COMM_INTERRUPT         = true; 
 theCollective.ENABLE_INCREMENTAL_LEARNING = 1; 
 theCollective.ENABLE_TRANSFER_LEARNING    = 1; 
 theCollective.ENABLE_COLLECTIVE_LEARNING  = 1; 
-theCollective.REPEATING_SKILLS            = 0;
+% theCollective.REPEATING_SKILLS            = 0;
 
 % Define simulation episodes
-theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+theCollective.Episodes            = 1:0.1:(2*theCollective.FundamentalComplexity);
 
 % Define agent(s) learning factors
 theCollective.Eta_0       = +0.01;
 theCollective.Gamma_0     = +0.01;
+% theCollective.Eta_0       = -0.1;
+% theCollective.Gamma_0     = +0.2;
 
 % Max. nummber of skills per product
-theCollective.MaxNumberOfSkillsPerProduct = 8;
+% theCollective.MaxNumberOfSkillsPerProduct = 8;
+theCollective.MaxNumberOfSkillsPerProduct = theCollective.NumberOfRobots;
 %% Simulate
 clc
 close all
-[totalComplexity, learnedSkills, clusterKnowledge, results] = ...
+[totalLearningEpisodes, learnedSkills, clusterKnowledge, results] = ...
     theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
 
 
@@ -33,46 +302,107 @@ clc
 
 
 robotArray = [8,16,32,64,128];
-cl_resutlts = cell(1,numel(robotArray));
-for r = robotArray
-    r
+
+learningCases = [zeros(1,3);  % Isolated
+                 1 0 0;       % Incremental
+                 1 1 0;       % Trasnfer + Incremental
+                 1 1 1];      % Collective
+learningCasesLabels = {'IsL','IL','TIL','DCL'};
+cl_results = cell(size(learningCases,1),numel(robotArray));
 
 
-    theCollective = RobotCollective(numberOfRobots = r);
+%%
+clc
+for learningCaseIndex = 1%:size(learningCases,1)
+    for robotArrayIndex = 1:numel(robotArray)
+        cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
+        pause(3)
+        
+        theCollective = RobotCollective(numberOfRobots = robotArray(robotArrayIndex));
+        
+        % Set flags
+        theCollective.RAND_COMM_INTERRUPT         = true; 
+        theCollective.ENABLE_INCREMENTAL_LEARNING = learningCases(learningCaseIndex,1); 
+        theCollective.ENABLE_TRANSFER_LEARNING    = learningCases(learningCaseIndex,2); 
+        theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3); 
+        theCollective.REPEATING_SKILLS            = true;
+        
+        % Define simulation episodes
+        theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+        
+        % Define agent(s) learning factors
+        theCollective.Eta_0       = +0.01;
+        theCollective.Gamma_0     = +0.01;
+        
+        % Max. nummber of skills per product
+        theCollective.MaxNumberOfSkillsPerProduct = 8;
     
-    % Set flags
-    theCollective.RAND_COMM_INTERRUPT         = true; 
-    theCollective.ENABLE_INCREMENTAL_LEARNING = 1; 
-    theCollective.ENABLE_TRANSFER_LEARNING    = 1; 
-    theCollective.ENABLE_COLLECTIVE_LEARNING  = 1; 
-    theCollective.REPEATING_SKILLS            = true;
     
-    % Define simulation episodes
-    theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
     
-    % Define agent(s) learning factors
-    theCollective.Eta_0       = +0.01;
-    theCollective.Gamma_0     = +0.01;
-    
-    % Max. nummber of skills per product
-    theCollective.MaxNumberOfSkillsPerProduct = 8;
-
-
-
-    [~, ~, ~, cl_resutlts{r}] = ...
-    theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+        [~, ~, ~, cl_results{learningCaseIndex, robotArrayIndex}] = ...
+        theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+    end
 end
 %%
 clc
 close all
 figure('Color','w')
-
-for r = robotArray
-    loglog(cl_resutlts{r}.c_jk_cl_dist_episodes)
-    hold on
-end
 xlim([1, 500])
-ylim([1, 50])
+ylim([1, 100])
+set(gca,'XScale','linear')
+set(gca,'YScale','log')
+xlabel('Items','FontSize',11)
+ylabel('Complexity','FontSize',11)
+hold on
+for learningCaseIndex = 1:size(learningCases,1)
+    for robotArrayIndex = 1:numel(robotArray)
+        loglog(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes)
+    end
+end
+
+%%
+clc
+close all
+figure('Color','w')
+xlim([1, 500])
+ylim([1, 100])
+set(gca,'XScale','linear')
+set(gca,'YScale','linear')
+xlabel('Items','FontSize',11)
+ylabel('Complexity (episodes per item)','FontSize',11)
+hold on
+
+cmap = colormap('lines');
+% Create indices to pick colors evenly from the colormap
+colorIndices = linspace(1, size(cmap, 1), size(learningCases,1));
+% Interpolate the colormap to get the desired number of colors
+selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
+
+for learningCaseIndex = 1:size(learningCases,1)
+    remainingKnowledge = cell2mat(arrayfun(@(robotArrayIndex) cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,1:5,'UniformOutput',false))';
+    
+    meanCurve  = max(1,mean(remainingKnowledge,1));
+    stdCurve   = std(remainingKnowledge, 0, 1);
+    upperBound = meanCurve + stdCurve;
+    lowerBound = max(1,meanCurve - stdCurve);
+    
+    % Create the plot
+    % Plot the shaded region for standard deviation
+    
+    patch(gca, [1:500, fliplr(1:500)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+    'EdgeColor', 'none', 'FaceAlpha', 0.3);
+    
+    % Plot the mean curve
+    plot(gca, 1:500, meanCurve, 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:));
+
+end
+p1 = plot(NaN,'Color',selectedColors(1,:));
+p2 = plot(NaN,'Color',selectedColors(2,:));
+p3 = plot(NaN,'Color',selectedColors(3,:));
+p4 = plot(NaN,'Color',selectedColors(4,:));
+legend([p1 p2 p3 p4], learningCasesLabels)
+
+
 %%
 close all
 clc
@@ -307,7 +637,7 @@ parameters.maxNumberOfSkillsPerProduct = 8;
 
 % [totalComplexity, learnedSkills, clusterKnowledge] = ...
 %     simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
-[totalComplexity, learnedSkills, clusterKnowledge, results] = ...
+[totalLearningEpisodes, learnedSkills, clusterKnowledge, results] = ...
     simulateDistributedCollectiveKnowledgeDynamics(eta_0               = eta_mean, ...
                                                    gamma_0             = gamma_mean, ...
                                                    parameters          = parameters, ...
@@ -339,12 +669,12 @@ a = mean([parameters.alpha_min,parameters.alpha_max]);
 
 % [totalComplexity, learnedSkills, clusterKnowledge] = ...
 %     simulateDistributedCollectiveKnowledgeDynamicsGammaSweep(eta_mean, gamma_mean, parameters, numberOfRobots);
-totalComplexity ={};
+totalLearningEpisodes ={};
 learnedSkills   ={};
 clusterKnowledge = {};
 for m = [4,8,16,32,64,128]
     numberOfRobots = m;   
-    [totalComplexity{m}, learnedSkills{m}, clusterKnowledge{m}] = ...
+    [totalLearningEpisodes{m}, learnedSkills{m}, clusterKnowledge{m}] = ...
         simulateDistributedCollectiveKnowledgeDynamics(eta_mean, gamma_mean, parameters, numberOfRobots);
     pause
 end
@@ -353,7 +683,7 @@ clc
 close all
 figure('Color','w')
 for m = [4,8,16]
-    plot(totalComplexity{m})
+    plot(totalLearningEpisodes{m})
     hold on
 end
 %%
