@@ -165,7 +165,24 @@ classdef RobotCollective < handle
             set(gca, 'XScale', 'log')
 
             xlabel('Episodes','FontSize',25)
-            ylabel('$\bar{\boldmath{\sigma}}^{(\mathrm{DCL})}_{j,k}$','FontSize',25,'Interpreter','latex')
+
+            learningParadigm = [obj.ENABLE_INCREMENTAL_LEARNING, ...
+                                obj.ENABLE_TRANSFER_LEARNING, ...
+                                obj.ENABLE_COLLECTIVE_LEARNING];
+            learningCasesLabels = {'IsL','IL','TIL','DCL'};
+            if all(learningParadigm == [0 0 0])
+                learningParadigmLabel = learningCasesLabels{1};
+            elseif all(learningParadigm == [1 0 0])
+                learningParadigmLabel = learningCasesLabels{2};    
+            elseif all(learningParadigm == [1 1 0])
+                learningParadigmLabel = learningCasesLabels{3};    
+            elseif all(learningParadigm == [1 1 1])
+                learningParadigmLabel = learningCasesLabels{4};
+            end
+
+
+            % ylabel('$\bar{\boldmath{\sigma}}^{(\mathrm{DCL})}_{j,k}$','FontSize',25,'Interpreter','latex')
+            ylabel(sprintf('$\bar{\boldmath{\sigma}}^{(\mathrm{%s})}_{j,k}$',learningParadigmLabel),'FontSize',25,'Interpreter','latex')
             % Generate a colormap (e.g., 'parula', 'jet', 'hot', 'cool', etc.)
             cmap = colormap('lines');
             % Create indices to pick colors evenly from the colormap
