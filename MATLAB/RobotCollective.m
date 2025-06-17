@@ -47,6 +47,7 @@ classdef RobotCollective < handle
     properties
         Alpha_max                   = 0.0691;
         Alpha_min                   = 0.0461;
+        AgentMemory                 = [];
         DISTRIBUTED_COLLECTIVE_LEARNING ...
                                     = boolean(1);              % Implies agents are distributed across clusters
         ClusterTransferableKnowledgeFraction ....
@@ -153,6 +154,8 @@ classdef RobotCollective < handle
 
             obj.ClusterSimilarityMatrixPerAgent      = ClusterSimilarityMatrixPerAgent;
             obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
+
+            obj.AgentMemory = cell(1,obj.NumberOfRobots);
         end
         
         %% Generate plot canvas
@@ -182,7 +185,7 @@ classdef RobotCollective < handle
 
 
             % ylabel('$\bar{\boldmath{\sigma}}^{(\mathrm{DCL})}_{j,k}$','FontSize',25,'Interpreter','latex')
-            ylabel(sprintf('$\bar{\boldmath{\sigma}}^{(\mathrm{%s})}_{j,k}$',learningParadigmLabel),'FontSize',25,'Interpreter','latex')
+            ylabel(sprintf("$\\bar{\\boldmath{\\sigma}}^{(\\mathrm{%s})}_{j,k}$",learningParadigmLabel),'FontSize',25,'Interpreter','latex')
             % Generate a colormap (e.g., 'parula', 'jet', 'hot', 'cool', etc.)
             cmap = colormap('lines');
             % Create indices to pick colors evenly from the colormap
@@ -288,13 +291,19 @@ classdef RobotCollective < handle
 
 
             obj.SkillsInAgent                   = [obj.SkillsInAgent,productSkills'];
+
+            for agent = 1:obj.NumberOfRobots
+                obj.AgentMemory{agent} = arrayfun(@(clstr) intersect(obj.SkillsInAgent(agent,:),obj.SkillClusters(:,clstr)),1:obj.TotalSkillClusters,'UniformOutput',false);
+            end
+
+
             obj.NumberOfNewSkills(skillsBatch)  = numel(unique([obj.SeenSkills, productSkills(~isnan(productSkills))])) - numel(obj.SeenSkills); % The intersection of the sets
             obj.SeenSkills                      = unique([obj.SeenSkills, productSkills(~isnan(productSkills))]); % The union of the sets
             obj.NumberOfSeenSkills(skillsBatch) = numel(obj.SeenSkills);
             if obj.ENABLE_COLLECTIVE_LEARNING == 1
                 obj.NumberOfLearnedSkills  = numel(obj.SeenSkills).*ones(obj.NumberOfRobots,1);
             else
-                aux = obj.SkillsInAgent();
+                aux = obj.SkillsInAgent;
                 aux(isnan(aux)) = 0;
                 obj.NumberOfLearnedSkills = reshape(arrayfun(@(i) sum(unique(aux(i,:))~=0),1:obj.NumberOfRobots),obj.NumberOfRobots,1);                
             end
@@ -465,7 +474,7 @@ classdef RobotCollective < handle
                 
                 % Message if there were skills learned
                 if any(obj.SkillsRemainingKnowledge(productSkills)<=obj.KnowledgeLowerBound)
-                    disp('Skill(s) learned!')
+                    disp('There are learned skill(s)!')
                 end
 
                 % obj.updateSkillPool(productSkills = productSkills(remainingKnowledge(:,end)<obj.KnowledgeLowerBound), skillsBatch = skillsBatch)
