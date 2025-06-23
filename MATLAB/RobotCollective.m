@@ -84,6 +84,7 @@ classdef RobotCollective < handle
         REPEATING_SKILLS            = boolean(1);              % Controls if a given skills bacth conttais repeated skills
         SeenSkills                  = [];
         SkillClusters               = [];
+        SkillClusterMembership      = [];
         SkillsInAgent               = [];
         SkillsInCluster             = [];
         SkillsPerCluster            = 128;
@@ -150,28 +151,16 @@ classdef RobotCollective < handle
             B = rand(obj.TotalSkillClusters);
             obj.ClusterSimilarityMatrix = 0.5*(triu(B,1) + transpose(triu(B,1)));
 
-% Define the similarity between clusters and agents
-ClusterSimilarityMatrixPerAgent     = [];% zeros(obj.NumberOfRobots,obj.NumberOfRobots);
-aux = eye(obj.TotalSkillClusters) + obj.ClusterSimilarityMatrix;
-               
-for c = 1:obj.TotalSkillClusters
-    theRow = aux(c,:);
-    tmp  = repmat(theRow,obj.NumberOfRobotsPerCluster(c),1);
-    tmp  = repmat(transpose(tmp(:)),obj.NumberOfRobotsPerCluster(c),1);
-    ClusterSimilarityMatrixPerAgent = [ClusterSimilarityMatrixPerAgent;tmp];
-end
-
-obj.ClusterSimilarityMatrixPerAgent      = ClusterSimilarityMatrixPerAgent;
-
-% Initialize the trasferable knowledge fraction
-obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
-obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.TotalSkillClusters,obj.NumberOfRobots);
+            % Initialize the trasferable knowledge fraction
+            obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
+            obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.TotalSkillClusters,obj.NumberOfRobots);
             
             % Initialize the memory
             obj.AgentMemory = cell(1,obj.NumberOfRobots);
 
-            % obj.AgentStorage = zeros(obj.TotalSkills,obj.TotalSkillClusters,obj.NumberOfRobots);
+            % Initialize the each agent's storage
             obj.AgentStorage = cell(obj.NumberOfRobots,obj.TotalSkillClusters);
+            obj.AgentStorage(:) = {NaN};
         end
         
         %% Generate plot canvas
@@ -199,8 +188,6 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
                 learningParadigmLabel = learningCasesLabels{4};
             end
 
-
-            % ylabel('$\bar{\boldmath{\sigma}}^{(\mathrm{DCL})}_{j,k}$','FontSize',25,'Interpreter','latex')
             ylabel(sprintf("$\\bar{\\boldmath{\\sigma}}^{(\\mathrm{%s})}_{j,k}$",learningParadigmLabel),'FontSize',25,'Interpreter','latex')
             % Generate a colormap (e.g., 'parula', 'jet', 'hot', 'cool', etc.)
             cmap = colormap('lines');
@@ -248,7 +235,7 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
             % Plot the shaded region for standard deviation
             if ~all(meanCurve < obj.KnowledgeLowerBound)
                 patch(ax, [obj.Episodes, fliplr(obj.Episodes)], [upperBound, fliplr(lowerBound)], selectedColors(skillsBatch,:), ...
-                    'EdgeColor', 'none', 'FaceAlpha', 0.3);
+                    'EdgeColor', 'none', 'FaceAlpha', 0.05);
             end
             % Plot the mean curve
             plot(ax, obj.Episodes, meanCurve, 'b-', 'LineWidth', 0.5,'Color',selectedColors(skillsBatch,:));
@@ -293,51 +280,21 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
             end
         end
 
-        %% Update the agent's memory
-        % function robot = updateAgentsMemory(obj)
-        % 
-        %     robot = struct();
-        % 
-        %     robot.LearnedSkills = obj.SkillsInAgent;
-        % 
-        %     % Update the agent's memory
-        %     for agent = 1:obj.NumberOfRobots
-        %         tmp                    = arrayfun(@(clstr) intersect(obj.SkillsInAgent(agent,:),obj.SkillClusters(:,clstr)),1:obj.TotalSkillClusters,'UniformOutput',false);
-        %         obj.AgentMemory{agent} = tmp;
-        %     end
-        % 
-        % 
-        %     for agent = 1:obj.NumberOfRobots
-        %         for cluster = 1:obj.TotalSkillClusters
-        %         clusterFraction = obj.AgentMemory{agent}{}
-        %     end
-        % 
-        % 
-        %     % Check how many skills in the batch were new
-        %     obj.NumberOfNewSkills(skillsBatch)  = numel(unique([obj.SeenSkills, productSkills(~isnan(productSkills))])) - numel(obj.SeenSkills); % The intersection of the sets
-        % 
-        %     % Log the indices of the NEW skills contained in the batch
-        %     obj.SeenSkills                      = unique([obj.SeenSkills, productSkills(~isnan(productSkills))]); % The union of the sets
-        %     % Log the number of NEW skills seen in the batch
-        %     obj.NumberOfSeenSkills(skillsBatch) = numel(obj.SeenSkills);
-        % 
-        %     % Count the number of skills each agent has learned
-        %     if obj.ENABLE_COLLECTIVE_LEARNING == 1
-        %         % In CL all agents learned the new skills in the batch
-        %         obj.NumberOfLearnedSkillsPerAgentAndTargetSkill  = numel(obj.SeenSkills).*ones(obj.NumberOfRobots,1);
-        %     else
-        %         % aux = obj.SkillsInAgent;
-        %         % aux(isnan(aux)) = 0;
-        %         % obj.NumberOfLearnedSkillsPerAgent = reshape(arrayfun(@(i) sum(unique(aux(i,:))~=0),1:obj.NumberOfRobots),obj.NumberOfRobots,1);                
-        % 
-        %         for agent = 1:obj.NumberOfRobots
-        %             aux = obj.AgentMemory{agent}{:,skillClusterMembership(agent)};
-        %             aux(isnan(aux)) = 0;
-        %             obj.NumberOfLearnedSkillsPerAgentAndTargetSkill(agent) = sum(unique(aux)~=0);
-        %         end   
-        %         obj.NumberOfLearnedSkillsPerAgentAndTargetSkill = reshape(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill,obj.NumberOfRobots,1);
-        %     end
-        % end
+        %% Get number of learned skills from memory
+        function getNumberOfLearnedSkillsPerAgent(obj)
+            % Count the number of skills each agent has learned
+            if obj.ENABLE_COLLECTIVE_LEARNING == 1
+                % In CL all agents learned the new skills in the batch
+                obj.NumberOfLearnedSkillsPerAgentAndTargetSkill  = numel(obj.SeenSkills).*ones(obj.NumberOfRobots,1);
+            else
+                for agent = 1:obj.NumberOfRobots
+                    aux = obj.AgentStorage{agent,obj.SkillClusterMembership(agent)};
+                    aux(isnan(aux)) = 0;
+                    obj.NumberOfLearnedSkillsPerAgentAndTargetSkill(agent) = sum(unique(aux)~=0);
+                end   
+                obj.NumberOfLearnedSkillsPerAgentAndTargetSkill = reshape(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill,obj.NumberOfRobots,1);
+            end        
+        end
 
         %% Log and update learned skills 
         function updateSkillPool(obj, NameValueArgs)
@@ -346,7 +303,6 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
                 NameValueArgs.productSkills
                 NameValueArgs.skillsBatch
                 NameValueArgs.skillRemainingKnowledge
-
             end   
             productSkills = NameValueArgs.productSkills;
             skillsBatch   = NameValueArgs.skillsBatch;
@@ -358,9 +314,9 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
             end
 
             % Check which skills were succesfully learned
-            succesfullyLearnedProductSkills_id                   = NameValueArgs.skillRemainingKnowledge<=obj.KnowledgeLowerBound;
+            succesfullyLearnedProductSkills_id = NameValueArgs.skillRemainingKnowledge<=obj.KnowledgeLowerBound;
             
-            % Replace the skill number by NaN if not learned
+            % Replace the skill number by NaN if NOT learned
             productSkills(succesfullyLearnedProductSkills_id~=1) = NaN;
 
             % Add the learned skills in the batch to the skills each agent has individually learned
@@ -383,42 +339,14 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
             
             % Log the number of NEW skills seen in the batch
             obj.NumberOfSeenSkills(skillsBatch) = numel(obj.SeenSkills);
-            
-            % Count the number of skills each agent has learned
-            if obj.ENABLE_COLLECTIVE_LEARNING == 1
-                % In CL all agents learned the new skills in the batch
-                obj.NumberOfLearnedSkillsPerAgentAndTargetSkill  = numel(obj.SeenSkills).*ones(obj.NumberOfRobots,1);
-            else
-                % aux = obj.SkillsInAgent;
-                % aux(isnan(aux)) = 0;
-                % obj.NumberOfLearnedSkillsPerAgent = reshape(arrayfun(@(i) sum(unique(aux(i,:))~=0),1:obj.NumberOfRobots),obj.NumberOfRobots,1);                
 
-                for agent = 1:obj.NumberOfRobots
-                    aux = obj.AgentMemory{agent}{:,skillClusterMembership(agent)};
-                    aux(isnan(aux)) = 0;
-                    obj.NumberOfLearnedSkillsPerAgentAndTargetSkill(agent) = sum(unique(aux)~=0);
-                end   
-                obj.NumberOfLearnedSkillsPerAgentAndTargetSkill = reshape(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill,obj.NumberOfRobots,1);
-            end
-            
-            % disp(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill')
             % Count the total number of skills learned from each cluster (by all agents)
             for k = 1:obj.TotalSkillClusters
                 obj.SkillsInCluster(k,skillsBatch) = numel(intersect(obj.SeenSkills,obj.SkillClusters(:,k)));
             end
             obj.ClusterTransferableKnowledgeFraction = obj.SkillsInCluster(:,skillsBatch)./obj.SkillsPerCluster;
-            disp("Cluster Transferable Knowledge Fraction:")
-            disp(obj.ClusterTransferableKnowledgeFraction)
-            
-
-% warning("The next lines need review")
-% % In the case of CL, all collected knowledge in a cluster is available for transfer
-% scaledTransferableKnowledgePerCluster_aux = [];
-% for k = 1:obj.TotalSkillClusters
-%     scaledTransferableKnowledgePerCluster_aux = [scaledTransferableKnowledgePerCluster_aux, ...
-%                                                  repmat(obj.ClusterTransferableKnowledgeFraction(k),1,obj.NumberOfRobotsPerCluster(k))];
-% end
-% obj.AggregatedScaledClusterTransferableKnowledgeFractionPerAgent = scaledTransferableKnowledgePerCluster_aux;
+            disp("Cluster TOTAL transferable knowledge fraction:")
+            disp(transpose(obj.ClusterTransferableKnowledgeFraction))
         end
         
         %% The dynamics of Isolated Learning (IsL)
@@ -436,11 +364,6 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
                 obj (1,1) RobotCollective
                 NameValueArgs.eta
             end    
-            % if obj.ENABLE_INCREMENTAL_LEARNING == 1
-            %     out = (NameValueArgs.eta.*obj.NumberOfLearnedSkillsPerAgentAndTargetSkill + 1);
-            % else
-            %     out = 1;
-            % end
             out = (NameValueArgs.eta.*obj.NumberOfLearnedSkillsPerAgentAndTargetSkill.*double(obj.ENABLE_INCREMENTAL_LEARNING)) + 1;
         end
 
@@ -497,54 +420,47 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
             % Loop over skill batches (products) ==========================
             rng("default") % Reset the random number generator for consistency across simulations
             for skillsBatch = 1:obj.NumberOfSkillBatches        
-
-                % Select skills for a given product
+                % Select skills for a given product and determine their
+                % cluster membership
                 [productSkills, skillClusterMembership] = obj.getProductSkills();
+                obj.SkillClusterMembership = skillClusterMembership;
 
-                % Determine how much knowledge can be transfered from
-                % SOURCE clusers to TARGET cluster
+                % Check wich skills in memory can be used to draw knowledge
+                obj.getNumberOfLearnedSkillsPerAgent()
+                disp("Skills in each agent's memory, given current skill's cluster")
+                disp(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill')
+
+                % Determine how much knowledge can be transfered from the
+                % SOURCE clusters to the skill in the TARGET cluster
                 % *NOTE: Use 0.99 instead of 1 to avoid eventual divisions by
                 %        zero
-
-
-                % availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,sum(obj.ClusterSimilarityMatrix*(obj.ClusterTransferableKnowledgeFraction),2)).*double(obj.ENABLE_TRANSFER_LEARNING);            
-                % % Assign the transferable knowledge fraction according to
-                % % the current cluster for each agent (depending on the to-be-learned skills)
-                % obj.AggregatedScaledClusterTransferableKnowledgeFractionPerAgent(:) = availableAggregatedScaledTransferableKnowledgetoClusters(skillClusterMembership);
-
-
-
-                availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,obj.ClusterSimilarityMatrix*obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill).*double(obj.ENABLE_TRANSFER_LEARNING);            
+                if obj.ENABLE_COLLECTIVE_LEARNING
+                    aux = repmat(sum(obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill,2),1,obj.NumberOfRobots);
+                    availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,obj.ClusterSimilarityMatrix*aux).*double(obj.ENABLE_TRANSFER_LEARNING);
+                else
+                    availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,obj.ClusterSimilarityMatrix*obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill).*double(obj.ENABLE_TRANSFER_LEARNING);
+                end
                 % Assign the transferable knowledge fraction according to the current cluster for each agent (depending on the cluster of the to-be-learned skills)
                 obj.AggregatedScaledClusterTransferableKnowledgeFractionPerAgent(:) = diag(availableAggregatedScaledTransferableKnowledgetoClusters(skillClusterMembership,:));
-
-
-
-
-
                 
-% For collective learning the cluster similarity matrix needs to be adapted
-% depending on the cluster of the skill being learned and the number of
-% agents
-% Create the current ClusterSimilarityMatrixPerAgent depeneding on no. of
-% agents and current skill batch
-for row = 1:obj.NumberOfRobots
-    for col = 1:obj.NumberOfRobots
-        if(skillClusterMembership(row) == skillClusterMembership(col))
-            obj.ClusterSimilarityMatrixPerAgent(row,col) = 1;
-        else
-            obj.ClusterSimilarityMatrixPerAgent(row,col) = obj.ClusterSimilarityMatrix(skillClusterMembership(row),skillClusterMembership(col));
-        end
-    end
-end
+                % For collective learning the cluster similarity matrix needs to be adapted
+                % depending on the cluster of the skill being learned and the number of
+                % agents
+                for row = 1:obj.NumberOfRobots
+                    for col = 1:obj.NumberOfRobots
+                        if(skillClusterMembership(row) == skillClusterMembership(col))
+                            obj.ClusterSimilarityMatrixPerAgent(row,col) = 1;
+                        else
+                            obj.ClusterSimilarityMatrixPerAgent(row,col) = obj.ClusterSimilarityMatrix(skillClusterMembership(row),skillClusterMembership(col));
+                            
+                        end
+                    end
+                end
             
-            obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
-
-
+                obj.ClusterTransferableKnowledgeFraction = zeros(obj.TotalSkillClusters,1);
                 skillTransferableKnowledgeFraction = mean((obj.NumberOfLearnedSkillsPerAgentAndTargetSkill./obj.TotalSkills)*double(obj.ENABLE_TRANSFER_LEARNING));        
                 clusterKnowledge(skillsBatch)      = mean(skillTransferableKnowledgeFraction);
                 j      = skillsBatch;
-
 
                 % fprintf('Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
                 cprintf('green','[INFO] Robots = %2i | Eta_0 = %0.2f | Gamma_0 = %0.2f | Skills batch: %2i/%3i | Cluster knowledge: %1.3f \n',obj.NumberOfRobots, obj.Eta_0, obj.Gamma_0, skillsBatch, obj.NumberOfSkillBatches, skillTransferableKnowledgeFraction)
@@ -594,8 +510,7 @@ end
                     numberNotLearnedSkills = numel(remainingKnowledge(remainingKnowledge(:,end)>obj.KnowledgeLowerBound));
                     warning('%3i skills COULD NOT be learned',numberNotLearnedSkills)
                 end    
-                
-        
+                        
                 % Simulate the smart factory ==============================
                 % productSkills = obj.getProductSkills();
                 obj.SkillsRemainingKnowledge(productSkills) = remainingKnowledge(:,end);
@@ -605,7 +520,7 @@ end
                     disp('There are learned skill(s)!')
                 end
 
-                % obj.updateSkillPool(productSkills = productSkills(remainingKnowledge(:,end)<obj.KnowledgeLowerBound), skillsBatch = skillsBatch)
+                % Update the record of learned skills and their clusters
                 obj.updateSkillPool(productSkills = productSkills, skillsBatch = skillsBatch, skillRemainingKnowledge = remainingKnowledge(:,end))
                 % =========================================================================        
         
@@ -626,14 +541,17 @@ end
         
             % =============================================================            
             figure('Color', 'w')
-            plot(1:obj.MaxNumberOfProducts, obj.NumberOfNewSkills,'r')
+            plot(1:obj.MaxNumberOfProducts, obj.NumberOfNewSkills,'r',LineWidt=1.5)
             hold on
-            plot(1:obj.MaxNumberOfProducts, obj.NumberOfSeenSkills,'b')
-            plot(1:obj.MaxNumberOfProducts, obj.SkillsInCluster,'k')
+            plot(1:obj.MaxNumberOfProducts, obj.NumberOfSeenSkills,'b',LineWidt=1.5)
+            clusterColors = distinguishable_colors(obj.TotalSkillClusters);
+            plot(1:obj.MaxNumberOfProducts, obj.SkillsInCluster,LineWidt=1.5)
+            colororder(clusterColors)
             legend('No. new skills','No. learned skills','Skills per cluster')
             xlabel('No. of products')
             ylabel('No. of skills learned')
             axis square
+            xlim([1 skillsBatch])
         
             % Put together <results> structure
             results.c_jk_cl_dist_episodes = c_jk_cl_dist_episodes;
