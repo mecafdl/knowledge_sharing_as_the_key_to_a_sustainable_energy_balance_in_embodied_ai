@@ -514,7 +514,7 @@ obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill = zeros(obj.Total
 
 
 
-                availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill).*double(obj.ENABLE_TRANSFER_LEARNING);            
+                availableAggregatedScaledTransferableKnowledgetoClusters = min(0.99,obj.ClusterSimilarityMatrix*obj.ClusterTransferableKnowledgeFractionPerAgentAndTargetSkill).*double(obj.ENABLE_TRANSFER_LEARNING);            
                 % Assign the transferable knowledge fraction according to the current cluster for each agent (depending on the cluster of the to-be-learned skills)
                 obj.AggregatedScaledClusterTransferableKnowledgeFractionPerAgent(:) = diag(availableAggregatedScaledTransferableKnowledgetoClusters(skillClusterMembership,:));
 
