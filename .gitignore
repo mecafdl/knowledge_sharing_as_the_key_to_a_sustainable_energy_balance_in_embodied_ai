@@ -1,9 +1,12 @@
 # Ignore Sync+Share folder
 .PowerFolder
 
-# Ignore the directory with MATLAB files
+# Ignore the directory with various unimportant files
 #MATLAB/figures/
 /miscellaneous
+
+# Ignore deprecated MATLAB folder
+/MATLAB_OLD
 
 # Windows default autosave extension
 *.asv
@@ -36,9 +39,6 @@ MATLAB/*.slxc
 
 # Octave session info
 # octave-workspace
-
-# Ignore the directory with non-used figures
-fig/miscellaneous/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
