@@ -7,7 +7,7 @@ cd(fileparts(matlab.desktop.editor.getActiveFilename));
 close all
 clc
 
-robotArray = [8,16,32,64,128];
+robotArray = [4,8,16,32,64,128];
 
 learningCases = [zeros(1,3);  % Isolated
                  1 0 0;       % Incremental
@@ -18,15 +18,32 @@ cl_results = cell(size(learningCases,1),numel(robotArray));
 
 for learningCaseIndex = 1:size(learningCases,1)
     for robotArrayIndex = 1:numel(robotArray)
+        close all
         cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
-        pause(3)
+        pause(1.5)
 
         % Initialize a robot collective
-        theCollective                             = RobotCollective(numberOfRobots = robotArray(robotArrayIndex), repeatingSkills = true);
+        % * NOTE: if ...
+        %         - repeatingSkills = false --> ideal case, each robot learns a new skill
+        %         - repeatingSkills = true  --> smart factory case, products may use repeated skills
+        
+        repeatingSkills = false;
+        
+        theCollective                             = RobotCollective(numberOfRobots = robotArray(robotArrayIndex), ...
+                                                                    repeatingSkills = repeatingSkills);
         theCollective.RAND_COMM_INTERRUPT         = true; 
         theCollective.ENABLE_INCREMENTAL_LEARNING = learningCases(learningCaseIndex,1); 
         theCollective.ENABLE_TRANSFER_LEARNING    = learningCases(learningCaseIndex,2); 
         theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3); 
+
+        % Max. nummber of skills per product
+        if(repeatingSkills == 1)
+            theCollective.MaxNumberOfSkillsPerProduct = 8;
+        else
+            theCollective.MaxNumberOfSkillsPerProduct = theCollective.NumberOfRobots;
+        end
+
+        
         
         % Define simulation episodes
         theCollective.Episodes = 1:.1:2*theCollective.FundamentalComplexity;
@@ -35,8 +52,7 @@ for learningCaseIndex = 1:size(learningCases,1)
         theCollective.Eta_0       = +0.01;
         theCollective.Gamma_0     = +0.01;
         
-        % Max. nummber of skills per product
-        theCollective.MaxNumberOfSkillsPerProduct = 8;
+
     
         % Run the scenario
         [~, ~, ~, cl_results{learningCaseIndex, robotArrayIndex}] = ...
@@ -51,15 +67,63 @@ xlim([1, 500])
 ylim([1, 100])
 set(gca,'XScale','linear')
 set(gca,'YScale','log')
-xlabel('Items','FontSize',11)
+xlabel('Skill batches (products)','FontSize',11)
+ylabel('Complexity','FontSize',11)
+hold on
+totalComplexity = zeros(learningCaseIndex,robotArrayIndex);
+for learningCaseIndex = 1:size(learningCases,1)
+    for robotArrayIndex = 1:numel(robotArray)
+        aux = cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes;
+        totalComplexity(learningCaseIndex,robotArrayIndex) = sum(aux);
+        loglog(aux,LineWidth=2)
+        
+        % loglog(cumsum(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes),LineWidth=2)
+        % pause(2)
+    end
+    % set(gca,'ColorOrder','factory')
+end
+leg = legend(learningCasesLabels);
+leg.Location = "southeast";
+axis square
+xlim("auto")
+
+%%
+close all
+figure('Color','w')
+bp = bar(totalComplexity(:,3));
+ylabel('Total Complexity [episodes for all skills]')
+set(gca,'xticklabel',learningCasesLabels)
+title(sprintf("No. of Robots: %3i",theCollective.NumberOfRobots))
+ylim([-inf 10000])
+% ylim([0 10000])
+% set(gca,"YScale","log")
+%%
+
+clc
+close all
+
+% cmap = colormap('lines');
+% % Create indices to pick colors evenly from the colormap
+% colorIndices = linspace(1, size(cmap, 1), size(learningCases,1));
+% % Interpolate the colormap to get the desired number of colors
+% selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
+
+figure('Color','w')
+xlim([1, inf])
+ylim([1, 100])
+set(gca,'XScale','linear')
+set(gca,'YScale','log')
+xlabel('Skill batch','FontSize',11)
 ylabel('Complexity','FontSize',11)
 hold on
 for learningCaseIndex = 1:size(learningCases,1)
     for robotArrayIndex = 1:numel(robotArray)
-        loglog(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes)
+        size(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes)
+        loglog(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,'Color',selectedColors(learningCaseIndex,:))
     end
 end
-
+% legend(learningCasesLabels)
+axis square
 %%
 clc
 close all
@@ -80,6 +144,55 @@ selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
 
 for learningCaseIndex = 1:size(learningCases,1)
     remainingKnowledge = cell2mat(arrayfun(@(robotArrayIndex) cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,1:5,'UniformOutput',false))';
+    
+    meanCurve  = max(1,mean(remainingKnowledge,1));
+    stdCurve   = std(remainingKnowledge, 0, 1);
+    upperBound = meanCurve + stdCurve;
+    lowerBound = max(1,meanCurve - stdCurve);
+    
+    % Create the plot
+    % Plot the shaded region for standard deviation
+    
+    patch(gca, [1:500, fliplr(1:500)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+    'EdgeColor', 'none', 'FaceAlpha', 0.3);
+    
+    % Plot the mean curve
+    plot(gca, 1:500, meanCurve, 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:));
+
+end
+p1 = plot(NaN,'Color',selectedColors(1,:));
+p2 = plot(NaN,'Color',selectedColors(2,:));
+p3 = plot(NaN,'Color',selectedColors(3,:));
+p4 = plot(NaN,'Color',selectedColors(4,:));
+legend([p1 p2 p3 p4], learningCasesLabels)
+
+%% ************************************************************************
+% Plots of the ideal case (no repeated skills)
+% *************************************************************************
+
+%%
+clc
+close all
+figure('Color','w')
+xlim([1, inf])
+ylim([1, 100])
+set(gca,'XScale','linear')
+set(gca,'YScale','linear')
+xlabel('Items','FontSize',11)
+ylabel('Complexity (episodes per item)','FontSize',11)
+hold on
+
+cmap = colormap('lines');
+% Create indices to pick colors evenly from the colormap
+colorIndices = linspace(1, size(cmap, 1), size(learningCases,1));
+% Interpolate the colormap to get the desired number of colors
+selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
+
+for learningCaseIndex = 4% 1:size(learningCases,1)
+    % remainingKnowledge = cell2mat(arrayfun(@(robotArrayIndex) cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,1:5,'UniformOutput',false))';
+
+
+    remainingKnowledge = (arrayfun(@(robotArrayIndex) cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,1:5,'UniformOutput',false))';
     
     meanCurve  = max(1,mean(remainingKnowledge,1));
     stdCurve   = std(remainingKnowledge, 0, 1);
