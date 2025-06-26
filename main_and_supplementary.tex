@@ -438,7 +438,7 @@ An important fact in \ac{eai} is the existence of a lower bound on the energy re
 	E_{\tau} =  \underbrace{E_\text{BEE}}_{\text{Body-dependent energy}} + \underbrace{E_\text{CCE} + E_\text{MIE}}_{\text{Learning energy}} \gg \underbrace{E^\star_{\tau}}_{\text{Skill energy}} .
 \end{equation}
 % ---
-It is worth mentioning that if Eq.~\eqref{eq:skill_energy_in_eai} was used to describe the energy consumption of a task in \ac{dai}, $E_\text{BEE}$ could be associated with the edge devices and $E_\text{CCE}$ would represent the primary source of energy consumption. Crucially, the expenditures $E^\star_{\tau}$ and $E_\text{MIE}$ do not exist in \ac{dai} since physical interaction is absent.
+It is worth mentioning that if Eq.~\eqref{eq:skill_energy_in_eai} was used to describe the energy consumption of a task in \ac{dai}, $E_\text{BEE}$ could be associated with the edge devices and $E_\text{CCE}$ would represent the primary source of energy consumption. Additionally, the expenditures $E^\star_{\tau}$ and $E_\text{MIE}$ do not exist in \ac{dai} since physical interaction is absent.
 
 %\paragraph*{\textbf{Aim and contribution}}
 %This work provides a perspective on the challenges linked to the energetic demand associated with implementing current learning paradigms from (disembodied) artificial intelligence on the anticipated exponential numbers of future robotic agents. Particularly, we stress that inefficient knowledge utilization exacerbates these challenges, resulting in a rapidly escalating energy demand. Our study favors adopting a learning strategy that explicitly leverages interconnection and knowledge sharing among intelligent robotic systems. Consequently, we propose collective learning as the optimal paradigm to facilitate faster and more efficient learning, thereby mitigating the energetic challenges in AI for physical systems. Specifically, we examine the ideal knowledge-sharing dynamics that a group of robots must exhibit to effectively realize the benefits of a collective learning strategy.
@@ -544,7 +544,7 @@ Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowled
 		\includegraphics[width=8.35cm]{remaining_knowledge_dynamics_idealization.png} \label{fig:knowledge_idealization}
 	\end{subfigure}
 	\hspace*{\fill}
-	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$, (\subref{fig:knowledge_idealization}) \myhl{remaining knowledge to learn a new skill $s_{j,k}$}.}	
+	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Similar skills in $\mathcal{S}$ can be grouped into clusters $\mathcal{Z}_k$, (\subref{fig:knowledge_idealization}) the remaining knowledge $\bar{\sigma}_{j,k}$ to learn a new skill $s_{j,k}$ has a monotonically decreasing behavior.}	
 \end{figure*}
 % ---
 % ===================================================================================================
@@ -553,7 +553,7 @@ To evaluate the effect of knowledge exchange during learning on the complexity o
 % ---
 \begin{enumerate}
 	\item There is less remaining knowledge, reflected in the initial value; i.e., $\bar{\sigma}_{j,k}(0) < 1$
-	\item The knowledge acquisition rate increases\footnote{This can also be interpreted as an increase in the depletion rate of the remaining knowledge.}
+	\item The knowledge acquisition rate increases. This can also be interpreted as an increase in the depletion rate of the remaining knowledge.
 \end{enumerate}
 % ---
 These effects signify that the remaining knowledge scales down as a function of the number of learned skills $N_{\zeta_k}=|\mathcal{\zeta}_k|$. Consequently, the complexity $c_{j,k}$ of said skill is smaller than the fundamental complexity $c_0$. Additionally, without loss of generality, under knowledge exchange, we can consider that
@@ -574,7 +574,7 @@ These effects signify that the remaining knowledge scales down as a function of 
 %	\end{subequations}
 	\begin{equation}\label{eq:simple_knowledge_dynamics}
 		\dot{\bar{\sigma}}_{j,k}\left(n\right)=\begin{cases}
-			f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right), & \epsilon < \bar{\sigma}_{j,k}\left(n\right) < 1, \\
+			-f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right), & \epsilon < \bar{\sigma}_{j,k}\left(n\right) < 1, \\
 			0, & \text{otherwise}.
 		\end{cases}
 	\end{equation}	
@@ -661,25 +661,17 @@ For the upcoming analysis, we consider an idealized reference system in which ma
 
 % ===================================================================================================
 \paragraph*{Conventional learning paradigms} 
-When an \ac{eai} agent performs \ac{isl}, it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---corresponds to the case where an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-loops---but also retains and uses the acquired knowledge to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the \emph{transferable knowledge fraction factor} $\xi_k \in [0,1)$. Which results from adding the available knowledge $\varsigma^{(k)}$ in the $N_\mathcal{K}$ clusters scaled by the the \emph{cluster similarity matrix}
+When an \ac{eai} agent performs \ac{isl}, it learns each new skill from the ground up, disregarding the accumulating knowledge from already learned skills. In contrast, \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---corresponds to the case where an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-loops---but also retains and uses the acquired knowledge to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the $k$-th cluster via the \emph{aggregated and scaled cluster transferable knowledge fraction}~%\emph{transferable knowledge fraction factor}
+$\xi_k \in [0,1)$. Which results from adding the transferable knowledge fraction $\varsigma_{k}$ from the $N_\mathcal{K}$ clusters scaled by the the \emph{cluster similarity matrix}
 % ---
-%\begin{equation}
-%	\bm{B} = 
-%	\begin{bmatrix}
-%		1 & \beta_{1,2} & \beta_{1,3} & \beta_{1,4} \\ 
-%		\beta_{2,1} & 1 & \beta_{2,3} & \beta_{2,4} \\
-%		\beta_{3,1} & \beta_{3,2} & 1 & \beta_{3,4} \\
-%		\beta_{4,1} & \beta_{4,2} & \beta_{4,3} & 1 \\
-%	\end{bmatrix}
-%\end{equation}
 \begin{equation}\label{eq:cluster_similarity_matrix}
 	\bm{B}=\begin{cases}
 		1, & i=j, \\
-		\beta_{i,j} = \beta_{j,i}, & i \neq j,
+		\beta_{ij} = \beta_{ji}, & i \neq j,
 	\end{cases}
 \end{equation}
 % ---
-with $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the different clusters. In general, \ac{il} and \ac{tl} can always be combined; as such, we consider \ac{til} as the third learning paradigm. A detailed discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods}.
+with $\beta_{ij} \in [0,1)$ defines the closeness between the skills in the different clusters. In general, \ac{il} and \ac{tl} can always be combined; as such, we consider \ac{til} as the third learning paradigm. A complementary discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods}.
 
 
 
@@ -687,10 +679,10 @@ with $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the dif
 
 % ===================================================================================================
 \paragraph*{\textbf{\Acl{cl}}}
-This paradigm goes beyond simple parallelization. In CL $m$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{m} $ develop and accumulate a common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on and horizontally by sharing concurrent experience between agents. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable \ac{cl}, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allows agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the \ac{cl} paradigm. 
+This paradigm goes beyond simple parallelization---learning different skills with different robots at the same time. In \ac{cl} $m$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{m} $ develop and accumulate a common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on and horizontally by sharing concurrent experience between agents. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable \ac{cl}, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allow agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the \ac{cl} paradigm. 
 
-Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a collective learning system (see Fig.~\ref{fig:collective_learning_system}). Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents 
-is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills with low similarity, that is, skills in different clusters, then $\gamma$ is scaled by the inter-cluster transferable knowledge fraction factor $\beta$. In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
+Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a \acl{cl} system (see Fig.~\ref{fig:collective_learning_system}). Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents 
+is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient is the bidirectional pairwise knowledge exchange between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills in different clusters $i$ and $j$, then $\gamma$ is scaled down by the cluster similarity $\beta_{ij}$. In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
 % ---
 \begin{equation}\label{eq:collective_knowledge_dynamics}
 	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
@@ -717,11 +709,48 @@ The factor $\gamma \in \mathbb{R} $ weighs the knowledge exchange strength among
 with $\bm{\varsigma} \in \mathbb{R}^{N_\mathcal{K}}$; scales down the knowledge contributions between robots from different clusters. The functions
 % ---
 \begin{equation}\label{eq:f_function_collective}
-	f(\cdot) = \left[-\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \beta_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right]
+	f(\cdot) = \left[-\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \xi_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right]
 \end{equation}
 % --- 
 \noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} and $g(\cdot)$ are dependent on the number $r$ of knowledge-exchanging robots, which directly impacts the number of learned skills that enter $\zeta_k$ after a learning cycle. \myhl{Note that the product $r N_{\zeta_k}$ represents the ideal number of learned skills about which an agent has knowledge at the end of a learning cycle. In case a given agent failed to successfully learned a skill, it might be substituted by the number of actually learned skills $\kappa \in (0, r N_{\zeta_k})$.}\\
 \pending{Perhaps rewrite to mention $\kappa$ in all eqs. instead of $r N_{\zeta_k}$.}
+
+\begin{verbatim}
+            if obj.ENABLE_COLLECTIVE_LEARNING == 1 && obj.DISTRIBUTED_COLLECTIVE_LEARNING == 1
+% Remove the diagonal entries (corresponding to self-knowledge sharing)
+clusterTransferMatrix                    = obj.ClusterSimilarityMatrixPerAgent - eye(obj.NumberOfRobots);                       
+% Currupt randomly the values for sharing
+perturbation_B                           = rand(obj.NumberOfRobots,obj.NumberOfRobots);
+perturbation_B(clusterTransferMatrix==0) = 1;
+perturbation_B(clusterTransferMatrix==1) = 1;
+perturbation_B                           = (perturbation_B + transpose(perturbation_B))./2; % Ensure the matrix is symmetric
+
+clusterTransferMatrix                    = clusterTransferMatrix.*perturbation_B;
+
+% The result of inter-agent sharing scaled by the cluster
+% similarity matrix
+weightedAdjacencyMatrix = clusterTransferMatrix.*weightedAdjacencyMatrix;
+end
+
+% In agents are not sharing knowledge, cancel the connectivity matrix
+if obj.ENABLE_COLLECTIVE_LEARNING == 0
+weightedAdjacencyMatrix = 0*weightedAdjacencyMatrix;
+end
+
+% =====================================================================
+
+for agent = 1:obj.NumberOfRobots
+knowledgeIntegrationVector         = obj.knowledgeIntegration(agentsRemainingKnowledge,agentsRemainingKnowledge(agent));
+integratedKnowledgeDynamics(agent) = ...
+weightedAdjacencyMatrix(agent,:)*knowledgeIntegrationVector;
+end
+
+mainDynamicsCoeff  = (diag(selfKnowledgeDynamics) - integratedKnowledgeDynamics);
+% if any(mainDynamicsCoeff > 0)
+%     disp('Knowledge corruption!')
+% end
+d_coupledRemainingKnowledge = mainDynamicsCoeff.*agentsRemainingKnowledge;
+\end{verbatim}
 
 The \emph{knowledge integration function} 
 % ---
