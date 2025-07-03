@@ -693,9 +693,21 @@ is represented via the cross-couplings, weighted by a parameter $\gamma$ that mo
 %\end{equation}
 
 
+%\begin{equation}\label{eq:collective_knowledge_dynamics}
+%	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
+%		\overbrace{\left[-\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum\limits_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l} d(\bar{\sigma}_j,\bar{\sigma}_l)\right]}^{f(\cdot)} \bar{\sigma}^{(\text{CL})}_{j,k}
+%\end{equation}
+
+
+
+%\begin{equation}\label{eq:collective_knowledge_dynamics}
+%	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
+%	\left[-f(\kappa;\alpha,\eta,\xi_k)  - h(\bar{\bm{\sigma}};\xi,\gamma_{j,l},m,)\right] \bar{\sigma}^{(\text{CL})}_{j,k}
+%\end{equation}
+
 \begin{equation}\label{eq:collective_knowledge_dynamics}
-	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
-		\overbrace{\left[-\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum\limits_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l} d(\bar{\sigma}_j,\bar{\sigma}_l)\right]}^{f(\cdot)} \bar{\sigma}^{(\text{CL})}_{j,k}
+\dot{\bar{\sigma}}^{(\text{CL})}_{j} =
+-\left[-\underbrace{f(\kappa;\alpha,\eta,\bm{B},N_r)}_{\text{self-learning dynamics}} + \overbrace{h(\bar{\bm{\sigma}};\bm{B},\bm{\Gamma},N_r) \bar{\sigma}^{(\text{CL})}_{j}}^{\text{knowledge sharing dynamics}}\right]
 \end{equation}
 
 
@@ -721,7 +733,7 @@ with $\bm{\varsigma} \in \mathbb{R}^{N_\mathcal{K}}$; scales down the knowledge 
 %\end{equation}
 
 \begin{equation}\label{eq:f_function_collective}
-	f(\cdot) = -\underbrace{\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)}_{\text{self-learning dynamics}}  - \overbrace{\sum_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)}^{\text{knowledge sharing dynamics}}
+	f(\cdot) = -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)
 \end{equation}
 
 % --- 
