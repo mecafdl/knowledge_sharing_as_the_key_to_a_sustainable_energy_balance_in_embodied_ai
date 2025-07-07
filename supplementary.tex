@@ -5,13 +5,28 @@
 %                                                 |                                                 |
 %                                                 |                                                 |
 % ===================================================================================================
-\section{Materials and Methods}\label{sec:materials_and_methods}
 
-% ===================================================================================================
-\subsection{Episodic energy and time requirements}\label{sec:power_per_episode}
 % ---
-\begin{figure}[!h]
+\begin{figure*}[t!]
 	\centering
+	\hspace*{\fill}
+	\includegraphics[width=\textwidth]{energy_consumption_trends_ai_and_robotics.png}
+	\hspace*{\fill}
+	\caption[] {\label{fig:energy_consumption_trends_ai_and_robotics} \textbf{Energy demands in \ac{ai} and robotics.} Global electricity demand of data centers (\textsc{Left}), adapted from \cite{andrae2015global}. The estimated World Robot Energy Consumption of industrial (\textsc{Middle}) and  collaborative robots (\textsc{Right}).}
+\end{figure*}
+% ---
+
+
+
+% ---
+\begin{figure*}[t!]
+	\centering\section{Materials and Methods}\label{sec:materials_and_methods}
+	\hspace*{\fill}
+	\includegraphics[width=14cm]{closed_loop_collective_dynamics.png}% ===================================================================================================
+	\hspace*{\fill}\subsection{Episodic energy and time requirements}\label{sec:power_per_episode}
+	\caption[] {\label{fig:collective_learning_system} \textbf{A \acl{cl} system.} {A multi-agent system with appropriate learning algorithm(s) and inter-agent knowledge sharing can learn a universe of skills exponentially fast, as reflected by the exponential collection of the knowledge required to learn the skills.}\pending{Consider sending this figure to the supplementary materials.}}% ---
+\end{figure*}\begin{figure}[!h]
+% ---	\centering
 	\includegraphics[width=0.45\textwidth]{fig/power_per_episode.png}
 	\caption{\textbf{Power consumption per episode.} An episode is an attempt to accomplish a skill. For simplicity, the power to complete an episode is assumed constant.}	
 	\label{fig:power_per_episode}
