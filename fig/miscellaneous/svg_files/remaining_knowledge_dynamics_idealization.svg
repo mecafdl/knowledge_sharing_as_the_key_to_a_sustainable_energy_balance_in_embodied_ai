@@ -2,13 +2,13 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="83.577911mm"
-   height="57.461697mm"
-   viewBox="0 0 83.577913 57.461699"
+   width="80mm"
+   height="80mm"
+   viewBox="0 0 80.000002 80.000003"
    version="1.1"
    id="svg5"
    sodipodi:docname="remaining_knowledge_dynamics_idealization.svg"
-   inkscape:version="1.4.1 (1:1.4.1+202503302257+93de688d07)"
+   inkscape:version="1.4.2 (1:1.4.2+202505120738+ebf0e940d0)"
    inkscape:export-filename="../../remaining_knowledge_dynamics_idealization.png"
    inkscape:export-xdpi="600"
    inkscape:export-ydpi="600"
@@ -27,11 +27,11 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="1.9503865"
-     inkscape:cx="153.04659"
-     inkscape:cy="157.14834"
+     inkscape:zoom="0.97519325"
+     inkscape:cx="-3.0763133"
+     inkscape:cy="233.79981"
      inkscape:window-width="1850"
-     inkscape:window-height="1136"
+     inkscape:window-height="1016"
      inkscape:window-x="70"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -1390,12 +1390,12 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 0"
-     transform="translate(-116.64486,-13.667222)" />
+     transform="translate(-118.43383,-2.3980742)" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(62.189173,198.53821)">
+     transform="translate(60.400204,209.80736)">
     <text
        xml:space="preserve"
        transform="matrix(2.4355946,0,0,2.4355946,1465.5654,1881.3219)"
@@ -1409,14 +1409,13 @@
     <g
        id="g1">
       <rect
-         style="font-variation-settings:normal;vector-effect:none;fill:#ffffef;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.489143;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
+         style="font-variation-settings:normal;vector-effect:none;fill:#ffffef;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.564665;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000"
          id="rect74-8"
-         width="83.577911"
-         height="57.461697"
-         x="116.64487"
-         y="13.667225"
-         ry="1.0259321"
-         transform="translate(-178.83404,-212.20543)" />
+         width="80"
+         height="80"
+         x="-60.400204"
+         y="-209.80736"
+         ry="1.4283352" />
       <g
          id="g2">
         <rect
