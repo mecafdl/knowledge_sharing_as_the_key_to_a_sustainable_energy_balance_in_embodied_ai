@@ -5,30 +5,15 @@
 %                                                 |                                                 |
 %                                                 |                                                 |
 % ===================================================================================================
+\section{Materials and Methods}\label{sec:materials_and_methods}
 
+% ===================================================================================================
+\subsection{Episodic energy and time requirements}\label{sec:power_per_episode}
 % ---
-\begin{figure*}[t!]
+\begin{figure}[!h]
 	\centering
-	\hspace*{\fill}
-	\includegraphics[width=\textwidth]{energy_consumption_trends_ai_and_robotics.png}
-	\hspace*{\fill}
-	\caption[] {\label{fig:energy_consumption_trends_ai_and_robotics} \textbf{Energy demands in \ac{ai} and robotics.} Global electricity demand of data centers (\textsc{Left}), adapted from \cite{andrae2015global}. The estimated World Robot Energy Consumption of industrial (\textsc{Middle}) and  collaborative robots (\textsc{Right}).}
-\end{figure*}
-% ---
-
-
-
-% ---
-\begin{figure*}[t!]
-	\centering\section{Materials and Methods}\label{sec:materials_and_methods}
-	\hspace*{\fill}
-	\includegraphics[width=14cm]{closed_loop_collective_dynamics.png}% ===================================================================================================
-	\hspace*{\fill}\subsection{Episodic energy and time requirements}\label{sec:power_per_episode}
-	\caption[] {\label{fig:collective_learning_system} \textbf{A \acl{cl} system.} {A multi-agent system with appropriate learning algorithm(s) and inter-agent knowledge sharing can learn a universe of skills exponentially fast, as reflected by the exponential collection of the knowledge required to learn the skills.}\pending{Consider sending this figure to the supplementary materials.}}% ---
-\end{figure*}\begin{figure}[!h]
-% ---	\centering
 	\includegraphics[width=0.45\textwidth]{fig/power_per_episode.png}
-	\caption{\textbf{Power consumption per episode.} An episode is an attempt to accomplish a skill. For simplicity, the power to complete an episode is assumed constant.}	
+	\caption{\textbf{Power consumption per episode.}}
 	\label{fig:power_per_episode}
 \end{figure}
 % ---
@@ -45,7 +30,7 @@ Consequently, the energy consumed by a robot learning a skill $ s_j $ is directl
 	E_j =\sum_{n=1}^{c_j} e_j(n) = e_0c_j.
 \end{equation}
 % ---
-The energy spent on learning $\mathcal{S}$ under the absence of knowledge sharing is
+The energy spent on learning $\mathcal{S}$ under the absence of knowledge transfer is
 % ---
 \begin{equation}\label{eq:total_energy}
 	E_{\mathcal{S}} = \sum_{j=1}^{{N_{\mathcal{S}}}} E_j = e_0 \sum_{j=1}^{{N_{\mathcal{S}}}} c_j%N_{\mathcal{T}} \cdot e_0 \cdot c_j 
@@ -60,7 +45,7 @@ The energy spent on learning $\mathcal{S}$ under the absence of knowledge sharin
 % ---
 
 % ===================================================================================================
-\subsection{The conventional learning paradigms}\label{sec:types_of_learning}
+\subsection{The different learning paradigms}\label{sec:types_of_learning}
 
 % ---------------------------------------------------------------------------------------------------
 \paragraph{Isolated Learning (IsL)} A robot performs IsL when it learns each skill in $\mathcal{Z}_k$ one after another from the ground up, disregarding the accumulating knowledge from already learned skills. In such a case the rate of convergence and the initial remaining knowledge for all skills are given by
@@ -200,7 +185,7 @@ and the total number of episodes  $ C_k $ that an agent requires to learn the $N
 % ---
 \begin{align}\label{eq:total_episodes_transfer}
 	\begin{split}
-		C^{(\text{TIL})}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(\text{TIL})}_{j,k}.
+		C^{(\text{TIL})}_k &= \sum^{N_{\mathcal{Z}}}_{j=1} c^{(TIL)}_{j,k}.
 	\end{split}
 \end{align}
 % --- 
@@ -282,29 +267,15 @@ This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_par
 %% ---
 %exhibits a dependency on the number of seen skills $N_{\zeta_k}$, which is directly influenced by the number of robots $r$ in the collective. Yet, it can be proven that there is a coupling strength $\gamma$ for a given connectivity $\bm{A}$ that ensures that the remaining knowledge for all skills converges asymptotically to zero.
 
+
 % ===================================================================================================
 %                                                 |                                                 |
 %                                                 |                                                 |
 % -------------------------------------------- SECTION ---------------------------------------------|
 %                                                 |                                                 |
 %                                                 |                                                 |
-% ===================================================================================================
 % ===================================================================================================
 \newpage
-\section{Analysis of the collective learning behavior}\label{sec:collective_learning_analysis}
-
-\textcolor{blue}{\textbf{THIS TEXT GOES TO SUPPLEMENTARY IN THE STABILITY ANALYSIS}} where the operator $\odot$ represents the Hadamard product of matrices. This expression models $r=m$ robots exchanging knowledge among each other. The vector $\bar{\bm{\sigma}}^{}_{j,k} \in \mathbb{R}^r$ represents the dynamics of the remaining knowledge of all the $m$ skills being concurrently learned. $\bm{A} \in \mathbb{R}^{r \times r}$ is a zero-diagonal symmetric adjacency matrix whose entry $(\bm{A})_{i,j} = 1$ if robot $r_i$ exchanges knowledge with robot $r_j$ and $(\bm{A})_{i,j} = 0$ if it does not.
-
-$\ldots$ the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \left \lbrace 1, \beta_{k} \right \rbrace$, $\ldots$
-
-% ===================================================================================================
-%                                                 |                                                 |
-%                                                 |                                                 |
-% -------------------------------------------- SECTION ---------------------------------------------|
-%                                                 |                                                 |
-%                                                 |                                                 |
-% ===================================================================================================
-
 \section{Results}\label{sec:use_case_results}
 Fig.~\ref{fig:collective_learning} shows the results of applying isolated learning, incremental learning, transfer and incremental learning, and collective learning to the learning scenario defined by the tuple
 % ---
@@ -366,13 +337,13 @@ The unit sales are congruent with the the estimated operational stock of industr
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\subcaption{}
 		\includegraphics[width= \textwidth]{ir_units_projections.png}
 		\label{fig:ir_stock}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[t]{0.45\textwidth}
 		\subcaption{}
 		\includegraphics[width= \textwidth]{cb_units_projections.png}
 		\label{fig:cobot_stock}
