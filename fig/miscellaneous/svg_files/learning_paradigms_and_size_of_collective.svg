@@ -26,9 +26,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.52661996"
-     inkscape:cx="271.54307"
-     inkscape:cy="651.32359"
+     inkscape:zoom="1.0532399"
+     inkscape:cx="266.79581"
+     inkscape:cy="344.65082"
      inkscape:window-width="1850"
      inkscape:window-height="1016"
      inkscape:window-x="70"
@@ -3917,7 +3917,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="111.79411"
        y="29.994268"
        id="text2384-8-9-1"><tspan
@@ -4221,7 +4221,7 @@
        transform="matrix(1.4173087,0,0,1.4173087,-234.80164,149.9537)" />
     <text
        xml:space="preserve"
-       style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="50.46801"
        y="75.689613"
        id="text2384-8-3-7"><tspan
@@ -4581,7 +4581,7 @@
        sodipodi:nodetypes="ccc" />
     <text
        xml:space="preserve"
-       style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="92.207024"
        y="75.682014"
        id="text2384-8-3-2-3"><tspan
@@ -4957,7 +4957,7 @@
        transform="translate(-445.69951,122.05422)" />
     <text
        xml:space="preserve"
-       style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="133.98497"
        y="75.681999"
        id="text2384-8-3-8-0"><tspan
@@ -5377,7 +5377,7 @@
        transform="translate(-698.56489,131.28718)">
       <text
          xml:space="preserve"
-         style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+         style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
          x="874.3277"
          y="-55.605171"
          id="text2384-8-3-23-5"><tspan
@@ -5437,7 +5437,7 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-size:3.88056px;line-height:1.25;font-family:Serif;-inkscape-font-specification:Serif;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
+       style="font-size:3.88056px;line-height:1.25;font-family:Myriad Pro;-inkscape-font-specification:Myriad Pro;font-variant-ligatures:none;text-align:center;text-anchor:middle;stroke-width:0.264583"
        x="387.04272"
        y="110.23287"
        id="text2384-8-9"><tspan
@@ -5658,5 +5658,27 @@
        cx="398.05566"
        cy="98.203423"
        r="0.53149074" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.88056px;font-family:'Myriad Pro';-inkscape-font-specification:'Myriad Pro';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;fill:#000000;stroke-width:0.352777"
+       x="23.927309"
+       y="28.619251"
+       id="text1"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="font-weight:bold;stroke-width:0.352778"
+         x="23.927309"
+         y="28.619251">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.88056px;font-family:'Myriad Pro';-inkscape-font-specification:'Myriad Pro';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;display:inline;fill:#000000;stroke-width:0.352777"
+       x="23.640144"
+       y="85.532715"
+       id="text1-3"><tspan
+         sodipodi:role="line"
+         id="tspan1-5"
+         style="font-weight:bold;stroke-width:0.352778"
+         x="23.640144"
+         y="85.532715">B</tspan></text>
   </g>
 </svg>
