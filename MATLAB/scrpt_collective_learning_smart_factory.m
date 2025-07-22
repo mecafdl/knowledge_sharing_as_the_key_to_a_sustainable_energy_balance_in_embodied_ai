@@ -44,38 +44,38 @@ learningCases = [zeros(1,3);  % Isolated
                  1 0 0;       % Incremental
                  1 1 0;       % Trasnfer + Incremental
                  1 1 1];      % Collective
-learningCasesLabels = {'IsL','IL','TIL','DCL'};
+learningCasesLabels = {'IsL','IL','TIL','CL'};
 cl_results = cell(size(learningCases,1),numel(robotArray));
 
 
 %%
 clc
-for learningCaseIndex = 1%:size(learningCases,1)
-    for robotArrayIndex = 1:numel(robotArray)
+for learningCaseIndex = 4%1:size(learningCases,1)
+    for robotArrayIndex = 1%1:numel(robotArray)
+        close all
         cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
         pause(3)
         
-        theCollective = RobotCollective(numberOfRobots = robotArray(robotArrayIndex));
+        % Initialize a robot collective
+        theCollective = RobotCollective(numberOfRobots = robotArray(robotArrayIndex), ...
+                                        repeatingSkills = true, ...
+                                        MaxNumberOfSkillsPerProduct = 8, ...
+                                        maxNumberOfProducts = 500);
         
         % Set flags
         theCollective.RAND_COMM_INTERRUPT         = true; 
         theCollective.ENABLE_INCREMENTAL_LEARNING = learningCases(learningCaseIndex,1); 
         theCollective.ENABLE_TRANSFER_LEARNING    = learningCases(learningCaseIndex,2); 
-        theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3); 
-        theCollective.REPEATING_SKILLS            = true;
+        theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3);
         
         % Define simulation episodes
         theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
         
-        % Define agent(s) learning factors
+        % Define agent(s) and collective learning factors
         theCollective.Eta_0       = +0.01;
         theCollective.Gamma_0     = +0.01;
-        
-        % Max. nummber of skills per product
-        theCollective.MaxNumberOfSkillsPerProduct = 8;
-    
-    
-    
+          
+        % Run the scenario
         [~, ~, ~, cl_results{learningCaseIndex, robotArrayIndex}] = ...
         theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
     end
@@ -83,30 +83,66 @@ end
 %%
 clc
 close all
-figure('Color','w')
+fig = figure('Color','w');
+ax = gca;
+
 xlim([1, 500])
 ylim([1, 100])
-set(gca,'XScale','linear')
-set(gca,'YScale','log')
+set(ax,'XScale','log')
+set(ax,'YScale','log')
 xlabel('Items','FontSize',11)
-ylabel('Complexity','FontSize',11)
+ylabel('Episodes / Item','FontSize',11)
+axis square
 hold on
+p = [];
 for learningCaseIndex = 1:size(learningCases,1)
-    for robotArrayIndex = 1:numel(robotArray)
-        loglog(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes)
+    for robotArrayIndex = 1%:numel(robotArray)
+        learningEpisodes      = cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes;
+        totalLearningEpisodes(learningCaseIndex) = sum(learningEpisodes);
+        p = [p loglog(ax, learningEpisodes)];
     end
 end
+p1  = plot(NaN,'-','Color',selectedColors(1,:));
+p2  = plot(NaN,'-','Color',selectedColors(2,:));
+p3  = plot(NaN,'-','Color',selectedColors(3,:));
+p4  = plot(NaN,'-','Color',selectedColors(4,:));
+leg = legend([p1 p2 p3 p4], learningCasesLabels);
+grid off
+ax1 = gca;
+fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 6, 1, 1)
+%% ---
+
+close all
+fig= figure('Color','w');
+
+% hold on
+learningEnergy  = 105000*totalLearningEpisodes;
+bp = bar(learningEnergy,'facecolor', 'flat');
+% bp = bar(totalLearningEpisodes ,'facecolor', 'flat');
+bp.CData = selectedColors(1:4,:);
+% ylabel('Total Complexity [episodes for all skills]')
+set(gca,'xticklabel',learningCasesLabels)
+% title(sprintf("No. of Robots: %3i",theCollective.NumberOfRobots))
+% ylim([-inf 10000])
+ylim([1 1.1*max(learningEnergy)])
+ylabel("Total learning energy [J]")
+% set(gca,"YScale","log")
+fcn_scrpt_prepare_graph_science_std(fig, gca, bp, [], [], 6, 1, 1)
+grid off
+axis square
+box off
 
 %%
 clc
 close all
-figure('Color','w')
+fig = figure('Color','w');
 xlim([1, 500])
 ylim([1, 100])
-set(gca,'XScale','linear')
-set(gca,'YScale','linear')
+set(gca,'XScale','log')
+set(gca,'YScale','log')
 xlabel('Items','FontSize',11)
-ylabel('Complexity (episodes per item)','FontSize',11)
+ylabel('Episodes per item','FontSize',11)
+axis square
 hold on
 
 cmap = colormap('lines');
@@ -114,9 +150,15 @@ cmap = colormap('lines');
 colorIndices = linspace(1, size(cmap, 1), size(learningCases,1));
 % Interpolate the colormap to get the desired number of colors
 selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
-
+p = [];
 for learningCaseIndex = 1:size(learningCases,1)
     remainingKnowledge = cell2mat(arrayfun(@(robotArrayIndex) cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes,1:5,'UniformOutput',false))';
+    
+    for robotArrayIndex = 1:numel(robotArray)
+        id_last_entry = nnz(remainingKnowledge(robotArrayIndex,:) ~= 0); 
+        remainingKnowledge(robotArrayIndex,id_last_entry+1:end) = min(remainingKnowledge(robotArrayIndex,1:id_last_entry)); 
+    end
+
     
     meanCurve  = max(1,mean(remainingKnowledge,1));
     stdCurve   = std(remainingKnowledge, 0, 1);
@@ -126,20 +168,47 @@ for learningCaseIndex = 1:size(learningCases,1)
     % Create the plot
     % Plot the shaded region for standard deviation
     
-    patch(gca, [1:500, fliplr(1:500)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
-    'EdgeColor', 'none', 'FaceAlpha', 0.3);
+    % patch(gca, [1:500, fliplr(1:500)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+    % 'EdgeColor', 'none', 'FaceAlpha', 0.3);
+
+    % patch(gca, [1:64, fliplr(1:64)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+    % 'EdgeColor', 'none', 'FaceAlpha', 0.3);   
+
+    % patch(gca, [1:numel(upperBound), fliplr(1:numel(upperBound))], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+    % 'EdgeColor', 'none', 'FaceAlpha', 0.2);   
     
     % Plot the mean curve
-    plot(gca, 1:500, meanCurve, 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:));
+    % p = [p plot(gca, 1:500, meanCurve, 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:))];
 
+
+% [envHigh, envLow] = envelope(meanCurve,10,"peaks");
+% envMean = (envHigh+envLow)/2;
+% p = [p plot(gca, 1:numel(upperBound), envMean, 'b-', 'LineWidth', 2,'Color',selectedColors(learningCaseIndex,:))];
+% fill([1:numel(upperBound), fliplr(1:numel(upperBound))], [envHigh, fliplr(envLow)], ...
+%      selectedColors(learningCaseIndex,:), 'FaceAlpha', 0.25, 'EdgeColor', 'none', ...
+%      'DisplayName', 'Envelope Area');  
+
+    meanCurve = smoothdata(meanCurve, 'movmean', 10);
+    p = [p plot(gca, 1:numel(upperBound), meanCurve, 'b-', 'LineWidth', 2,'Color',selectedColors(learningCaseIndex,:))];
+    % plot(1:numel(upperBound),envLow,'k')
+    % plot(1:numel(upperBound),envHigh,'k')
+
+  
 end
-p1 = plot(NaN,'Color',selectedColors(1,:));
-p2 = plot(NaN,'Color',selectedColors(2,:));
-p3 = plot(NaN,'Color',selectedColors(3,:));
-p4 = plot(NaN,'Color',selectedColors(4,:));
-legend([p1 p2 p3 p4], learningCasesLabels)
-
-
+p1 = plot(NaN,'-','Color',selectedColors(1,:));
+p2 = plot(NaN,'-','Color',selectedColors(2,:));
+p3 = plot(NaN,'-','Color',selectedColors(3,:));
+p4 = plot(NaN,'-','Color',selectedColors(4,:));
+leg = legend([p1 p2 p3 p4], learningCasesLabels);
+grid off
+ax1 = gca;
+fcn_scrpt_prepare_graph_science_std(fig, ax1, p, leg, [], 6, 1, 1)
+grid off
+% yyaxis right
+% ylabel('Right Side')
+% ax = gca;
+% ax.YTick = ax1.YTick*105;
+% ax.YTickLabel('0','10','1000')
 %%
 close all
 clc

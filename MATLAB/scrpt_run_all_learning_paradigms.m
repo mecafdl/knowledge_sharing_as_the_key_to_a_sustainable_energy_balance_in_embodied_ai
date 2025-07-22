@@ -14,10 +14,10 @@ learningCases = [zeros(1,3);  % Isolated
                  1 1 0;       % Trasnfer + Incremental
                  1 1 1];      % Collective
 learningCasesLabels = {'IsL','IL','TIL','DCL'};
-cl_results = cell(size(learningCases,1),numel(robotArray));
+% cl_results = cell(size(learningCases,1),numel(robotArray));
 
-for learningCaseIndex = 1:size(learningCases,1)
-    for robotArrayIndex = 1:numel(robotArray)
+for learningCaseIndex = 1%1:size(learningCases,1)
+    for robotArrayIndex = 6%1:numel(robotArray)
         close all
         cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
         pause(1.5)
@@ -59,44 +59,72 @@ for learningCaseIndex = 1:size(learningCases,1)
         theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
     end
 end
+cl_results{1,robotArrayIndex}.c_jk_cl_dist_episodes
 %%
 clc
 close all
 figure('Color','w')
 xlim([1, 500])
 ylim([1, 100])
-set(gca,'XScale','linear')
+set(gca,'XScale','log')
 set(gca,'YScale','log')
 xlabel('Skill batches (products)','FontSize',11)
-ylabel('Complexity','FontSize',11)
+ylabel('Complexity (energy)','FontSize',11)
 hold on
 totalComplexity = zeros(learningCaseIndex,robotArrayIndex);
-for learningCaseIndex = 1:size(learningCases,1)
+for learningCaseIndex = 1:4%1:size(learningCases,1)
     for robotArrayIndex = 1:numel(robotArray)
         aux = cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes;
         totalComplexity(learningCaseIndex,robotArrayIndex) = sum(aux);
-        loglog(aux,LineWidth=2)
+        plot(smoothdata(aux,'movmean',10),LineWidth=2,Color=selectedColors(learningCaseIndex,:))
+        % xtemp = linspace(1,100,numel(aux));
+        % plot(xtemp, aux,LineWidth=1,Color=selectedColors(learningCaseIndex,:))
         
         % loglog(cumsum(cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes),LineWidth=2)
         % pause(2)
     end
     % set(gca,'ColorOrder','factory')
 end
-leg = legend(learningCasesLabels);
+p1 = plot(NaN,'Color',selectedColors(1,:),LineWidth=2);
+p2 = plot(NaN,'Color',selectedColors(2,:),LineWidth=2);
+p3 = plot(NaN,'Color',selectedColors(3,:),LineWidth=2);
+p4 = plot(NaN,'Color',selectedColors(4,:),LineWidth=2);
+leg = legend([p1 p2 p3 p4], learningCasesLabels);
+
+% leg = legend(learningCasesLabels);
 leg.Location = "southeast";
 axis square
 xlim("auto")
-
 %%
 close all
 figure('Color','w')
-bp = bar(totalComplexity(:,3));
-ylabel('Total Complexity [episodes for all skills]')
+% loglog(robotArray,totalComplexity,'o-',LineWidth=1.5)
+semilogy(1:numel(robotArray),totalComplexity,'o-',LineWidth=1.5)
+xlabel('Number of robots','FontSize',11)
+ylabel('Total complexity [episodes for all skills]','FontSize',11)
+% xlim([4, inf])
+xticklabels(arrayfun(@(i) num2str(robotArray(i)),1:6,'UniformOutput',false))
+axis square
+legend(learningCasesLabels)
+% semilogy(1:6,totalComplexity)
+% xticks(robotArray)
+%%
+close all
+fig= figure('Color','w');
+
+% hold on
+bp = bar(105000*mean(totalComplexity(:,3),2) ,'facecolor', 'flat');
+bp.CData = selectedColors(1:4,:)
+% ylabel('Total Complexity [episodes for all skills]')
 set(gca,'xticklabel',learningCasesLabels)
-title(sprintf("No. of Robots: %3i",theCollective.NumberOfRobots))
-ylim([-inf 10000])
-% ylim([0 10000])
-% set(gca,"YScale","log")
+% title(sprintf("No. of Robots: %3i",theCollective.NumberOfRobots))
+% ylim([-inf 10000])
+ylim([1 1E10])
+ylabel("Total learning energy [J]")
+set(gca,"YScale","log")
+fcn_scrpt_prepare_graph_science_std(fig, gca, bp, [], [], 6, 1, 1)
+grid off
+axis square
 %%
 
 clc

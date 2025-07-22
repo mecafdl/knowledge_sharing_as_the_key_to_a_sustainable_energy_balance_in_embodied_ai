@@ -70,7 +70,7 @@ classdef RobotCollective < handle
         KnowledgeLowerBound         = 0.01;
         MaxNumberOfProducts         = [];
         MaxNumberOfRobots           = 128;
-        MaxNumberOfSkillsPerProduct = 50;
+        MaxNumberOfSkillsPerProduct = 8;
         NumberOfNewSkills           = [];
         NumberOfRobots              = [];
         NumberOfRobotsPerCluster    = [];
@@ -101,10 +101,12 @@ classdef RobotCollective < handle
             arguments
                 NameValueArgs.numberOfRobots           = [];
                 NameValueArgs.numberOfRobotsPerCluster = []
-                NameValueArgs.maxNumberOfProducts      = 500;
+                NameValueArgs.maxNumberOfProducts      = 1000;
                 NameValueArgs.repeatingSkills          = false;
+                NameValueArgs.MaxNumberOfSkillsPerProduct
             end
-
+            obj.MaxNumberOfSkillsPerProduct = NameValueArgs.MaxNumberOfSkillsPerProduct;
+        
             obj.NumberOfRobots = NameValueArgs.numberOfRobots;
             if isempty(NameValueArgs.numberOfRobotsPerCluster)
                 obj.NumberOfRobotsPerCluster = repmat(obj.NumberOfRobots/obj.TotalSkillClusters,obj.TotalSkillClusters,1);
@@ -120,15 +122,24 @@ classdef RobotCollective < handle
                 obj.REPEATING_SKILLS = NameValueArgs.repeatingSkills;
 
                 % obj.NumberOfSkillBatches = obj.TotalSkills/obj.NumberOfRobots;
-                if mod(obj.TotalSkills,obj.NumberOfRobots)==0
-                    obj.NumberOfSkillBatches = obj.TotalSkills/obj.NumberOfRobots;
+                % if mod(obj.TotalSkills,obj.NumberOfRobots)==0
+                %     obj.NumberOfSkillBatches = obj.TotalSkills/obj.NumberOfRobots;
+                %     % Set a flag
+                %     obj.UNEVEN_ROBOT_DISTRIBUTION = 0;
+                % else
+                %     obj.NumberOfSkillBatches      = floor(obj.TotalSkills/obj.NumberOfRobots) + 1;
+                %     % Set a flag
+                %     obj.UNEVEN_ROBOT_DISTRIBUTION = 1;
+                % end
+                if mod(obj.TotalSkills,obj.MaxNumberOfSkillsPerProduct)==0
+                    obj.NumberOfSkillBatches = obj.TotalSkills/obj.MaxNumberOfSkillsPerProduct;
                     % Set a flag
                     obj.UNEVEN_ROBOT_DISTRIBUTION = 0;
                 else
-                    obj.NumberOfSkillBatches      = floor(obj.TotalSkills/obj.NumberOfRobots) + 1;
+                    obj.NumberOfSkillBatches      = floor(obj.TotalSkills/obj.MaxNumberOfSkillsPerProduct) + 1;
                     % Set a flag
                     obj.UNEVEN_ROBOT_DISTRIBUTION = 1;
-                end
+                end                
             else
                 obj.NumberOfSkillBatches      = obj.MaxNumberOfProducts;
                 % Set a flag
@@ -201,6 +212,12 @@ classdef RobotCollective < handle
             yticklabels({'','$\epsilon$', '', '1'})
             set(gca,'TickLabelInterpreter','latex')
             title(gca,['$m =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta_0),'~|~\bar{\gamma} =', num2str(obj.Gamma_0),'$'],'Interpreter','latex','FontSize',11)
+
+
+% theString = sprintf("$N_r = %i ~|~ $ \\bar{\\eta}=%f \\pm %f ~|~\\bar{\\gamma} = %f \\pm %f$",obj.NumberOfRobots,obj.Eta_0,obj.Eta_std,obj.Gamma_0, obj.Gamma_std);
+% title(gca,theString,'Interpreter','latex','FontSize',11)
+title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta_0),'~|~\bar{\gamma} =', num2str(obj.Gamma_0),'$'],'Interpreter','latex','FontSize',11)
+
             hold(gca,"on")
             ax = gca;
         end
@@ -410,6 +427,7 @@ classdef RobotCollective < handle
             
             % Basics learning rates PER agent (embodiment dependent)
             % Alpha = mean([obj.Alpha_min, obj.Alpha_max])*eye(obj.NumberOfRobots);
+            rng("default") % Reset the random number generator for consistency across simulations
             Alpha = obj.isolatedLearningRemainingKnowledgeDynamics();
             
             % Initialization 
@@ -428,7 +446,7 @@ classdef RobotCollective < handle
                 % Check wich skills in memory can be used to draw knowledge
                 obj.getNumberOfLearnedSkillsPerAgent()
                 disp("Skills in each agent's memory, given current skill's cluster")
-                disp(obj.NumberOfLearnedSkillsPerAgentAndTargetSkill')
+                disp([obj.SkillClusterMembership;obj.NumberOfLearnedSkillsPerAgentAndTargetSkill'])
 
                 % Determine how much knowledge can be transfered from the
                 % SOURCE clusters to the skill in the TARGET cluster
@@ -475,7 +493,7 @@ classdef RobotCollective < handle
 
                 % To speed up the simulation, once the KnowledgeLowerBound
                 % is reached, stop the integration
-                if  all(initialRemainingKnowledge)<=obj.KnowledgeLowerBound
+                if  all(initialRemainingKnowledge <= obj.KnowledgeLowerBound)
                     remainingKnowledge = obj.KnowledgeLowerBound*ones(obj.NumberOfRobots,numel(obj.Episodes));
                 else
                     remainingKnowledge = transpose( ...
@@ -485,20 +503,46 @@ classdef RobotCollective < handle
                                 isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, initialRemainingKnowledge)); 
                 end
 
+% remainingKnowledge = transpose( ...
+%     ode4_sat(@(n,sigmaBar) ...
+%         obj.collectiveKnowledgeSharingDynamicsEpisodic( ...
+%             agentsRemainingKnowledge = sigmaBar, ...
+%             isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, [initialRemainingKnowledge(1);zeros(7,1)])); 
+
+
                 % Plot remaining knowlege curve
                 obj.plotRemainingKnowledgeCurves(remainingKnowledge = remainingKnowledge, skillsBatch = skillsBatch, figureHandle=fig, axisHandle= ax,lineColors=selectedColors);
                 
                 % Determine the complexity for learning the skills in the batch
-                complexity_jk_CL_Distributed(j) = ...
-                    ceil( ...
-                        mean( ...
-                            obj.Episodes( ...
-                                cell2mat( ...
-                                    arrayfun( ...
-                                        @(i) ( ...
-                                            find( ...
-                                                remainingKnowledge(i,:)<obj.KnowledgeLowerBound,1,'first')),1:size(remainingKnowledge,1),'UniformOutput',false)))));
-                
+                % complexity_jk_CL_Distributed(j) = ...
+                %     ceil( ...
+                %         mean( ...
+                %             obj.Episodes( ...
+                %                 cell2mat( ...
+                %                     arrayfun( ...
+                %                         @(i) ( ...
+                %                             find( ...
+                %                                 remainingKnowledge(i,:)<obj.KnowledgeLowerBound,1,'first')),1:size(remainingKnowledge,1),'UniformOutput',false)))));
+                % 
+
+
+% Find skills in the batch that need to be learned
+idx = find(initialRemainingKnowledge>obj.KnowledgeLowerBound);
+if isempty(idx)
+    complexity_jk_CL_Distributed(j) = 1;
+else
+complexity_jk_CL_Distributed(j) = ...
+    ceil( ...
+        mean( ...
+            obj.Episodes( ...
+                cell2mat( ...
+                    arrayfun( ...
+                        @(i) ( ...
+                            find( ...
+                                remainingKnowledge(i,:)<obj.KnowledgeLowerBound,1,'first')),idx,'UniformOutput',false)))));
+end
+
+
                 % For cases where a skill could not be learned, choose the
                 % fundamental complexity as fallback value
                 if isnan(complexity_jk_CL_Distributed(j))
@@ -525,8 +569,12 @@ classdef RobotCollective < handle
                 % =========================================================================        
         
                 % pause(1)
-                if obj.NumberOfLearnedSkillsPerAgentAndTargetSkill == obj.TotalSkills
+                % if obj.NumberOfLearnedSkillsPerAgentAndTargetSkill == obj.TotalSkills
+                if sum(~isnan((unique(obj.SkillsInAgent(:))))) == obj.TotalSkills%numel(unique(obj.SkillsInAgent(:))) == obj.TotalSkills
                     warning('All skilles learned')
+                    % Copy the last complexity to fill the remaining
+                    % products
+                    complexity_jk_CL_Distributed(j+1:end) = complexity_jk_CL_Distributed(j); 
                     pause(3)
                     break
                 end
@@ -536,22 +584,31 @@ classdef RobotCollective < handle
             fcn_scrpt_prepare_graph_science_std(fig, gca, [], [], [], 6, 1, 1)
             % pause(1)
             tightfig(fig);
+
+            % Update the information about the learned skils
+            obj.getNumberOfLearnedSkillsPerAgent()
+
             c_jk_cl_dist_episodes = (complexity_jk_CL_Distributed);
             learnedSkillsStorage  = obj.NumberOfLearnedSkillsPerAgentAndTargetSkill;
         
             % =============================================================            
-            figure('Color', 'w')
-            plot(1:obj.MaxNumberOfProducts, obj.NumberOfNewSkills,'r',LineWidt=1.5)
+            aux_fig = figure('Color', 'w');
+            aux_ax = gca;
+            pl1 = plot(1:obj.MaxNumberOfProducts, obj.NumberOfNewSkills,'r',LineWidt=1.5);
             hold on
-            plot(1:obj.MaxNumberOfProducts, obj.NumberOfSeenSkills,'b',LineWidt=1.5)
+            pl2 = plot(1:obj.MaxNumberOfProducts, obj.NumberOfSeenSkills,'b',LineWidt=1.5);
             clusterColors = distinguishable_colors(obj.TotalSkillClusters);
-            plot(1:obj.MaxNumberOfProducts, obj.SkillsInCluster,LineWidt=1.5)
+            pl3 = plot(1:obj.MaxNumberOfProducts, obj.SkillsInCluster,'-m',LineWidt=1.5);
+            pl4 = plot(1:obj.MaxNumberOfProducts, obj.MaxNumberOfSkillsPerProduct*ones(size(1:obj.MaxNumberOfProducts)),'k--',LineWidt=1.5);
             colororder(clusterColors)
-            legend('No. new skills','No. learned skills','Skills per cluster')
+            % leg = legend([pl1 pl2 pl3],'No. new skills','No. learned skills','Skills per cluster');
+            leg = legend('No. new skills','No. learned skills','Skills per cluster');
             xlabel('No. of products')
             ylabel('No. of skills learned')
             axis square
             xlim([1 skillsBatch])
+            ylim([1 obj.TotalSkills])
+            fcn_scrpt_prepare_graph_science_std(aux_fig, aux_ax, [pl1;pl2;pl3], [], [], 6, 1, 1);
         
             % Put together <results> structure
             results.c_jk_cl_dist_episodes = c_jk_cl_dist_episodes;
@@ -577,6 +634,7 @@ classdef RobotCollective < handle
             isolatedLearningRemainingKnowledgeDynamics = NameValueArgs.isolatedLearningRemainingKnowledgeDynamics;
             agentsRemainingKnowledge                   = NameValueArgs.agentsRemainingKnowledge;
 
+            % Chane the incremental factor per episode
             eta_robots             = obj.Eta_0 + obj.Eta_std.*randn(obj.NumberOfRobots,1);    
             selfKnowledgeDynamics  = -isolatedLearningRemainingKnowledgeDynamics.*diag((1 - obj.AggregatedScaledClusterTransferableKnowledgeFractionPerAgent).^(-1)).*obj.incrementalLearningRemainingKnowledgeDynamics(eta = eta_robots).*eye(obj.NumberOfRobots);
         

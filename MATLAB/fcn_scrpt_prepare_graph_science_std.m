@@ -61,14 +61,14 @@ function fcn_scrpt_prepare_graph_science_std(fig, ax, plt, leg, tx, text_width, 
 
     %Axes config
     if exist('ax','var') && ~isempty(ax)
-        %set(ax,'LineWidth',0.25*k_scaling);
-        set(ax,'LineWidth',0.75*k_scaling);
+        % set(ax,'LineWidth',0.25*k_scaling);
+        set(ax,'LineWidth',max(0.5,0.75*k_scaling));
         set(ax,'GridLineStyle',':');
         set(ax,'XGrid','on');
         set(ax,'YGrid','on');
         set(ax,'ZGrid','on');
         set(ax,'FontName','Helvetica');
-        set(ax,'FontSize',10*k_scaling);
+        set(ax,'FontSize',max(11,10*k_scaling));
         set(ax,'Units','normalized');
         set(ax,'LineStyleOrder','-|--');
         set(ax,'TickDir','in');  
