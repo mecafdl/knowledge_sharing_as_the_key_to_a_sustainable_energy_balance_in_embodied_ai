@@ -265,28 +265,31 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
         end        
         
         %% Choose a set of skills to learn
-        function [productSkills, skillClusterMembership] = getProductSkills(obj)
-            
+        function [productSkills, skillClusterMembership] = getProductSkills(obj, NameValueArgs)
+            arguments
+                obj (1,1) RobotCollective
+                NameValueArgs.randStream
+            end   
             if obj.REPEATING_SKILLS == 0
                 % productSkills    = randperm(obj.TotalSkills,obj.MaxNumberOfSkillsPerProduct);
 
                 useenSkills      = setdiff(1:obj.TotalSkills,obj.SeenSkills); % returns the data in A that is not in B, with no repetitions. C is in sorted order
                  
                 if numel(useenSkills) >= obj.MaxNumberOfSkillsPerProduct
-                    productSkillsIds = randperm(numel(useenSkills),obj.MaxNumberOfSkillsPerProduct);
+                    productSkillsIds = randperm(NameValueArgs.randStream, numel(useenSkills),obj.MaxNumberOfSkillsPerProduct);
                     productSkills    = useenSkills(productSkillsIds);
                 else
                     numOfJokerSkills = obj.MaxNumberOfSkillsPerProduct - numel(useenSkills); 
                     %productSkills    = [useenSkills useenSkills(randperm(numel(useenSkills),numOfJokerSkills))];
-                    productSkills    = [useenSkills useenSkills(randi(numel(useenSkills),1,numOfJokerSkills))];
+                    productSkills    = [useenSkills useenSkills(randi(NameValueArgs.randStream, numel(useenSkills),1,numOfJokerSkills))];
                 end
 
             else
-                productSkills = randi(obj.TotalSkills,1,obj.MaxNumberOfSkillsPerProduct);
+                productSkills = randi(NameValueArgs.randStream, obj.TotalSkills,1,obj.MaxNumberOfSkillsPerProduct);
             end
 
             if obj.MaxNumberOfSkillsPerProduct<obj.NumberOfRobots
-                extraSkills   = productSkills(randi(numel(productSkills),1,obj.NumberOfRobots-obj.MaxNumberOfSkillsPerProduct));
+                extraSkills   = productSkills(randi(NameValueArgs.randStream, numel(productSkills),1,obj.NumberOfRobots-obj.MaxNumberOfSkillsPerProduct));
                 productSkills = [productSkills, extraSkills];
             end
 
@@ -437,10 +440,15 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
             
             % Loop over skill batches (products) ==========================
             rng("default") % Reset the random number generator for consistency across simulations
+            
+            % Rand stream for the products
+            productRandomNumberStream = RandStream.create('mlfg6331_64');
+            reset(productRandomNumberStream,0)
+
             for skillsBatch = 1:obj.NumberOfSkillBatches        
                 % Select skills for a given product and determine their
                 % cluster membership
-                [productSkills, skillClusterMembership] = obj.getProductSkills();
+                [productSkills, skillClusterMembership] = obj.getProductSkills(randStream = productRandomNumberStream);
                 obj.SkillClusterMembership = skillClusterMembership;
 
                 % Check wich skills in memory can be used to draw knowledge
@@ -604,10 +612,11 @@ end
             % leg = legend([pl1 pl2 pl3],'No. new skills','No. learned skills','Skills per cluster');
             leg = legend('No. new skills','No. learned skills','Skills per cluster');
             xlabel('No. of products')
-            ylabel('No. of skills learned')
+            ylabel('No. of learned skills')
             axis square
             xlim([1 skillsBatch])
             ylim([1 obj.TotalSkills])
+            set(aux_ax, 'YScale', 'log')
             fcn_scrpt_prepare_graph_science_std(aux_fig, aux_ax, [pl1;pl2;pl3], [], [], 6, 1, 1);
         
             % Put together <results> structure
