@@ -148,8 +148,13 @@ classdef RobotCollective < handle
 
             obj.SkillsRemainingKnowledge = ones(obj.TotalSkills,1);
 
+            % Create a random number of stream to distribute skills in the
+            % clusters and create the similarity matrix
+            skillClustersRandomNumberStream = RandStream.create('shr3cong');
+            reset(skillClustersRandomNumberStream,1)
+
             % Create skill clusters
-            skillIndices  = randperm(obj.TotalSkills, obj.TotalSkills);
+            skillIndices  = randperm(skillClustersRandomNumberStream, obj.TotalSkills, obj.TotalSkills);
             skillClusters = reshape(skillIndices, obj.SkillsPerCluster, obj.TotalSkillClusters);
             for k = 1:obj.TotalSkillClusters
                 sample_indices = randperm(obj.SkillsPerCluster,10);
@@ -158,9 +163,7 @@ classdef RobotCollective < handle
             obj.SkillClusters = skillClusters;
     
             % Define the similarity between clusters and agents
-            clusteSimilarityRandomNumberStream = RandStream.create('shr3cong');
-            reset(clusteSimilarityRandomNumberStream,1)
-            B = rand(clusteSimilarityRandomNumberStream, obj.TotalSkillClusters);
+            B = rand(skillClustersRandomNumberStream, obj.TotalSkillClusters);
             obj.ClusterSimilarityMatrix = 0.5*(triu(B,1) + transpose(triu(B,1)));
 
             % Initialize the trasferable knowledge fraction
@@ -442,7 +445,7 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
             obj.SkillsInCluster    = zeros(obj.TotalSkillClusters,obj.MaxNumberOfProducts);
             
             % Loop over skill batches (products) ==========================
-            rng("default") % Reset the random number generator for consistency across simulations
+            % rng("default") % Reset the random number generator for consistency across simulations
             
             % Rand stream for the products
             productRandomNumberStream = RandStream.create('mlfg6331_64');
