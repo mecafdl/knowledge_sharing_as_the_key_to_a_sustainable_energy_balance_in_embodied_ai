@@ -371,11 +371,12 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
         end
         
         %% The dynamics of Isolated Learning (IsL)
-        function out = isolatedLearningRemainingKnowledgeDynamics(obj)
+        function out = isolatedLearningRemainingKnowledgeDynamics(obj, NameValueArgs)
             arguments
                 obj (1,1) RobotCollective
+                NameValueArgs.agentRandomNumberStream
             end            
-            Alpha = diag(obj.Alpha_min + (obj.Alpha_max - obj.Alpha_min).*rand(obj.NumberOfRobots,1));
+            Alpha = diag(obj.Alpha_min + (obj.Alpha_max - obj.Alpha_min).*rand(NameValueArgs.agentRandomNumberStream, obj.NumberOfRobots,1));
             out   = Alpha;
         end
         
@@ -431,8 +432,9 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
             
             % Basics learning rates PER agent (embodiment dependent)
             % Alpha = mean([obj.Alpha_min, obj.Alpha_max])*eye(obj.NumberOfRobots);
-            rng("default") % Reset the random number generator for consistency across simulations
-            Alpha = obj.isolatedLearningRemainingKnowledgeDynamics();
+            agentRandomNumberStream = RandStream.create('mcg16807');
+            reset(agentRandomNumberStream,2)
+            Alpha = obj.isolatedLearningRemainingKnowledgeDynamics(agentRandomNumberStream = agentRandomNumberStream);
             
             % Initialization 
             obj.NumberOfNewSkills  = zeros(1,obj.MaxNumberOfProducts);
