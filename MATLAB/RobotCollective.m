@@ -158,8 +158,9 @@ classdef RobotCollective < handle
             obj.SkillClusters = skillClusters;
     
             % Define the similarity between clusters and agents
-            rng("default")
-            B = rand(obj.TotalSkillClusters);
+            clusteSimilarityRandomNumberStream = RandStream.create('shr3cong');
+            reset(clusteSimilarityRandomNumberStream,1)
+            B = rand(clusteSimilarityRandomNumberStream, obj.TotalSkillClusters);
             obj.ClusterSimilarityMatrix = 0.5*(triu(B,1) + transpose(triu(B,1)));
 
             % Initialize the trasferable knowledge fraction
@@ -454,7 +455,7 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
                 % Check wich skills in memory can be used to draw knowledge
                 obj.getNumberOfLearnedSkillsPerAgent()
                 disp("Skills in each agent's memory, given current skill's cluster")
-                disp([obj.SkillClusterMembership;obj.NumberOfLearnedSkillsPerAgentAndTargetSkill'])
+                disp([productSkills; obj.SkillClusterMembership;obj.NumberOfLearnedSkillsPerAgentAndTargetSkill'])
 
                 % Determine how much knowledge can be transfered from the
                 % SOURCE clusters to the skill in the TARGET cluster
