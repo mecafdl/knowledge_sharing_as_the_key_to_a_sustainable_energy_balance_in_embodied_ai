@@ -306,6 +306,14 @@ $\ldots$ the matrix $\bm{B}$, whose entries are $\left(\bm{B}\right)_{i,j} \in \
 % ===================================================================================================
 
 \section{Results}\label{sec:use_case_results}
+
+\subsection{Idealized collective learning scenario}
+
+\textcolor{blue}{To study the idealized dynamics of a \ac{cl} system, we first discuss a scenario in which each of the $N_\mathrm{r}$ \ac{eai} agents in the collective learns a different skill every learning cycle\footnote{A learning cycle encompasses all the learning episodes required to learn a given skill batch.}. In this idealized scenario, the collective learns $N_\mathcal{S}=512$ skills, segregated into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. A given skill, according to Eq.~\eqref{eq:simple_knowledge_dynamics}, is considered learned when the remaining knowledge $\bar{\sigma}$ falls below the threshold $\epsilon$. The fundamental complexity of each skill---the assumed maximum number of episodes to learn it---is $c_0 = 100$ episodes. Finally, for simplicity, the energetic cost of a learning episode is assumed to be constant and is represented by $ e_0 $. Consequently, the total energy expenditure to learn all skills is directly proportional to the total number of learning episodes. Details on the values of the elements in $\bm{\rho}$ are provided in \nameref{sec:supplementary_materials}.}
+
+\subsection{Smart factory}
+
+
 Fig.~\ref{fig:collective_learning} shows the results of applying isolated learning, incremental learning, transfer and incremental learning, and collective learning to the learning scenario defined by the tuple
 % ---
 \begin{equation*}
