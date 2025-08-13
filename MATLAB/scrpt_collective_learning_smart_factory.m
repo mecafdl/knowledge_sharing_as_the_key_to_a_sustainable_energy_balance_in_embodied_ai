@@ -45,43 +45,69 @@ learningCases = [zeros(1,3);  % Isolated
                  1 1 0;       % Trasnfer + Incremental
                  1 1 1];      % Collective
 learningCasesLabels = {'IsL','IL','TIL','CL'};
-cl_results = cell(size(learningCases,1),numel(robotArray));
+
+numberOfScenarios = 50;
+cl_results = cell(size(learningCases,1), numel(robotArray), numberOfScenarios);
 
 
 %%
+   % 439   102   336   495    23   286    93   437
+   % 3     2     4     1     2     1     2     4
+   % 511   511   511   511   511   511   511   511
+
+   % 439   102   336   495    23   286    93   437
+   %   4     2     2     2     2     3     1     1
+   % 511   511   511   511   511   511   511   511
+
 clc
-for learningCaseIndex = 4%1:size(learningCases,1)
-    for robotArrayIndex = 1%1:numel(robotArray)
-        close all
-        cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
-        pause(3)
-        
-        % Initialize a robot collective
-        theCollective = RobotCollective(numberOfRobots = robotArray(robotArrayIndex), ...
-                                        repeatingSkills = true, ...
-                                        MaxNumberOfSkillsPerProduct = 8, ...
-                                        maxNumberOfProducts = 500);
-        
-        % Set flags
-        theCollective.RAND_COMM_INTERRUPT         = true; 
-        theCollective.ENABLE_INCREMENTAL_LEARNING = learningCases(learningCaseIndex,1); 
-        theCollective.ENABLE_TRANSFER_LEARNING    = learningCases(learningCaseIndex,2); 
-        theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3);
-        
-        % Define simulation episodes
-        theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
-        
-        % Define agent(s) and collective learning factors
-        theCollective.Eta_0       = +0.01;
-        theCollective.Gamma_0     = +0.01;
-          
-        % Run the scenario
-        [~, ~, ~, cl_results{learningCaseIndex, robotArrayIndex}] = ...
-        theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+
+seeds = randperm(numberOfScenarios,numberOfScenarios);
+
+for scenario = 1%1:numberOfScenarios
+    theSeed = randi(100);
+    for learningCaseIndex = 4%1:size(learningCases,1)
+        for robotArrayIndex = 1%1:numel(robotArray)
+            close all
+            cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
+            pause(3)
+            
+            % Initialize a robot collective
+            theCollective = RobotCollective(numberOfRobots = robotArray(robotArrayIndex), ...
+                                            repeatingSkills = true, ...
+                                            MaxNumberOfSkillsPerProduct = 8, ...
+                                            maxNumberOfProducts = 500);
+            
+            % Set flags
+            theCollective.RAND_COMM_INTERRUPT         = true; 
+            theCollective.ENABLE_INCREMENTAL_LEARNING = learningCases(learningCaseIndex,1); 
+            theCollective.ENABLE_TRANSFER_LEARNING    = learningCases(learningCaseIndex,2); 
+            theCollective.ENABLE_COLLECTIVE_LEARNING  = learningCases(learningCaseIndex,3);
+            
+            % Define simulation episodes
+            theCollective.Episodes            = 1:.1:2*theCollective.FundamentalComplexity;
+            
+            % Define agent(s) and collective learning factors
+            theCollective.Eta_0       = +0.01;
+            theCollective.Gamma_0     = +0.01;
+            
+            % theCollective.productSeed = seeds(scenario);
+            theCollective.productSeed = theSeed;
+            % Run the scenario
+            [~, ~, ~, cl_results{learningCaseIndex, robotArrayIndex, scenario}] = ...
+            theCollective.simulateDistributedCollectiveKnowledgeDynamics(maxNumberOfProducts = 1000);
+        end
     end
 end
 %%
 clc
+
+
+cmap = colormap('lines');
+% Create indices to pick colors evenly from the colormap
+colorIndices = linspace(1, size(cmap, 1), size(learningCases,1));
+% Interpolate the colormap to get the desired number of colors
+selectedColors = interp1(1:size(cmap, 1), cmap, colorIndices);
+
 close all
 fig = figure('Color','w');
 ax = gca;
@@ -97,9 +123,24 @@ hold on
 p = [];
 for learningCaseIndex = 1:size(learningCases,1)
     for robotArrayIndex = 1%:numel(robotArray)
-        learningEpisodes      = cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes;
+        % learningEpisodes      = cl_results{learningCaseIndex,robotArrayIndex}.c_jk_cl_dist_episodes;
+        aux      = (cell2mat(arrayfun(@(k) (cl_results{learningCaseIndex,robotArrayIndex,k}.c_jk_cl_dist_episodes),1:50,'UniformOutput',false)));
+        learningEpisodes      = mean(aux,2);
+        % learningEpisodes      = cell2mat(arrayfun(@(k) (cl_results{learningCaseIndex,robotArrayIndex,k}.c_jk_cl_dist_episodes),1:5,'UniformOutput',false));
         totalLearningEpisodes(learningCaseIndex) = sum(learningEpisodes);
-        p = [p loglog(ax, learningEpisodes)];
+
+% x = 1:500;
+% y = learningEpisodes;
+% degree = 2;
+% pfit = polyfit(x, y, degree);
+% % Create a new, smoother set of x-values for the trend line
+% x_fit = linspace(min(x), max(x), 100);
+% % Evaluate the polynomial at these new x-values
+% y_fit = polyval(pfit, x_fit);
+% loglog(ax, x_fit, y_fit,'Color',selectedColors(learningCaseIndex,:))
+        
+        % p = [p loglog(ax, learningEpisodes,'-','Color',selectedColors(learningCaseIndex,:))];
+        p = [p loglog(ax, smooth(learningEpisodes,10))];
     end
 end
 p1  = plot(NaN,'-','Color',selectedColors(1,:));
@@ -110,6 +151,11 @@ leg = legend([p1 p2 p3 p4], learningCasesLabels);
 grid off
 ax1 = gca;
 fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 6, 1, 1)
+%%
+close all
+for k=1:5
+plot(cl_results{3,1,k}.c_jk_cl_dist_episodes)
+end
 %% ---
 
 close all

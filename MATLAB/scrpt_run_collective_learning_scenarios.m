@@ -70,7 +70,8 @@ success_cmap = colormap('jet');
 % Create indices to pick colors evenly from the colormap
 success_colorIndices = linspace(0, size(success_cmap, 1), 100);
 
-
+% myVar = NaN(6,2,9);
+myVar = NaN(125,2,9);
 aux_index = 1;
 for index = [7,8,9,4,5,6,1,2,3] % The indices match the order of the above legends
     ax = subplot(3,3,aux_index);
@@ -86,11 +87,14 @@ for index = [7,8,9,4,5,6,1,2,3] % The indices match the order of the above legen
     totalLearnedSkills      = arrayfun(@(r) mean(cl_scenarios_results{index,r}.learnedSkillsStorage),1:numel(robotCollectivesSize));
     learnedSkillsPercentage = 100*totalLearnedSkills./theCollective.TotalSkills;
     
+% myVar(:,:,index) = [totalLearningEpisodes', learnedSkillsPercentage'];
+
     % Auxiliary code to color the line with a smooth color gradient corresponding to the success rate
     xx                       = 4:1:128;
     yy                       = interp1(robotCollectivesSize, totalLearningEpisodes, xx,"pchip");
     learnedSkillsPercentage2 = interp1(robotCollectivesSize, learnedSkillsPercentage, xx);
 
+myVar(:,:,index) = [yy', learnedSkillsPercentage2'];
 
     upperBound  =  12800*ones(size(xx))';
     upperBound  = upperBound(:);
@@ -160,6 +164,103 @@ end
 
 %%
 
+
+theMarkers = {"o","square","diamond","^","v",">","<","pentagram","hexagram"};
+
+alphaRange = linspace(0.5,1,125);
+clc
+theColors = distinguishable_colors(9);
+close all
+fig = figure('Color','w');
+ax = gca;
+hold on
+xlabel('Success rate','FontSize',11)
+ylabel('Total learning episodes','FontSize',11)
+p = [];
+for k=[7,8,9,4,5,6,1,2,3]
+    % scatter(myVar(:,2,k),myVar(:,1,k),50,'MarkerFaceColor',theColors(k,:),'MarkerEdgeColor','none','MarkerFaceAlpha','flat',AlphaData=alphaRange,Marker=theMarkers{k},LineWidth=0.1,AlphaDataMapping='none');
+    interval =2;
+    aux = scatter(myVar(1:interval:end,2,k),myVar(1:interval:end,1,k),10,'MarkerFaceColor',theColors(k,:),'MarkerEdgeColor','none','MarkerFaceAlpha','flat',AlphaData=alphaRange(1:interval:end),LineWidth=0.1,AlphaDataMapping='none');
+    p = [p,aux];
+    plot(myVar(:,2,k),myVar(:,1,k),'--','Color',theColors(k,:))
+    % gradx = gradient(myVar(:,2,k),1);
+    % grady = gradient(myVar(:,1,k),0.8);
+    % 
+    % theGrad = [gradx';grady'];
+    % theGradNorm = vecnorm(theGrad);
+    % % quiver(myVar(:,2,k),myVar(:,1,k), 5*(theGrad(1,:)./theGradNorm)', 5*(theGrad(2,:)./theGradNorm)', 'AutoScale', 'on', 'AutoScaleFactor', 0.1, 'Color', 'r', 'LineWidth', 1.5, 'MaxHeadSize', 0.01); 
+    % quiver(myVar(:,2,k),myVar(:,1,k), 5*(theGrad(1,:)./theGradNorm)', 5*(theGrad(2,:)./theGradNorm)', 1,'Color', 'r', 'LineWidth', 1.5, 'MaxHeadSize', 0.001); 
+    % for p=1:125
+    %     scatter(myVar(p,2,k),myVar(p,1,k),50,'MarkerFaceColor',theColors(k,:),'MarkerEdgeColor',theColors(k,:),'MarkerFaceAlpha',alphaRange(p),Marker=theMarkers{k},LineWidth=0.1);
+    % end
+end
+leg = legend(p,'Case 1','Case 2','Case 3','Case 4','Case 5','Case 6','Case 7','Case 8','Case 9');
+% set(gca,'XScale','log')
+set(gca,'YScale','log')
+yticks([1E0 1E1 1E2 1E3 1E4])
+fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 6, 1, 1)
+grid off
+% yticklabels({'','$\epsilon$', '', '1'})
+axis square
+box on
+%%
+% Define x and y
+x = linspace(0, 2*pi, 20);
+y = sin(x);
+
+% Compute the derivative y' = cos(x)
+dx = 1;                % dx can be normalized for visual consistency
+dy = cos(x);           % tangent vector is (dx, dy)
+
+% Normalize the vectors for consistent arrow lengths
+L = sqrt(dx.^2 + dy.^2);
+dxn = dx ./ L;
+dyn = dy ./ L;
+
+% Plot the sine curve
+plot(x, y, 'b', 'LineWidth', 1.5); 
+hold on;
+
+% Plot the quiver (tangent arrows)
+quiver(x, y, dxn, dyn, 0.3, 'r', 'LineWidth', 1.2); 
+% 0.3 is the scaling factor for arrow length
+
+xlabel('x');
+ylabel('y = sin(x)');
+title('Quiver Plot Showing Tangent Vectors to sin(x)');
+axis equal;
+grid on;
+%%
+close all
+
+% Example data: 10 random points
+x1 = rand(1, 10);
+y1 = rand(1, 10);
+
+% Simulate some change (e.g., due to a parameter update)
+dx = 0.1 * randn(1, 10);  % change in x
+dy = 0.1 * randn(1, 10);  % change in y
+
+x2 = x1 + dx;
+y2 = y1 + dy;
+
+% Plot initial points
+scatter(x1, y1, 50, 'b', 'filled'); 
+hold on;
+
+% Plot arrows showing movement (displacement)
+quiver(x1, y1, dx, dy, 0, 'r', 'LineWidth', 1.5); 
+% The 0 turns off automatic scaling of arrows
+
+% Optionally, plot final positions
+scatter(x2, y2, 50, 'g', 'filled');
+
+legend('Original', 'Movement', 'New');
+xlabel('X');
+ylabel('Y');
+title('Scatter Plot with Movement Arrows');
+axis equal;
+grid on;
 %% Create plot
 close all
 clc

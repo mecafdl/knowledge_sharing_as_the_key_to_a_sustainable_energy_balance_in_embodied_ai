@@ -93,6 +93,7 @@ classdef RobotCollective < handle
         TotalSkills                 = 512;
         TotalSkillClusters          = 4;
         UNEVEN_ROBOT_DISTRIBUTION   = boolean(1);
+        productSeed                 = 0;
     end
 
     methods
@@ -449,7 +450,7 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
             
             % Rand stream for the products
             productRandomNumberStream = RandStream.create('mlfg6331_64');
-            reset(productRandomNumberStream,0)
+            reset(productRandomNumberStream,obj.productSeed)
 
             for skillsBatch = 1:obj.NumberOfSkillBatches        
                 % Select skills for a given product and determine their
@@ -588,9 +589,9 @@ end
                     warning('All skilles learned')
                     % Copy the last complexity to fill the remaining
                     % products
-                    complexity_jk_CL_Distributed(j+1:end) = complexity_jk_CL_Distributed(j); 
-                    pause(3)
-                    break
+% complexity_jk_CL_Distributed(j+1:end) = complexity_jk_CL_Distributed(j); 
+% pause(3)
+% break
                 end
             end
               
