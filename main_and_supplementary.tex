@@ -33,6 +33,9 @@
 
 
 \usepackage{amsmath}
+\usepackage{booktabs} % Add this to your preamble
+\usepackage{adjustbox} % Already used
+\usepackage{array} % For better column formatting
 \usepackage{amssymb}
 \usepackage{cancel}
 \usepackage{dirtytalk}
@@ -57,6 +60,8 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\urlstyle{same}
 
 \usepackage{xr}
 
@@ -256,7 +261,9 @@
 
 % Place your abstract within the special {sciabstract} environment.
 \begin{sciabstract}
-	\textbf{Abstract:} The current learning paradigms in \ac{dai} are characterized by substantial energy consumption, primarily due to intensive computational processes and limited utilization of acquired knowledge. As \ac{ai} converges with robotics to form \ac{eai} systems, their energy demands are poised to escalate further because data acquisition and learning necessitate continuous interaction with the physical environment. This study delves into the core energy requirements of \ac{eai} systems and explores the energy-related challenges linked to maintaining existing learning paradigms. Consequently, we advocate for collective learning, a paradigm shift that promotes efficient learning in \ac{eai} agents by actively sharing, aggregating, and leveraging past and current knowledge across systems. This approach is pivotal for reducing energy consumption and expediting the acquisition of new skills.
+	\textbf{Abstract:}
+    % The current learning paradigms in \ac{dai} are characterized by substantial energy consumption, primarily due to intensive computational processes and limited utilization of acquired knowledge. As \ac{ai} converges with robotics to form \ac{eai} systems, their energy demands are poised to escalate further because data acquisition and learning necessitate continuous interaction with the physical environment. This study delves into the core energy requirements of \ac{eai} systems and explores the energy-related challenges linked to maintaining existing learning paradigms. Consequently, we advocate for collective learning, a paradigm shift that promotes efficient learning in \ac{eai} agents by actively sharing, aggregating, and leveraging past and current knowledge across systems. This approach is pivotal for reducing energy consumption and expediting the acquisition of new skills.
+As \ac{ai} becomes increasingly embodied in physical agents---robots, vehicles, drones---the energy demands of learning and adaptation rise sharply. Unlike disembodied \ac{ai}, which relies on computational training detached from physical action, \ac{eai} systems must interact continuously with the real world, incurring motion, interaction, and communication energy costs. In this work, we analyze the fundamental energy expenditures of \ac{eai} and identify the limitations of conventional learning paradigms---isolated, incremental, and transfer learning---in large-scale robotic deployments. We propose \ac{cl} as a scalable, energy-efficient alternative that leverages structured inter-agent knowledge sharing. We present a dynamical systems model of CL on a structured skill manifold and reveal nine canonical regimes of learning behavior, determined by intra-agent memory retention and inter-agent knowledge sharing. Our results demonstrate that CL dramatically reduces learning episodes and energy consumption---by a substantial margin compared to the closest conventional alternative---especially as the number of agents increases. Through simulation and a smart factory case study, we show that CL achieves superior skill acquisition while enabling zero-shot learning and minimal production downtime. These findings position \ac{cl} as a key enabler for sustainable, scalable, and adaptive \ac{ai} in robotics and beyond.    
 \end{sciabstract}
 
 %\textbf{One-Sentence Summary:} Embracing collective learning in (embodied) AI reduces energy consumption and accelerates skill acquisition by orders of magnitude.
@@ -293,9 +300,11 @@
 
 \Ac{ai}-powered technology, especially machine learning, is increasingly integrated into daily life. We anticipate a future with smart factories, \ac{ai}-enhanced healthcare services, and automated homes. Modern robots, equipped with advanced computing and communication capabilities, will become ubiquitous in industry, logistics, service, and healthcare. These robots will take advantage of \ac{ai} to acquire new skills and share knowledge between systems, integrate synergistically with various environments, and collaborate with humans on various tasks. However, this growing ubiquity of \ac{ai} and robotics also presents significant challenges, particularly with regard to their energy demands.
 
+% ===================================================================================================
+\paragraph*{The grand challenges in \ac{ai}}
 Rapid advancements driven by \ac{ai} applications come at a substantial energy cost. This constitutes the \underline{\ac{c1}}. Cutting-edge machine learning algorithms require immense computational power to process, analyze, and learn from vast datasets, often requiring numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and companies rely heavily on existing infrastructure or cloud computing services in data centers for these energy-intensive workloads during the learning and deployment phases. This has led to a clear spike in energy consumption in data centers and associated hardware such as GPUs. Training \ac{ai} models in data centers is estimated to consume about three times more energy than traditional cloud tasks, significantly straining resources \cite{Thomas2023cloudusesmassive}.
 
-Consider the latest breakthroughs in generative \ac{ai}, including large language models (LLMs), text-to-image, and text-to-video models. These models, with billions of parameters, require thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more \ac{ai} applications are developed, the demand for \ac{ai} infrastructure surges, leading to a substantial increase in GPU-based \ac{ai} server sales. This escalation directly translates into a parallel increase in data center energy consumption. Globally, data center energy consumption rose from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to the International Energy Agency\footnote{Data from the International Energy Agency, available at \url{[https://www.iea.org/reports/data-centres-and-data-transmission-networks](https://www.iea.org/reports/data-centres-and-data-transmission-networks)}}. This concerning trend is illustrated in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Left} panel).
+Consider the latest breakthroughs in generative \ac{ai}, including large language models (LLMs), text-to-image, and text-to-video models. These models, with billions of parameters, require thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more \ac{ai} applications are developed, the demand for \ac{ai} infrastructure surges, leading to a substantial increase in GPU-based \ac{ai} server sales. This escalation directly translates into a parallel increase in data center energy consumption. Globally, data center energy consumption rose from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to the International Energy Agency\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is illustrated in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Left} panel).
 
 The \underline{\ac{c2}}, the escalating energy demand of a potential robotic revolution, is amplified by the rise of Industry 4.0, the implementation of smart factories, and the expanding use of robots in service applications. This rapid proliferation has even been dubbed the ``Cambrian explosion'' of robotics \cite{Pratt2015Iscambrianexplosion}. Despite advances in robot technology that have improved energy efficiency, the focus remains predominantly on individual systems, often overlooking the aggregate impact of all active units.
 
@@ -303,7 +312,9 @@ During the past decade, the installed base of industrial robots has undergone a 
 
 The far-reaching influence of collaborative and even service robots mirrors the significance observed among their industrial counterparts. Collaborative robots (cobots), for instance, have undergone a paradigm shift, rising from a mere 6\% of the market in 2017 to accounting for approximately one-quarter of annual installations \cite{tobe2015}, as illustrated in Fig.~\ref{fig:industrial_cobot_share}. Drawing from analogous assumptions applied to industrial robots, Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Right} panel) depicts the projected growth trajectory of cobots and their associated energy consumption. Concurrently, the domain of service robots is experiencing an analogous surge. For example, estimates projected that the service robotics market would reach 56 billion euros by 2025 \cite{statista_service_robots}. These robots are used in various fields, including logistics, defense, public relations, and medical applications, aligning with the increasing trends observed among industrial and collaborative robots.
 
-The \underline{\ac{c3}}, often overlooked in the realm of \ac{ai}, is the energetic expenditure associated with the actual manufacture of the hardware required for \ac{ai} and robotics. This energy demand encompasses two primary facets. First, it involves the energy expenditure to procure materials for robot manufacturing and associated computational hardware (for example, processors, GPUs, and \ac{ai} servers). Second, it pertains to the intrinsic energy consumption of the manufacturing process itself. Given the direct correlation between energy demand and the number of \ac{ai}-powered robots produced, an exponential increase in the latter directly corresponds to the increase in the energy consumption for their production. Assessment and formulation of strategies to address this aspect are crucial. Although an immediate solution may not be evident and substantial energy savings in the procurement of raw materials may be impractical, significant potential lies in the recycling of electronic components of computer and robot hardware as a means of conserving energy\footnote{An example of such an endeavor is the international competition Robothon\textsuperscript{\textregistered} - The Grand Challenge, see \url{[https://automatica-munich.com/en/munich-i/robothon/](https://automatica-munich.com/en/munich-i/robothon/)}.}.
+The \underline{\ac{c3}}, often overlooked in the realm of \ac{ai}, is the energetic expenditure associated with the actual manufacture of the hardware required for \ac{ai} and robotics. This energy demand encompasses two primary facets. First, it involves the energy expenditure to procure materials for robot manufacturing and associated computational hardware (for example, processors, GPUs, and \ac{ai} servers). Second, it pertains to the intrinsic energy consumption of the manufacturing process itself. Given the direct correlation between energy demand and the number of \ac{ai}-powered robots produced, an exponential increase in the latter directly corresponds to the increase in the energy consumption for their production. Assessment and formulation of strategies to address this aspect are crucial. Although an immediate solution may not be evident and substantial energy savings in the procurement of raw materials may be impractical, significant potential lies in the recycling of electronic components of computer and robot hardware as a means of conserving energy \cite{Ude2025Recycling}.
+
+% \footnote{An example of such an endeavor is the international competition Robothon\textsuperscript{\textregistered} - The Grand Challenge, see \url{[https://automatica-munich.com/en/munich-i/robothon/](https://automatica-munich.com/en/munich-i/robothon/)}.}.
 
 % ---
 \begin{figure*}[t!]
@@ -323,7 +334,7 @@ We define \ac{dai} as methods and algorithms that tackle purely computational pr
 
 In \ac{dai} applications aimed at various tasks or systems, effective knowledge transfer depends on whether the learning approach is suitable and whether the model and training data adequately encapsulate the relevant information for the problem. However, when any of these elements are lacking, it may be essential to retrain, possibly even starting anew, resulting in energy-intensive learning procedures. Even if learning occurs only once, the ongoing deployment of the model can require significant energy due to the constant execution that is computationally intensive \cite{Vries2023growingenergyfootprint}. Thus, depending on the application, the energetic cost of learning and deployment in \ac{dai} can outweigh the benefits \cite{Strubell2019EnergyPolicyConsiderations}. This also applies to recent breakthroughs, such as transformer models for Natural Language Processing, whose results are accompanied by energetic challenges \cite{Cao2020TowardsAccurateReliable}.
 
-The evolution toward \ac{eai}, the integration of \ac{ai} and robotics \cite{Pfeifer2004Embodiedartificialintelligence}, further expands the spectrum of energy use. Unlike virtual environments, the real world cannot be faithfully replicated, despite considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}. Learning and deployment in \ac{eai} demand constant, energy-expending interaction with the physical environment for active data generation, as depicted in Fig.~\ref{fig:eai_and_dai_concept_figure}~\textbf{B}, facilitated by physical agents such as robots, vehicles, and drones. Mastering skills in the physical realm requires continuous and repeated execution, consuming energy for motion and interaction in each instance. Take, for example, autonomous driving, where vehicles function as rudimentary \ac{eai} agents in structured human-made environments. In addition to energy for autonomous movement, vehicles expend additional energy on motion to collect data necessary to retrain and improve the policy model. Another example is the usage of robots to automate a high percentage of chores in essentially limitless variations of household environments\cite{Lehdonvirta2022futuresunpaidwork}. Such robots will undergo constant retraining due to the subtle and changing dynamics of household environments.
+The evolution toward \ac{eai}, the integration of \ac{ai} and robotics \cite{Pfeifer2004Embodiedartificialintelligence}, further expands the spectrum of energy use. Unlike virtual environments, the real world cannot be faithfully replicated, despite considerable advances in sim-to-real applications \cite{Chebotar2019Closingsimreal}. Learning and deployment in \ac{eai} demand constant, energy-expending interaction with the physical environment for active data generation, as depicted in Fig.~\ref{fig:eai_and_dai_concept_figure}~\textbf{B}, facilitated by physical agents such as robots, vehicles, and drones. Mastering skills in the physical realm requires continuous and repeated execution, consuming energy for motion and interaction in each instance. Take, for example, autonomous driving, where vehicles function as rudimentary \ac{eai} agents in structured human-made environments. In addition to energy for autonomous movement, vehicles expend additional energy on motion to collect data necessary to retrain and improve the policy model. Another example is the usage of robots to automate a high percentage of chores in essentially limitless variations of household environments\cite{Lehdonvirta2022futuresunpaidwork}. Such robots will undergo constant retraining due to the subtle and changing dynamics of household environments. Consequetnly, the case of several \ac{eai} agents learning diverse skills in realistic environments around-the-clock directly influences the potential energy consumption of the skill acquisition process (an example of such case is discussed in \cite{Johannsmeier2025APM}).
 
 % ---
 \begin{figure*}[t!]
@@ -379,7 +390,7 @@ Nevertheless, these approaches do not target the hypothesized exponential learni
 %                                                 |                                                 |
 %                                                 |                                                 |
 % ===================================================================================================
-\section*{Results}\label{sec_use_case}
+\section*{Results}\label{sec:main_results}
 % ---
 \begin{figure*}[t!]
 	\centering
@@ -390,106 +401,253 @@ Nevertheless, these approaches do not target the hypothesized exponential learni
     	% \textbf{Collective learning dynamics over an unknown structured skill manifold.} 
     	% (\textbf{A}) \ac{eai} agents learn and share knowledge across a structured---however, inherently unknown---\textit{skill manifold}, where skills form clusters with intra- and inter-cluster similarity. (\textbf{B}) The skill remaining knowledge dynamics $\dot{\bar{\sigma}}^{(\mathrm{CL})}_j$. (\textbf{C}) Three canonical \ac{cl} regimes: \textit{Destructive}, learning inhibited by poor communication); \textit{Compensating}, weak agents supported by strong network; and \textit{Ideal}, synergistic learning across agents and network.
     	\textbf{Collective learning dynamics over an unknown structured skill manifold.} 
-    	(\textbf{A}) \ac{eai} agents learn and share knowledge across a structured---however, inherently unknown---\textit{skill manifold}. (\textbf{B}) The skill remaining knowledge dynamics $\dot{\bar{\sigma}}^{(\mathrm{CL})}_j$. (\textbf{C}) Three canonical \ac{cl} regimes: \textit{Destructive}, learning inhibited by poor communication); \textit{Compensating}, weak agents supported by strong network; and \textit{Ideal}, synergistic learning across agents and network.        
+    	(\textbf{A}) \ac{eai} agents learn and share knowledge across a structured---however, inherently unknown---skill manifold. (\textbf{B}) The skill remaining knowledge dynamics $\dot{\bar{\sigma}}^{(\mathrm{CL})}_j$. (\textbf{C}) Three canonical \ac{cl} regimes: \textit{Destructive}, learning inhibited by poor communication); \textit{Compensating}, weak agents supported by strong network; and \textit{Ideal}, synergistic learning across agents and network.        
     }
 \end{figure*}
 % ---
 
 % ===================================================================================================
 \paragraph*{\Acl{cl} of a universe of skills}
-Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization} presents a conceptual and quantitative illustration of the structure of a robot collective learning a distribution of skills and the associated knowledge dynamics governing \ac{cl} in \ac{eai} systems distributed over a structured skill space.
-
-The notion of a \textit{skill manifold} is shown in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A}, a continuous and structured latent space that represents the underlying knowledge structure of a population of skills. Individual skills group into \emph{skill clusters} (green patches) based on their shared similarity metrics. For example, insertion tasks (left) and processing tasks (right) may form two distinct but internally coherent clusters.
-
-The \ac{eai} agents navigate this manifold by learning and storing knowledge of the skills and exchanging it with peers, without knowing the structure. Solid black lines connecting skills denote \textit{intra-cluster similarity}, promoting efficient incremental accumulation of knowledge from similar skills, while dashed lines linking clusters indicate \textit{ intra-cluster similarity}, allowing more challenging but valuable cross-domain knowledge transfer, if performed successfully. Communication among agents and global knowledge storage allow concurrent knowledge accumulation, integration, and exchange of skills within and across clusters. %The strength of agent-level intra-cluster skill knowledge integration is quantified by the parameter $\eta$, while $\gamma$ captures the quality of inter-agent knowledge exchange. Additional factors such as $\alpha$ (agent's inherent learning capability), $\beta$ (inter-cluster spread), and $N_r$ (number of agents) influence the overall system dynamics.
-
-% The expression in Fig.\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B} formalizes the dynamics of the remaining knowledge about a skill learned by an \ac{eai} agent in a collective, denoted by $\dot{\bar{\sigma}}^{(\mathrm{CL})}_j$, through a set of interpretable components. The governing equation, introduced in Eq.\eqref{eq:collective_knowledge_dynamics}, exhibits dependencies on four main terms. The \emph{agent learning gain} captures the individual agent's ability to acquire knowledge about a skill and is parametrized by $\alpha$. The \emph{intra-cluster knowledge sharing gain} accounts for efficient knowledge propagation between related tasks within the same cluster, modulated by $\eta$. The \emph{inter-cluster similarity gain} reflects the transfer between groups based on structural similarities in the skill manifold, captured by the parameter $\beta$. Finally, the \emph{inter-agent transfer gain} models skill propagation between agents, governed by $\gamma$ and scaled by the number of agents $N_\mathrm{r}$. Together, these components determine whether the remaining knowledge about a skill decays---indicating successful learning---or grows, which signals corruption or forgetting, depending on the interplay of agent-level and collective learning dynamics.
-
-% The expression in Fig.\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B}---discussed in detail in Eq.\eqref{eq:collective_knowledge_dynamics} in \nameref{sec:methods}---formalizes the dynamics of the remaining knowledge about a skill $j$ learned by an \ac{eai} agent $i$ in a collective, denoted by $\dot{\bar{\sigma}}^{(\mathrm{CL})}_{i,j}$. This governing equation exhibits dependencies on four main terms that influence the overall dynamics of the system. The \emph{agent learning gain} $\alpha_i$ captures the inherent capacity of the agent $i$ to acquire knowledge about a skill. The \emph{intra-cluster knowledge sharing gain}  $\eta_i$ accounts for the efficient propagation of knowledge to skill $j$ that comes from the skills in the agent's memory belonging to the same cluster. Pairwise \emph{inter-cluster similarity gains}, contained in vector $\bm{\beta}_i$, weigh the transfer of knowledge from other clusters of skills to skill $j$ based on structural similarities in the skill manifold. Furthermore, each pairwise \emph{inter-agent transfer gain} $\gamma$ contained in matrix $\bm{\Gamma}$ models the concurrent propagation of knowledge from the different skills learned by the $N_\mathrm{r}$ agents in the collective. These parameters, together with the number $kappa_{i,k}$ of skills learned from each $k$ cluster that agent $i$ has in memory, determine whether the remaining knowledge about a skill decays, indicating successful learning, or grows, signaling corruption or forgetting, depending on the interplay of agent level and \ac{ cl} dynamics.
-
-
-The expression shown in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B}---and detailed in Eq.~\eqref{eq:collective_knowledge_dynamics} in \nameref{sec:methods}---describes the dynamics of the remaining knowledge $\dot{\bar{\sigma}}^{(\mathrm{CL})}_{i,j}$ about a skill $j$ learned by an \ac{eai} agent $i$ within a \ac{cl} system.
-
-This equation depends on four key terms that govern the system’s behavior:
-% ---
-\begin{itemize}
-    \item \textbf{Agent Learning Gain} ( $\alpha_i$): Represents the inherent ability of agent $i$ to acquire knowledge about skill $j$.
-    
-    \item \textbf{Intra-Cluster Knowledge Sharing Gain} ($\eta_i$): Quantifies how efficiently agent $i$ can reinforce skill $j$ through related skills in its memory that belong to the same cluster.
-    
-    \item \textbf{Inter-Cluster Similarity Gains} ($\bm{\beta}_i$): Encoded as a vector, these gains weigh the contribution of skills from other clusters to skill $j$, based on structural similarity within the skill manifold.
-    
-    \item \textbf{Inter-Agent Transfer Gains} ($\bm{\Gamma}$): The entries $\gamma$ in this matrix model the concurrent transfer of knowledge across the $N_\mathrm{r}$ agents in the collective, through pairwise interactions involving different skills.
-\end{itemize}
-% ---
-Additionally, the number of skills $\kappa_{i,k}$ from each cluster $k$  retained in agent $i$’s memory also influences the dynamics. Together, these parameters determine whether the residual knowledge about a skill decreases---indicating successful learning---or increases, which may signal knowledge corruption or forgetting, depending on both agent-level and collective learning dynamics.
-
-Let a skill-learning scenario be defined as the tuple
+In this work, our focus is not on the individual capabilities of \ac{eai} the agents nor on the various topologies and associated properties of their networked interactions. Rather, we address a deeply fundamental question: \emph{what if their learning paradigm enables inter-agent knowledge sharing?} We consider a skill-learning scenario defined as the tuple
 % ---
 \begin{equation*}
 	\phi = \left(N_\mathcal{S}, N_\mathcal{K}, N_\mathrm{r}, \bm{\rho} \right) \in \Phi,
 \end{equation*}
 % ---
-where $N_\mathcal{S}$ is the total number of skills to learn, $N_\mathcal{K}$ is the number of skill clusters, $N_\mathrm{r}$ is the number of \ac{eai} agents, i.e., the size of the collective, and $\Phi$ represents the set of all possible variable combinations. The parameter tuple $\bm{\rho} = \left(\bm{\alpha}, \bm{B}, \delta, \bm{\eta},\bm{\Gamma}\right)$ defines the knowledge exchange efficiency of the particular scenario, more details about these parameters are provided in \nameref{sec:methods}. Notice that the generality of $\Phi$ makes it representative of a variety of scenarios. It can very well be a smart factory setting where multiple robots learn different manufacturing tasks, a home crew of service robots learns different chores, or a fleet of underwater robots performs exploration, inspection, and maintenance routines. %\myhl{The different hypothetical scenarios posed by $\Phi$ allow contrasting the different learning paradigms regarding their associated energy demand (related to the \ac{cce}, \ac{bee}, and \ac{mie} expenditure categories).}
+where $N_\mathcal{S}$ is the total number of skills to learn, $N_\mathcal{K}$ is the number of skill clusters, $N_\mathrm{r}$ is the number of \ac{eai} agents, i.e., the size of the collective, and $\Phi$ represents the set of all possible viable combinations. The parameter tuple
+% ---
+\begin{equation*}
+	\bm{\rho} = \left(\bm{\alpha}, \bm{B}, \delta, \bm{\eta},\bm{\Gamma}\right),
+\end{equation*}
+% ---
+defines the knowledge exchange efficiency of the particular scenario; more details about these parameters are provided in \nameref{sec:methods}. Notice that the generality of $\Phi$ makes it representative of a variety of scenarios. It can very well be a smart factory setting where multiple robots learn different manufacturing tasks, a home crew of service robots learns different chores, or a fleet of underwater robots performs exploration, inspection, and maintenance routines.
 
-We first discuss a scenario in which each robot in the collective learns a different skill every time. In this ideal scenario, the goal is to learn $N_\mathcal{S}=512$ skills, segregated into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each, as fast as possible. This implies learning cycles in which the $N_\mathrm{r}$ robots learn a unique and distinct skill at the same time. A given skill, according to Eq.~\eqref{eq:simple_knowledge_dynamics}, is considered learned when the remaining knowledge $\bar{\sigma}$ falls below the threshold $\epsilon$. The fundamental complexity of each skill---the assumed maximum number of episodes to learn it---is $c_0 = 100$ episodes. Finally, for simplicity, the energetic cost of a learning episode is assumed to be constant and is represented by $ e_0 $. Consequently, the total energy expenditure to learn all skills is directly proportional to the total number of learning episodes. Details on the values of the elements in $\bm{\rho}$ are provided in \nameref{sec:supplementary_materials}.
+One example of a generic scenario $\phi$ is depicted in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}, which illustrates a group of robots learning a universe of skills and the associated knowledge dynamics governing \ac{cl} in \ac{eai} systems distributed over a structured skill space. The notion of a \textit{skill manifold} $\mathcal{S}$ is shown in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A}, a continuous and structured latent space that represents the underlying knowledge structure of a population of $N_\mathcal{S}$ skills. Individual skills group into $N_\mathcal{K}$ \emph{skill clusters} (green patches) based on their shared similarity metrics. For example, insertion tasks (left) and processing tasks (right) may form two distinct but internally coherent skill clusters.
 
-Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{C} illustrates three canonical operating regimes of a \ac{cl} system dependent on the mean values $(\bar{\eta}, \bar{\gamma})$. Each regime is visualized through: (i) a schematic of the agent-skill-manifold interaction, (ii) corresponding Gaussian distributions for $\eta$ and $\gamma$, and (iii) a performance plot showing the total learning episodes executed in an attempt to learn all the $ N_\mathcal{S} $ skills as a function of the collective size. The performance plots also include information on the success rate, that is, the percentage of skills actually learned.
+A robot \emph{collective}, namely, $N_\mathrm{r}$ \ac{eai} agents that navigate this skill manifold (the skill universe), learning and storing knowledge of the skills and exchanging it with peers; without knowing the structure. Solid black lines connecting skills denote \textit{intra-cluster similarity}, promoting efficient incremental accumulation of knowledge from similar skills, while dashed lines linking clusters indicate \textit{intra-cluster similarity}, allowing more challenging but valuable cross-domain knowledge transfer, if performed successfully. Communication among agents and global knowledge storage allow concurrent knowledge accumulation, integration, and exchange of skills within and across clusters. 
 
-In the \textbf{destructive regime}---dubbed the \emph{``Fake News Network''}---competent agents (\(\bar{\eta} > 0\)) are undermined by misleading or noisy collective interactions (\(\bar{\gamma} < 0\)). The collective behavior of the system amplifies the propagation of errors, resulting in a degradation of learning efficiency despite agent-level capabilities. %As shown in the learning frontier plot, performance plateaus with increasing agent count.
-~In the \textbf{compensating regime} (the \emph{``Network of Fools''}), agents exhibit negative learning dynamics (\(\bar{\eta} < 0\)), but a well-functioning collective with high $\bar{\gamma}$ counteracts this deficit. Collective robustness enables scalable improvement, with the number of learning episodes significantly decreasing with the size of the collective. Finally, in the \textbf{ideal regime}, \emph{``Network of Knowledge''}, both the agent and the collective components contribute positively (\(\bar{\eta} > 0, \bar{\gamma} > 0\)), leading to synergistic \acl{cl}. This regime achieves the steepest reduction in total learning episodes as more agents are added, exemplifying highly energy-efficient distributed skill acquisition.
+The expression shown in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B}---and detailed in Eq.~\eqref{eq:collective_knowledge_dynamics} in \nameref{sec:methods}---describes the dynamics of the remaining knowledge $\dot{\bar{\sigma}}^{(\mathrm{CL})}_{i,j}$ about a skill~$j$ learned by an \ac{eai} agent~$i$ within a \ac{cl} system. This equation depends on four key parameters that govern system behavior. The \textbf{agent learning gain} $\alpha_i \sim \mathcal{U}(\alpha_{\text{min}},\alpha_{\text{max}}) \in \mathbb{R}_+$ captures the inherent ability of agent~$i$ to acquire knowledge about skill~$j$ in isolation; the learning gains across all agents are collected in the vector~$\bm{\alpha}$, with the range $[\alpha_{\text{min}}, \alpha_{\text{max}}]$ assumed to be narrow (Asm.~\ref{assumption:agent_similarity}). The \textbf{intra-cluster knowledge sharing gain} $\eta_i \sim \mathcal{N}(\bar{\eta},\eta_{\Sigma})$ quantifies how effectively agent~$i$ can reinforce a skill~$j$ through memory of related skills in the same cluster; the vector~$\bm{\eta}$ aggregates these gains across agents and models the efficient reuse of experience, such as accessing stored subskills $\zeta_k$ to support composite skills $s_{j,k}$. The structural similarity within the skill manifold is captured in the \textbf{inter-cluster similarity matrix} $\bm{B} \in \mathbb{R}^{N_\mathcal{K} \times N_\mathcal{K}}$; a corresponding vector~$\bm{\beta}_{ij}$ weighs the contribution of skills from other clusters in the agent’s memory to the learning of a new skill~$j$. Finally, the \textbf{inter-agent transfer gains} $\gamma_{j,l} \sim \mathcal{N}(\bar{\gamma},\gamma_\Sigma)$, aggregated in the matrix~$\bm{\Gamma} \in \mathbb{R}^{N_\mathrm{r} \times N_\mathrm{r}}$, model the flow of knowledge between agents, accounting for embodiment differences, communication noise, and variation in prior experience. In addition to these four interaction terms, the model includes the parameter $\delta \in (0,\delta_{\text{max}}]$, which reflects the intrinsic intelligence of the system and controls the \textbf{exponential depletion rate} of initially available knowledge.
+
+In addition, the \textbf{number of learned skills}~$\kappa_{i,k}$ from each cluster~$k$ retained in agent~$i$’s memory also influences the dynamics. Collectively, these parameters determine whether the residual knowledge about a skill decreases---indicating successful learning---or increases, which may signal knowledge corruption or forgetting, depending on both individual and collective learning processes.
+
+% ===================================================================================================
+\paragraph*{Knowledge dynamics from different learning paradigms}
+Learning paradigms in \ac{eai} differ in how knowledge is shared across skills. In \ac{isl}, agents learn each skill from scratch without reusing prior knowledge. \Ac{il} enables skill acquisition by reusing knowledge from similar, previously learned intra-cluster skills, improving learning efficiency. \Ac{tl} introduces inter-cluster knowledge reuse, where prior knowledge from one or more origin clusters accelerates learning of skills in a destination cluster, governed by the \emph{transferable knowledge fractions} $\xi_k$ and $\bar{\xi}_k$ (which depend on the cluster similarity matrix $\bm{B}$). The combined use of \ac{il} and \ac{tl}, termed \ac{til}, leverages both intra- and inter-cluster generalization. Further details about these paradigms are provided in \nameref{sec:methods} and in the \nameref{sec:supplementary_materials} Sec.~\ref{sec:conventional_learning_paradigms}. \Ac{cl} goes beyond mere parallelization, enabling a collective of $N_\mathrm{r}$ robots to build a shared knowledge base through real-time communication, combining vertical transfer of prior knowledge and horizontal sharing of ongoing experiences.
+
+% % ---
+% \begin{table}[!t]
+% 	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
+% 	\begin{center}
+% 		\begin{adjustbox}{width=\textwidth}
+% 			\begin{tabular}{|l||*{4}{c|}}\hline
+% 				\textbf{Learning paradigm}
+% 				&\makebox[3em]{\textbf{\ac{isl}}}&\makebox[3em]{\textbf{\ac{il}}}&\makebox[3em]{\textbf{\ac{til}}}
+% 				&\makebox[3em]{\textbf{\ac{cl}}}\\\hline\hline
+% 				Learning rate  &$ -\alpha_i$ & $ -\alpha_i\left(\eta_i \kappa_{i,k} + 1 \right)$ & -$\alpha_i \left( \frac{\eta_i \kappa_{i,k} + 1}{1 - \xi_k} \right)$ & $  -\alpha_i \left( \frac{\eta_i \kappa_{i,k} + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)}\bar{\xi}_{j,l}\gamma_{j,l}d(\cdot)$ \\\hline
+% 				Initial condition &$1$ & $e^{-\delta \kappa_{i,k}}$ & $(1-\xi_k) e^{-\delta \kappa_{i,k}}$ & $(1-\xi_k) e^{-\delta \kappa_{i,k}} $ \\\hline
+% 			\end{tabular}
+% 		\end{adjustbox}
+% 	\end{center}	
+% \end{table}
+% % ---
+
+
+\begin{table}[!t]
+    \caption{Dynamics of the different learning paradigms.\label{tab:learning_paradigms_expressions}}
+    \begin{center}
+        \begin{adjustbox}{width=\textwidth}
+            % \begin{tabular}{
+            %     >{\raggedright\arraybackslash}p{4.5cm} 
+            %     *{4}{>{\centering\arraybackslash}p{3.5cm}}
+            % }
+            \begin{tabular}{
+                >{\raggedright\arraybackslash}p{3cm} 
+                *{3}{>{\centering\arraybackslash}p{3cm}}
+                *{1}{>{\centering\arraybackslash}p{6.5cm}}
+            }            
+                \toprule
+                \textbf{Learning Paradigm} 
+                & \textbf{\ac{isl}} 
+                & \textbf{\ac{il}} 
+                & \textbf{\ac{til}} 
+                & \textbf{\ac{cl}} \\
+                \midrule
+                Learning rate 
+                & $-\alpha_i$ 
+                & $-\alpha_i\:\left(\eta_i \kappa + 1 \right)$ 
+                & $-\alpha_i\:\left( \frac{\eta_i \kappa + 1}{1 - \xi_{i,j}(\cdot)} \right)$ 
+                & $-\alpha_i\:\left( \frac{\eta_i \kappa + 1}{1 - \xi_{i,j}(\cdot)} \right) - \sum_{l \in \mathcal{N}(j)}\bar{\xi}_{i,l}(\cdot)\gamma_{i,l}d(\cdot)$ \\
+                \addlinespace[0.5ex]
+                Initial condition 
+                & $1$ 
+                & $e^{-\delta \kappa}$ 
+                & $\left(1-\xi_{i,j}(\cdot)\right)\: e^{-\delta \kappa}$ 
+                & $\left(1-\xi_{i,j}(\cdot)\right)\: e^{-\delta \kappa}$ \\
+                \bottomrule
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+Equation~\eqref{eq:collective_knowledge_dynamics} encompasses the dynamics of the remaining knowledge for all these learning paradigms, where the expression in the left-hand-side is simplified according to  Table~\ref{tab:learning_paradigms_expressions}. 
+
+% In summary, the model parameters have the following interpretations:
+% % ---
+% \begin{enumerate}
+% 	\item The parameter $\alpha_i \sim \mathcal{U}(\alpha_{\text{min}},\alpha_{\text{max}}) \in \mathbb{R}_+$ accounts for different embodiments and models the \emph{base learning rate} at which a robot in isolation learns any given skill. According to Asm.~\ref{assumption:agent_similarity}, the range $[\alpha_{\text{min}},\alpha_{\text{max}}]$ is rather narrow.
+% 	\item The parameter $\delta \in (0,\delta_{\text{max}}]$ reflects the intrinsic intelligence of the system and controls the \emph{exponential depletion rate}  of the initial remaining knowledge.
+% 	\item The parameter $\eta_i \sim \mathcal{N}(\bar{\eta},\eta_{\Sigma})$ is the \emph{intra-cluster knowledge exchange factor}, it models the efficient use of experience (e.g. accessing memory) and represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$.
+% 	\item The parameter $\gamma_{j,l} \sim \mathcal{N}(\bar{\gamma},\gamma_\Sigma)$ is the \emph{inter-agent knowledge exchange factor}, it weighs the knowledge exchange between agents and accounts for different embodiments, false communication, and dissimilar knowledge.
+% %	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
+% \end{enumerate}
+ 
+% In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
+% % ---
+% \begin{equation}\label{eq:collective_knowledge_dynamics}
+% 	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
+% 		\overbrace{\left[-\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum\limits_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l} d(\bar{\sigma}_j,\bar{\sigma}_l)\right]}^{f(\cdot)} \bar{\sigma}^{(\text{CL})}_{j,k},
+% \end{equation}
+% % ---
+
+% \noindent for $\epsilon < \bar{\sigma}_{j,k} < 1$ and with initial conditions $\bar{\sigma}^{(\text{CL})}_{j,k}(0) = g_{j,k}\left(\kappa\right)$. Note that $\kappa$ represents the total number of successfully learned skills. Each gain $\gamma_{j,l} \in \mathbb{R} $ weighs the knowledge exchange strength among robots. Since robots may have in-memory skills from different clusters, the transferable knowledge fraction factor
+% % ---
+% \begin{equation} 
+% 	\bm{\xi} = [\xi_1 \cdots \xi_k \cdots \xi_{N_\mathcal{K}}]^\intercal = (\bm{B} - \bm{I}) \bm{\varsigma} ,
+% \end{equation}
+% % ---
+% with $\bm{\varsigma} \in \mathbb{R}^{N_\mathcal{K}}$; accounts for the one-time transfer of knowledge based upon the cluster similarity at the beginning of a learning cycle. Similarly, the term $ \bar{\xi}_{j,l} $ scales the concurrent---that is, during learning---sharing of knowledge coming from the skills currently being learned in different clusters. The functions
+% % ---
+% \begin{equation}\label{eq:f_function_collective}
+% 	f(\cdot) = -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)
+% \end{equation}
+
+% % --- 
+% \noindent and 
+% % ---
+% \begin{equation}%\label{eq:f_function_collective}
+% 	g(\cdot) = (1-\xi_k) e^{-\delta \kappa}
+% \end{equation}
+% % ---
+% \noindent are dependent on the number of successfully learned skills $ \kappa $ and the $N_\mathrm{r}$ knowledge-exchanging robots. Note that, after a learning cycle, ideally $\kappa= N_\mathrm{r} N_{\zeta_k}$; however, since some agents may fail to successfully learn a given skill, then $\kappa \leq N_\mathrm{r} N_{\zeta_k}$.
+
+% The \emph{knowledge integration function} 
+% % ---
+% \begin{equation}\label{eq:knowledge_integration_function}
+% 	d(\bar{\sigma}_j,\bar{\sigma}_l) = e^{-a\left(\bar{\sigma}_l-\bar{\sigma}_j\right)^2}\in [0,1],
+% \end{equation}
+% % --- 
+% \noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} accounts for the contribution of knowledge from other agents, weighing it according to the relevance (similarity) of the shared knowledge. 
+
+
+
+
+
+
+
+% In this work, our focus is not on the individual capabilities of the agents nor on the various topologies and associated properties of their networked interactions. Rather, we address a deeply fundamental question: \emph{what if the learning paradigm enables inter-agent knowledge sharing?} We consider a skill-learning scenario defined as the tuple
+% % ---
+% \begin{equation*}
+% 	\phi = \left(N_\mathcal{S}, N_\mathcal{K}, N_\mathrm{r}, \bm{\rho} \right) \in \Phi,
+% \end{equation*}
+% % ---
+% where $N_\mathcal{S}$ is the total number of skills to learn, $N_\mathcal{K}$ is the number of skill clusters, $N_\mathrm{r}$ is the number of \ac{eai} agents, i.e., the size of the collective, and $\Phi$ represents the set of all possible viable combinations. The parameter tuple
+% % ---
+% \begin{equation*}
+% 	\bm{\rho} = \left(\bm{\alpha}, \bm{B}, \delta, \bm{\eta},\bm{\Gamma}\right),
+% \end{equation*}
+% % ---
+% defines the knowledge exchange efficiency of the particular scenario, more details about these parameters are provided in \nameref{sec:methods}. Notice that the generality of $\Phi$ makes it representative of a variety of scenarios. It can very well be a smart factory setting where multiple robots learn different manufacturing tasks, a home crew of service robots learns different chores, or a fleet of underwater robots performs exploration, inspection, and maintenance routines. %\myhl{The different hypothetical scenarios posed by $\Phi$ allow contrasting the different learning paradigms regarding their associated energy demand (related to the \ac{cce}, \ac{bee}, and \ac{mie} expenditure categories).}
+
+% ===================================================================================================
+% \textcolor{blue}{To study the idealized dynamics of a \ac{cl} system, we first discuss a scenario in which each of the $N_\mathrm{r}$ \ac{eai} agents in the collective learns a different skill every learning cycle\footnote{A learning cycle encompasses all the learning episodes required to learn a given skill batch.}. In this idealized scenario, the collective learns $N_\mathcal{S}=512$ skills, segregated into $N_\mathcal{K}=4$ clusters of $N_\mathcal{Z} = 128$ skills each. A given skill, according to Eq.~\eqref{eq:simple_knowledge_dynamics}, is considered learned when the remaining knowledge $\bar{\sigma}$ falls below the threshold $\epsilon$. The fundamental complexity of each skill---the assumed maximum number of episodes to learn it---is $c_0 = 100$ episodes. Finally, for simplicity, the energetic cost of a learning episode is assumed to be constant and is represented by $ e_0 $. Consequently, the total energy expenditure to learn all skills is directly proportional to the total number of learning episodes. Details on the values of the elements in $\bm{\rho}$ are provided in \nameref{sec:supplementary_materials}.}
+
+% \paragraph*{Canonical \acl{cl} regimes}
+% \myhl{Recall that $\bar{\eta}$ quantifies the average quality of learning from previous knowledge at the level of individual agents; high $\bar{\eta}$ corresponds to consistent, robust knowledge accumulation within a robot; low $\bar{\eta}$ indicates erratic behavior or even knowledge degradation. Likewise, $\bar{\gamma}$ characterizes the integrity and effectiveness of the collective exchange of knowledge between agents. A high $\bar{\gamma}$ implies stable and constructive accumulation of shared knowledge, while a low $\bar{\gamma}$ may imply knowledge corruption or destruction, for example, due to noisy communication, concept drift, or misaligned objectives.}
+
+% \myhl{Based on the relevant possible combinations of the mean values $\bar{\eta}$ and $\bar{\gamma}$, and using and idealized scenario in which each of the $N_\mathrm{r}$ \ac{eai} agents in the collective learns a different skill every learning cycle\footnote{A learning cycle encompasses all the learning episodes required to learn a given skill batch.}, we discovered nine canonical regimes for a \ac{cl} system. \textbf{Those cases are summarized} in Table~\ref{tab:cl_regimes} and are shown in the performance plots in Fig.~\ref{fig:collective_learning_cases}. These nine rigmies can be }
+
+% Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{C} illustrates three canonical operating regimes of a \ac{cl} system dependent on the mean values $(\bar{\eta}, \bar{\gamma})$. Each regime is visualized through: (i) a schematic of the agent-skill-manifold interaction, (ii) corresponding Gaussian distributions for $\eta$ and $\gamma$, and (iii) a performance plot showing the total learning episodes executed in an attempt to learn all the $ N_\mathcal{S} $ skills as a function of the collective size. The performance plots also include information on the success rate, that is, the percentage of skills actually learned.
+
+% In the \textbf{destructive regime}---dubbed the \emph{``Fake News Network''}---competent agents (\(\bar{\eta} > 0\)) are undermined by misleading or noisy collective interactions (\(\bar{\gamma} < 0\)). The collective behavior of the system amplifies the propagation of errors, resulting in a degradation of learning efficiency despite agent-level capabilities. %As shown in the learning frontier plot, performance plateaus with increasing agent count.
+% ~In the \textbf{compensating regime} (the \emph{``Network of Fools''}), agents exhibit negative learning dynamics (\(\bar{\eta} < 0\)), but a well-functioning collective with high $\bar{\gamma}$ counteracts this deficit. Collective robustness enables scalable improvement, with the number of learning episodes significantly decreasing with the size of the collective. Finally, in the \textbf{ideal regime}, \emph{``Network of Knowledge''}, both the agent and the collective components contribute positively (\(\bar{\eta} > 0, \bar{\gamma} > 0\)), leading to synergistic \acl{cl}. This regime achieves the steepest reduction in total learning episodes as more agents are added, exemplifying highly energy-efficient distributed skill acquisition.
 
 % ---
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
-	\includegraphics[width=16cm]{collective_learning_cases.png}
+	\includegraphics[width=14cm]{collective_learning_cases_v1.png}
 	\hspace*{\fill}
-	\caption[] {\label{fig:collective_learning_cases} \textbf{Different regimes exhibited by a \acl{cl} system.} {Depending on the mean value of $ \eta $ and $ \gamma $, a robot collective will have different behavior and performance in terms of the total number of episodes required to learn all skills and the associated success rate (percentage of skills successfully learned). Four canonical regimes are discovered: (\textbf{A}) destructive, (\textbf{B}) canceling, (\textbf{C}) ideal, and (\textbf{D}) compensating network behavior.}}
+	% \caption[] {\label{fig:collective_learning_cases} \textbf{Different regimes exhibited by a \acl{cl} system.} {Depending on the mean value of $ \eta $ and $ \gamma $, a robot collective will have different behavior and performance in terms of the total number of episodes (correspondingly, energy) required to learn all skills and the associated success rate (percentage of skills successfully learned). Four canonical regimes are discovered: (\textbf{A}) destructive, (\textbf{B}) canceling, (\textbf{C}) ideal, and (\textbf{D}) compensating network behavior. (\textbf{E} The size of the collective impacts the total learning episodes and the success rate of the \ac{cl}.}}
+	\caption[] {\label{fig:collective_learning_cases} \textbf{Canonical regimes of a \acl{cl} system.} Robot collectives exhibit distinct behaviors depending on the mean values of $\eta$ and $\gamma$, affecting the total learning episodes (and thus energy) and success rate. Four principal regimes are identified: (\textbf{A}) destructive, (\textbf{B}) canceling, (\textbf{C}) ideal, and (\textbf{D}) compensating. (\textbf{E}) Collective size influences both learning efficiency and success.}
 \end{figure*}
 % ---
 
+% % ---
+% \begin{table}[t!]
+% 	\centering
+% 	\caption{\label{tab:cl_regimes} Regimes of a \ac{cl} system.}
+% 	\renewcommand{\arraystretch}{1.2}
+% 	\begin{tabular}[t]{|l| p{5cm}|}
+% 		\hline
+% 		\textbf{Case} & \textbf{Description}\\
+% 		\hline
+% 		Case 1 ($\bar{\eta} >0,~\bar{\gamma}<0$) & {Agent accumulates knowledge, collective destroys knowledge.} \\
+% 		\hline
+% 		Case 2 ($\bar{\eta} >0,~\bar{\gamma}=0$) & {Agent accumulates knowledge, collective corrupts knowledge.}\\
+% 		\hline
+% 		Case 3 ($\bar{\eta} >0,~\bar{\gamma}>0$) & {Agent and collective accumulate knowledge.}\\
+% 		\hline
+% 		Case 4 ($\bar{\eta} =0,~\bar{\gamma}<0$) & {Agent erratically accumulates knowledge, collective destroys knowledge.}\\
+% 		\hline
+% 		Case 5 ($\bar{\eta} =0,~\bar{\gamma}=0$) & {Agent and collective erratically accumulate knowledge.}\\
+% 		\hline
+% 		Case 6 ($\bar{\eta} =0,~\bar{\gamma}>0$) & {Agent erratically use previous knowledge and collective shares knowledge.}\\
+% 		\hline
+% 		Case 7 ($\bar{\eta} <0,~\bar{\gamma}<0$) & {Agent and collective destroy knowledge.}\\
+% 		\hline
+% 		Case 8 ($\bar{\eta} <0,~\bar{\gamma}=0$) & {Agent corrupts knowledge and collective erratically share knowledge.}\\
+% 		\hline
+% 		Case 9 ($\bar{\eta} <0,~\bar{\gamma}>0$) & {Agent destroys knowledge, collective accumulates knowledge (compensates).}\\
+% 		\hline	
+% 	\end{tabular}
+% 	\label{tab:caption}
+% \end{table}%
 % ---
-\begin{table}[t!]
-	\centering
-	\caption{\label{tab:cl_regimes} Regimes of a \ac{cl} system.}
-	\renewcommand{\arraystretch}{1.2}
-	\begin{tabular}[t]{|l| p{11cm}|}
-		\hline
-		\textbf{Case} & \textbf{Description}\\
-		\hline
-		Case 1 ($\bar{\eta} >0,~\bar{\gamma}<0$) & {Agent accumulates knowledge, collective destroys knowledge.} \\
-		\hline
-		Case 2 ($\bar{\eta} >0,~\bar{\gamma}=0$) & {Agent accumulates knowledge, collective corrupts knowledge.}\\
-		\hline
-		Case 3 ($\bar{\eta} >0,~\bar{\gamma}>0$) & {Agent and collective accumulate knowledge.}\\
-		\hline
-		Case 4 ($\bar{\eta} =0,~\bar{\gamma}<0$) & {Agent erratically accumulates knowledge, collective destroys knowledge.}\\
-		\hline
-		Case 5 ($\bar{\eta} =0,~\bar{\gamma}=0$) & {Agent and collective erratically accumulate knowledge.}\\
-		\hline
-		Case 6 ($\bar{\eta} =0,~\bar{\gamma}>0$) & {Agent erratically use previous knowledge and collective shares knowledge.}\\
-		\hline
-		Case 7 ($\bar{\eta} <0,~\bar{\gamma}<0$) & {Agent and collective destroy knowledge.}\\
-		\hline
-		Case 8 ($\bar{\eta} <0,~\bar{\gamma}=0$) & {Agent corrupts knowledge and collective erratically share knowledge.}\\
-		\hline
-		Case 9 ($\bar{\eta} <0,~\bar{\gamma}>0$) & {Agent destroys knowledge, collective accumulates knowledge (compensates).}\\
-		\hline	
-	\end{tabular}
-	\label{tab:caption}
-\end{table}%
-% ---
+% % ---
+% \begin{figure*}[t!]
+% 	\centering
+% 	\hspace*{\fill}
+% 	\includegraphics[width=0.95\textwidth]{fig/cases_point_plot.png}
+% 	\hspace*{\fill}
+% 	\caption[] {\label{fig:cases_point_plot} \textbf{Effect of the collective size on the learning energy and success.} The size of the collective impacts the success rate of the \ac{cl} system depending on the mean values ($\bar{\eta},\bar{\gamma}$) }
+% \end{figure*}
+% %---
+% In case 1, the agent accumulates knowledge, while the collective destroys it. Here, each agent benefits from prior knowledge stored locally, but communication with other agents introduces corruptions that degrade learning; as corrupted knowledge spreads, the overall success rate drops rapidly. In case 2, the agent again accumulates knowledge, but the collective merely corrupts it---competent agents are undermined by a noisy or unreliable network, possibly due to poor synchronization, stale updates, or adversarial sharing. Case 3 represents the ideal regime: both individual and collective learning processes are stable and mutually strengthening, enabling scalable, energy-efficient performance.
 
-It is worth examining more deeply the influence of the mean values $\bar{\eta}$ and $\bar{\gamma}$ on the behavior of a \ac{cl} system. Recall that $\bar{\eta}$ quantifies the average quality of learning from previous knowledge at the level of individual agents; high $\bar{\eta}$ corresponds to consistent, robust knowledge accumulation within a robot; low $\bar{\eta}$ indicates erratic behavior or even knowledge degradation. Likewise, $\bar{\gamma}$ characterizes the integrity and effectiveness of the collective exchange of knowledge between agents. A high $\bar{\gamma}$ implies stable and constructive accumulation of shared knowledge, while a low $\bar{\gamma}$ may imply knowledge corruption or destruction, for example, due to noisy communication, concept drift, or misaligned objectives. Based on the possible combinations of these key parameters, we discovered nine canonical regimes for a \ac{cl} system. Those cases are summarized in Table~\ref{tab:cl_regimes} and are shown in the performance plots in Fig.~\ref{fig:collective_learning_cases}.
+% In case 4, the agent's learning is erratic, and the collective exacerbates this instability, leading to inefficiencies or fragmented knowledge. Case 5 is similarly unstable, but some learning still occurs; such behavior may stem from partial observability, asynchronous updates, or sparse data, and may be stabilized through robust system design. In case 6, the agent intermittently leverages past knowledge while the collective supports learning, leading to successful outcomes at slightly higher complexity compared to Case 3.
 
-In case 1, the agent accumulates knowledge, while the collective destroys it. Here, each agent benefits from prior knowledge stored locally, but communication with other agents introduces corruptions that degrade learning; as corrupted knowledge spreads, the overall success rate drops rapidly. In case 2, the agent again accumulates knowledge, but the collective merely corrupts it---competent agents are undermined by a noisy or unreliable network, possibly due to poor synchronization, stale updates, or adversarial sharing. Case 3 represents the ideal regime: both individual and collective learning processes are stable and mutually strengthening, enabling scalable, energy-efficient performance.
+% The most adverse behavior arises in case 7, where both the agent and the collective destroy knowledge---an outcome that may result from catastrophic forgetting, model collapse, or uncoordinated behavior. In case 8, the agent corrupts knowledge while the collective shares it erratically; interestingly, a sufficiently large collective can still enable successful learning. Finally, Case 9 describes a compensatory regime where individual agents degrade, but the collective accumulates knowledge effectively, highlighting the potential of fault-tolerant, robust collective systems.
 
-In case 4, the agent's learning is erratic, and the collective exacerbates this instability, leading to inefficiencies or fragmented knowledge. Case 5 is similarly unstable, but some learning still occurs; such behavior may stem from partial observability, asynchronous updates, or sparse data, and may be stabilized through robust system design. In case 6, the agent intermittently leverages past knowledge while the collective supports learning, leading to successful outcomes at slightly higher complexity compared to Case 3.
+% These nine discovered regimes can be clustered into four principal regimes according to the impact on the success rate: Fig.~\ref{fig:collective_learning_cases}~\textbf{A} destructive network behavior (cases 1, 4, and 7), Fig.~\ref{fig:collective_learning_cases}~\textbf{B} canceling network behavior (cases 2 and 5), Fig.~\ref{fig:collective_learning_cases}~\textbf{C} ideal agent-collective behavior (cases 3 and 6), and Fig.~\ref{fig:collective_learning_cases}~\textbf{C} compensating network behavior (cases 8 and 9). Three of these cases have already been touched on. In the \textbf{canceling regime}, the mean values $\bar{\eta}$ and $\bar{\gamma}$ strike a balance that, while still ensuring successful learning of all skills, it still demands a larger number of learning episodes than the ideal regime, hence significantly more learning energy. In short, the performance plots in Fig.~\ref{fig:collective_learning_cases} provide insight into the energetic demands of the different \ac{cl} regimes, emphasizing that successful knowledge acquisition in \acl{cl} is more dependent on interconnectivity and successful knowledge sharing between agents. This is observed in cases 8 and 9, where even in the presence of meager individual learning capabilities, the size of the collective will lead to successful learning of the skills if the connectivity ensures stable knowledge sharing.
 
-The most adverse behavior arises in case 7, where both the agent and the collective destroy knowledge---an outcome that may result from catastrophic forgetting, model collapse, or uncoordinated behavior. In case 8, the agent corrupts knowledge while the collective shares it erratically; interestingly, a sufficiently large collective can still enable successful learning. Finally, Case 9 describes a compensatory regime where individual agents degrade, but the collective accumulates knowledge effectively, highlighting the potential of fault-tolerant, robust collective systems.
+% ===================================================================================================
+\paragraph*{Canonical \acl{cl} regimes}
+The \acl{cl} behavior of a system depends crucially on two key parameters: the mean intra-agent knowledge retention $\bar{\eta}$ and the mean inter-agent knowledge transfer gain $\bar{\gamma}$. Recall that the parameter $\bar{\eta}$ captures the average quality of learning from prior knowledge at the individual level. Thus, a high $\bar{\eta}$ implies robust and consistent knowledge accumulation within each robot, whereas a low $\bar{\eta}$ signals erratic internal learning or even degradation of stored knowledge. Conversely, $\bar{\gamma}$ characterizes the integrity and effectiveness of knowledge exchange across the agent network. A high $\bar{\gamma}$ enables constructive, reliable sharing of skills, while a low value reflects corruption due to issues like noisy communication, concept drift, or divergent objectives.
 
-These nine discovered regimes can be clustered into four principal regimes according to the impact on the success rate: Fig.~\ref{fig:collective_learning_cases}~\textbf{A} destructive network behavior (cases 1, 4, and 7), Fig.~\ref{fig:collective_learning_cases}~\textbf{B} canceling network behavior (cases 2 and 5), Fig.~\ref{fig:collective_learning_cases}~\textbf{C} ideal agent-collective behavior (cases 3 and 6), and Fig.~\ref{fig:collective_learning_cases}~\textbf{C} compensating network behavior (cases 8 and 9). Three of these cases have already been touched on. In the \textbf{canceling regime}, the mean values $\bar{\eta}$ and $\bar{\gamma}$ strike a balance that, while still ensuring successful learning of all skills, it still demands a larger number of learning episodes than the ideal regime, hence significantly more learning energy. In short, the performance plots in Fig.~\ref{fig:collective_learning_cases} provide insight into the energetic demands of the different \ac{cl} regimes, emphasizing that successful knowledge acquisition in \acl{cl} is more dependent on interconnectivity and successful knowledge sharing between agents. This is observed in cases 8 and 9, where even in the presence of meager individual learning capabilities, the size of the collective will lead to successful learning of the skills if the connectivity ensures stable knowledge sharing.
+% To analyze how these two factors shape system-level dynamics, we studied an idealized---the particulars of this scenario are provided in the \nameref{sec:supplementary_materials}---where each of the $N_\mathrm{r}$ \ac{eai} agents in the collective learns a different skill in every learning cycle.\footnote{A learning cycle encompasses all episodes required to learn a given skill batch.} Based on all possible combinations of $\bar{\eta}$ and $\bar{\gamma}$, we identified nine canonical \ac{cl} regimes---summarized in Table~\ref{tab:cl_regimes}---that can also be categorized into four principal regimes. Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{C} illustrates three of these principal regimes, each depicted through a schematic of agent-skill-manifold interaction, Gaussian distributions over $\eta$ and $\gamma$, and performance plots indicating the number of learning episodes required to acquire all $N_\mathcal{S}$ skills as a function of collective size. The energy expenditure of the learning process is related to the learning episodes. For simplicity, the energetic cost of a learning episode is assumed to be constant and is represented by $ e_0 $. Consequently, the total energy expenditure to learn all skills is directly proportional to the total number of learning episodes. These performance plots also show the success rate, defined as the percentage of skills successfully learned.
+
+To analyze how these two factors shape system-level dynamics, we studied an idealized scenario---the particulars of this scenario are provided in the \nameref{sec:supplementary_materials} Sec.~\ref{sec:results_supplementaries}---where each of the $N_\mathrm{r}$ \ac{eai} agents in the collective learns a different skill in every learning cycle.\footnote{A learning cycle encompasses all episodes required to learn a given skill batch.} Based on all possible combinations of $\bar{\eta}$ and $\bar{\gamma}$, we identified nine canonical \ac{cl} regimes that can also be categorized into four principal regimes. Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{C} illustrates three of these principal regimes, each depicted through a schematic of agent-skill-manifold interaction, Gaussian distributions over $\eta$ and $\gamma$, and performance plots indicating the number of learning episodes required to acquire all $N_\mathcal{S}$ skills as a function of collective size. It is worth mentioning that, since, for simplicity, the energetic cost $ e_0 $ of a learning episode is assumed to be constant, the total energy expenditure to learn all skills is directly proportional to the total number of learning episodes.
+
+In the \textbf{destructive regime}---referred to as the \emph{``Fake News Network''}---competent agents ($\bar{\eta} > 0$) are misled by faulty collective interactions ($\bar{\gamma} < 0$). Despite having robust internal learning, agents suffer from corrupt external knowledge that spreads rapidly, resulting in reduced system performance. In contrast, the \textbf{compensating regime}, labeled \emph{``Network of Fools''}, features agents with poor internal learning ($\bar{\eta} < 0$) supported by a strong and reliable collective ($\bar{\gamma} > 0$). This collective structure compensates for individual shortcomings, reducing the number of learning episodes with increasing collective size. The \textbf{ideal regime}, or \emph{``Network of Knowledge''}, emerges when both agent-level and network-level learning are stable and constructive ($\bar{\eta} > 0, \bar{\gamma} > 0$). Here, the system achieves maximal efficiency and minimal energy expenditure in distributed skill acquisition.
+
+Beyond these principal regimes, analysis of the individual canonical regimes provides further insight. As visualized in the performance plots of Fig.~\ref{fig:collective_learning_cases}, in \textbf{Case 1}, agents retain knowledge well, but collective communication is destructive. This leads to rapid decay in success rates due to corrupted knowledge propagation. \textbf{Case 2} is similar: agents learn effectively, but the network only partially degrades knowledge—failures may result from misaligned updates, stale messages, or adversarial sharing. \textbf{Case 3} represents the ideal, where both individual and collective learning reinforce each other, yielding scalable and efficient performance. 
+
+In \textbf{Case 4}, both the agents and the collective behave erratically, compounding instability. \textbf{Case 5} shows partial recovery from this: some learning occurs due to stochastic factors or sparse data, which might be stabilized via architectural or procedural improvements. \textbf{Case 6} features agents that intermittently reuse prior knowledge, supported by a cooperative collective—resulting in success, albeit at a higher complexity cost than in Case 3.
+
+\textbf{Case 7} presents the worst scenario, with both agents and the network actively destroying knowledge, possibly due to catastrophic forgetting, model collapse, or uncoordinated learning. In \textbf{Case 8}, agents corrupt knowledge individually, but the network offers some structure; with sufficient scale, even this erratic setting can yield learning. Finally, \textbf{Case 9} demonstrates that even when individual agents degrade knowledge, a robust collective can ensure successful learning through strong knowledge sharing.
+
+As already mentioned, we clustered the nine canonical regimes into four principal regimes, as shown in Fig.~\ref{fig:collective_learning_cases}: \textbf{(A)} destructive regimes (Cases 1, 4, 7), \textbf{(B)} canceling regimes (Cases 2, 5), \textbf{(C)} ideal regimes (Cases 3, 6), and \textbf{(D)} compensating regimes (Cases 8, 9). The \textbf{canceling regime} strikes a delicate balance: while all skills can still be learned, the required number of episodes is significantly higher than in the ideal case, implying a higher energy cost. Overall, the performance plots in Fig.~\ref{fig:collective_learning_cases} emphasize that system-wide success in \acl{cl} depends more on robust inter-agent connectivity and shared knowledge dynamics than on isolated learning capabilities. This is particularly evident in compensating cases (8 and 9), where large collectives overcome individual agent weaknesses through stable, redundant communication structures. To also highlight the influence that the size of the collective has in the different regimes, Fig.~\ref{fig:collective_learning_cases}~\textbf{(E)} shows the total learning episodes and the success rate, defined as the percentage of skills successfully learned, for all regimes. Depending of parameters ($\bar{\eta},\bar{\gamma}$) the size of the collective can bring the system from a successful learning state to an entire obliteration of the knowledge capability (as in Case 1), while in Cases 8 and 9, the growing size of the collective drives the system towards successful learning of the skill universe, in spite of the individual learning limitations.
+
 
 % ===================================================================================================
 \paragraph*{A smart factory case study}
@@ -499,7 +657,8 @@ These nine discovered regimes can be clustered into four principal regimes accor
 	\hspace*{\fill}
 	\includegraphics[width=16cm]{smart_factory_case_study.png}
 	\hspace*{\fill}
-	\caption[] {\label{fig:smart_factory_case_study} \textbf{Smart sensor manufacturing.} {(\textbf{A}) A factory manufactures a new smart sensor every shift. At downtime, a robot collective might need to learn a new set of skills to manufacture the new sensor. (\textbf{A}) The skills seen by the collective according to the number of products, (\textbf{C}) the learning episodes required to learn a product, and (\textbf{D}) the total learning energy required to master all skills.}}
+	\caption[] {\label{fig:smart_factory_case_study} \textbf{Smart sensor manufacturing.} {(\textbf{A}) A factory manufactures a new smart sensor every shift. At downtime, a robot collective might need to learn a new set of skills to manufacture the new sensor. (\textbf{A}) The skills seen by the collective according to the number of products, (\textbf{C}) the learning episodes required to learn a product, and (\textbf{D}) the total learning energy required to master all skills. %\TODO{Run more times to smooth the plot.}
+    }}
 \end{figure*}
 % ---
 
@@ -526,7 +685,7 @@ To assign a numerical value to $P_\text{BEE}$, and without loss of generality, w
 \end{equation}
 % ---
 
-Figure~\ref{fig:smart_factory_case_study}~\textbf{B} shows the learning progress in terms of the number of skills that have been seen as the number of products increases. Correspondingly, the number of episodes required to learn the batches of skills corresponding to different products is depicted in Fig.~\ref{fig:smart_factory_case_study}~\textbf{C}. It can be observed that, close to the 20 product mark, all other skills can be learned practically instantaneously (zero-shot learning). This means that the downtime associated with learning the skills for a product is negligible at this point. For comparison, similar plots for the conventional paradigms of \ac{isl}, \ac{il}, and \ac{til} are also provided (see \nameref{sec:methods} for more details). In these paradigms, there is no inter-agent knowledge exchange, which clearly impacts the number of learning episodes required. As expected, \ac{isl} exhibits the worst performance, always requiring $c_0$ episodes to learn every skill. \ac{il} shows improvement, but does not benefit from knowledge in other skill clusters. This is not the case in \ac{til}, as a robot can exploit the knowledge of the clusters it has visited. The speed of knowledge collection is exponentiated with \ac{cl}---reflected in the number of learning episodes---thanks to the exchange of knowledge among the $N_\mathrm{r}$ robots in the collective. Compared to the other learning paradigms, with \ac{cl}, a batch of skills (that is, a new product) is learned in a few episodes. This last fact is directly related to the energy required by the collective to learn all $N_\mathcal{S}$ skills. The bar plot in Fig.~\ref{fig:smart_factory_case_study}~\textbf{D} shows the energy required for each paradigm for all the learning episodes. \Acl{cl} uses only about 10\% of the energy required by its closest competitor, \acl{til}.
+Figure~\ref{fig:smart_factory_case_study}~\textbf{B} shows the learning progress in terms of the number of skills that have been seen as the number of products increases. Correspondingly, the number of episodes required to learn the batches of skills corresponding to different products is depicted in Fig.~\ref{fig:smart_factory_case_study}~\textbf{C}. It can be observed that, close to the 20 product mark, all other skills can be learned practically instantaneously (zero-shot learning). This means that the downtime associated with learning the skills for a product is negligible at this point. For comparison, similar plots for the conventional paradigms of \ac{isl}, \ac{il}, and \ac{til} are also provided (see \nameref{sec:methods} for more details). In these paradigms, there is no inter-agent knowledge exchange, which clearly impacts the number of learning episodes required. As expected, \ac{isl} exhibits the worst performance, always requiring $c_0$ episodes to learn every skill. \ac{il} shows improvement, but does not benefit from knowledge in other skill clusters. This is not the case in \ac{til}, as a robot can exploit the knowledge of the clusters it has visited. Finally, the speed of knowledge collection is exponentiated with \ac{cl}---reflected in the number of learning episodes---thanks to the exchange of knowledge among the $N_\mathrm{r}$ robots in the collective. Compared to the other learning paradigms, with \ac{cl}, a batch of skills (that is, a new product) is learned in a few episodes. This last fact is directly related to the energy required by the collective to learn all $N_\mathcal{S}$ skills. The bar plot in Fig.~\ref{fig:smart_factory_case_study}~\textbf{D} shows the energy required for each paradigm for all the learning episodes. \Acl{cl} uses only about 10\% of the energy required by its closest competitor, \acl{til}.
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -537,32 +696,35 @@ Figure~\ref{fig:smart_factory_case_study}~\textbf{B} shows the learning progress
 % ===================================================================================================
 \section*{Discussion}\label{sec:discussion}
 
+This work establishes a principled foundation for understanding and optimizing energy efficiency in \ac{eai} systems through the lens of \ac{cl}. We began by identifying three grand energy challenges posed by \ac{dai} and the growing population of robots: the escalating computational load, the increasing energy footprint of physical agents, and the manufacturing-related energy costs. We then introduced a formal framework for modeling energy expenditure in \ac{eai} agents and demonstrated that traditional learning paradigms---isolated, incremental, and transfer learning---fail to scale efficiently with system size. In contrast, \acl{cl}, characterized by structured intra- and inter-agent knowledge exchange, emerged as a paradigm capable of accelerating learning and significantly reducing energy demands. Through analytical modeling and simulation studies, we revealed nine canonical \ac{cl} regimes and identified four principal behaviors---destructive, canceling, ideal, and compensating---that capture the interplay between individual and collective learning dynamics. Our results show that \ac{cl} can reduce energy consumption by an order of magnitude compared to conventional paradigms, especially in realistic smart factory settings. These findings highlight \ac{cl} as a scalable, fault-tolerant, and energy-efficient approach, offering a compelling path forward for sustainable AI and robotics.
+
+% Despite the promise that \ac{cl} holds for energy efficient learning, some points remain
+
 % ===================================================================================================
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
 	\includegraphics[width=16cm]{learning_paradigms_and_size_of_collective.png}
 	\hspace*{\fill}
-	\caption[] {\label{fig:learning_paradigms_and_size_of_collective} \textbf{Effect of the collective size on the total learning episodes.} {(\textsc{A}) In the classical paradigms, each agent holds its own memory and can only access the subset of knowledge corresponding to the skills it has seen. The more agents, the less available knowledge per agent. (\textsc{B}) The plot shows that as a result of having more agents, the classical paradigms degrade the learning and converge to \acl{isl}. On the contrary, \acl{cl} exploits the number of robots, exponentiating the learning as a result.}}
+	\caption[] {\label{fig:learning_paradigms_and_size_of_collective} \textbf{Effect of the collective size on the total learning episodes.} {(\textbf{A}) In the classical paradigms, even when learning in parallel, each agent holds its own memory and can only access the subset of knowledge corresponding to the skills it has seen. This effectively splits the total knowledge. The more agents, the less available knowledge per agent. (\textbf{B}) The plot shows that as a result of having more agents, the classical paradigms degrade the learning and converge to \acl{isl}. On the contrary, \acl{cl} exploits the number of robots, exponentiating the learning as a result.}}
 \end{figure*}
 % ---
 
 % ===================================================================================================
 \paragraph*{Splitting knowledge vs. sharing knowledge}
-To assess how the number $N_\mathrm{r}$ of robots and the number of skills learned $\kappa$ affects the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills, we use the same parameters $\bm{\rho}$ as before but let the number of skills per batch be equal to the size of the collective.
+% The performance plots in Fig.~\ref{fig:collective_learning_cases} showed different \ac{cl} regimes for a variying size of the collective. To assess how the number $N_\mathrm{r}$ of \ac{eai} agents and the number of skills learned $\kappa$ affects the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills in the different learning paradigms, we use the same parameters $\phi$ disucssed in as before but let the number of skills per batch be equal to the size of the collective.
 
-The results are shown in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}. It can be seen that, initially, \ac{il} is better than the trivial \ac{isl} case; however, as the collective size increases, the skill knowledge is divided among the available robots, which implies that less knowledge can be passed as the pool of learned skills $\zeta_k$ per robot decreases, this is illustrated in  Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{A}. This explains why the total number of trial episodes for \ac{isl} and \ac{il} approach each other in the limit. With a growing collective size, \ac{til} exhibits a similar behavior. Less cluster knowledge can be collected by each robot and transferred to a target cluster. With a larger collective, \ac{til} rapidly converges to \ac{il} and eventually to \ac{isl}, see Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{B}. Unlike these conventional paradigms, in \ac{cl}, as the size of the collective robots grows, the total complexity keeps decreasing as a result of the knowledge exchange from all the robots learning skills from different clusters at the same time.
+The performance plots in Fig.~\ref{fig:collective_learning_cases} showed different \ac{cl} regimes for a varying size of the collective. It is also important to look at how the other discussed learning paradimgs behave based on the number $N_\mathrm{r}$ of \ac{eai} agents in the collective, which is directly related to the the total number of trial episodes $C_\mathcal{S}$ required to learn all the $N_\mathcal{S}$ skills, and, hence, to the learning energy expenditure via the constant $e_0$. The results of this analysis are shown in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}. The first immediate implication of the lack of knowledge sharing among agents is that the total knowledge is effectively partitioned among the agents in the collective. This is conceptually illustrated in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{A}, where four robots---identified in different colors for clarity---travel the skill manifold learning an equal number of skills in parallel. As the learning cycles progress, each agent holds in its memory a share of the total knowledge (depicted by the colored areas). It follows, that the more agents are in the collective, the more the total knowledge is partitioned among all the agents. This effect is shown in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{B}, where it can be seen that, initially, \ac{il} is better than the trivial \ac{isl} case; however, as the collective size increases, the skill knowledge is divided among the available robots, which implies that less knowledge can be passed as the pool of learned skills $\zeta_k$ per robot decreases. This explains why the total number of trial episodes for \ac{isl} and \ac{il} approach each other in the limit. With a growing collective size, \ac{til} exhibits a similar behavior. Less cluster knowledge can be collected by each robot and transferred to a target cluster. With a larger collective, \ac{til} rapidly converges to \ac{il} and eventually to \ac{isl}. Unlike these conventional paradigms, in \ac{cl}, as the size of the collective robots grows, the total complexity keeps decreasing as a result of the knowledge exchange from all the robots learning skills from different clusters at the same time.
 
 % ===================================================================================================
-\paragraph*{On the parameters of the collective system}
-Various factors can influence the dynamics that govern a \ac{cl} system, including false communication, communication breaches, updates to the learning rate, and the correctness of the information transferred. Each of these factors can alter the key parameters of the model, namely $\alpha$, $\eta$, and $\gamma)$, thereby affecting the overall behavior of the system. Although the effects of embodiment distribution are primarily addressed by Assumptions~\ref{assumption:average_behavior} and \ref{assumption:agent_similarity}---see \nameref{sec:methods}. Recall that the parameters, $\alpha_i$, account for how efficiently the agents are in learning a skill, mostly related to their embodiment. Yet, $\alpha$ does not hinder the learning, only makes it faster or slower. Determined by the skill similarity withing a cluster but ultimately reflected on the agent's learning, variations in $eta_i$ can hinder the learning asrefer to how good an a
+\paragraph*{On the regimes of \acl{cl} systems}
+% Various factors can influence the dynamics that govern a \ac{cl} system, including embodiment, false communication, communication breaches, updates to the learning rate, and the correctness of the information transferred. Each of these factors can alter the key parameters of the model, namely $\alpha$, $\eta$, and $\gamma)$, thereby affecting the overall behavior of the system. Although the effects of embodiment distribution are primarily addressed by Assumptions~\ref{assumption:average_behavior} and \ref{assumption:agent_similarity}---see \nameref{sec:methods}. Recall that the parameters, $\alpha_i$, account for how efficiently the agents are in learning a skill, mostly related to their embodiment. Yet, $\alpha_i$ does not hinder the learning, only makes it faster or slower. Strongly linked to the skill similarity within a cluster, but ultimately reflected on the agent's capacity to use the already acquired knowledge, variations in $eta_i$ can actually thwart the learning.  Despite these variations, the idealized collective effect persists, provided that the inter-agent exchange factor $\gamma$ is chosen sensibly to maintain the stability of the system. Indeed, one of the most important and intriguing findings is the identification of regimes in which \ac{cl} significantly  any conventional learning paradigms. Remarkably, this advantageous regime aligns with parameter ranges that are likely to arise in real-world scenarios, underscoring the relevance and promise of the collective knowledge-sharing paradigm.
 
 
+% Various factors can influence the dynamics that govern a \ac{cl} system, including differences in embodiment, communication errors, breaches in information exchange, updates to the learning rate, and the correctness of the information being transferred. Each of these factors can affect the key parameters of the model---namely, $\alpha$, $\eta$, and $\gamma$---thereby shaping the overall behavior of the system. The impact of embodiment distribution is addressed primarily by Assumptions~\ref{assumption:average_behavior} and \ref{assumption:agent_similarity} (see \nameref{sec:methods}). The parameter $\alpha_i$ captures how efficiently an agent can learn a skill, primarily reflecting its embodiment. Although differences in $\alpha$ influence the speed of learning, they do not prevent it from occurring. In contrast, $\eta$---which is closely related to skill similarity within a cluster and reflects an agent’s ability to reuse previously acquired knowledge---can directly hinder learning when its value is too low. Despite these potential variations, the \acl{cl} effect remains robust, provided that the inter-agent exchange factor $\gamma$ is chosen appropriately to ensure system stability; recall $\gamma$ accounts for the stable and efficient communication. Based on the values of these parameters, one of the most significant findings is the emergence of regimes in which \ac{cl} substantially outperforms conventional learning paradigms. In particular, these beneficial regimes correspond to parameter ranges that are likely to occur in real-world systems, reinforcing the practical relevance and promise of collective knowledge sharing.
 
-the inter-agent exchange factor $\gamma$ can also serve as a mechanism to capture such variations. 
 
-
-Despite these variations---primarily captured by $\alpha$---the idealized collective effect persists, provided that the inter-agent exchange factor $\gamma$ is chosen sensibly to maintain the stability of the system. Given these assumptions, one of the most important and intriguing findings is the identification of regimes in which \ac{cl} significantly outperforms conventional learning paradigms. Remarkably, this advantageous regime aligns with parameter ranges that are likely to arise in real-world scenarios, underscoring the relevance and promise of the collective knowledge-sharing paradigm.
+The dynamics of a \ac{cl} system are shaped by multiple interacting factors, including differences in embodiment, inaccuracies in communication, breaches in synchronization, updates to learning parameters, and the correctness of the information exchanged. These factors manifest through variations in the key model parameters: the agent learning rate $\alpha$, the intra-agent retention gain $\eta$, and the inter-agent exchange gains ${\gamma}$. As discussed in \nameref{sec:methods}, Assumptions~\ref{assumption:average_behavior} and~\ref{assumption:agent_similarity} constrain embodiment heterogeneity, which primarily influences $\alpha$, the rate at which an agent acquires new skills in isolation. While $\alpha$ affects the speed of learning, it does not qualitatively change whether learning succeeds or fails. In contrast, $\eta$ reflects an agent’s ability to reuse and reinforce previously acquired knowledge. Since it is sensitive to the similarity structure of skills within a cluster, a low $\eta$ can actively hinder the learning process, even in otherwise competent agents. Nevertheless, the system-level behavior remains robust if the inter-agent transfer parameter $\gamma$ is chosen appropriately to maintain the stability of knowledge sharing across the collective. One of the most compelling findings is the existence of regimes in which \ac{cl} outperforms conventional, isolated learning paradigms. These regimes---particularly the ideal and compensating ones---emerge within realistic parameter ranges and demonstrate how even weak or noisy agents can succeed collectively through effective knowledge integrations and sharing. This highlights the practical relevance and potential of \ac{cl} systems as scalable, fault-tolerant architectures for distributed intelligence.
 
 % ===================================================================================================
 \paragraph*{Developing collective learning to address the energy challenges of \ac{eai}}
@@ -584,7 +746,7 @@ To emphasize the importance of energy demands in \ac{ai} systems, we discussed t
 
 As discussed in \cite{Kaelbling2020foundationefficientrobot}, efficient robotic learning algorithms must exhibit several key attributes to enable agents to acquire new skills on the fly: sample efficiency, generalizability, compositionality, and incremental learning capabilities. The \acl{cl} paradigm inherently fulfills these requirements by leveraging the full communication potential of networked \ac{eai} agents. This approach supports real-time, concurrent knowledge exchange and aggregation, yielding both energy- and time-efficient skill acquisition.
 
-Our results show that relying on conventional paradigms--such as isolated, incremental, or transfer learning---for large numbers of \ac{eai} agents leads to suboptimal energy utilization. Even when agents operate concurrently, the absence of genuine inter-agent knowledge exchange causes energy demands to scale inefficiently with agent population size. In contrast, our simulation study shows that \ac{cl} provides a compelling solution, especially when skill similarity guides the exchange process. In particular, the \ac{ cl} paradigm achieved better performance as the number of robots increased, enabling concurrent learning of multiple skills with improved energy efficiency.
+Our results show that relying on conventional paradigms--such as isolated, incremental, or transfer learning, as is also the case for foundation models---for large numbers of \ac{eai} agents leads to suboptimal energy utilization. Even when agents operate concurrently, the absence of genuine inter-agent knowledge exchange causes energy demands to scale inefficiently with agent population size. In contrast, our simulation study shows that \ac{cl} provides a compelling solution, especially when skill similarity guides the exchange process. In particular, the \ac{cl} paradigm achieved better performance as the number of robots increased, enabling concurrent learning of multiple skills with improved energy efficiency.
 
 Although the promise of \ac{cl} is clear, it is important to acknowledge that the foundational algorithms and infrastructure required to realize this paradigm are either still in development or yet to be established. Even state-of-the-art approaches to incremental and transfer learning remain in the early stages. However, although our main focus has been on the energy efficiency of the \ac{eai} systems, the implications of \ac{cl} extend well beyond this domain.
 
@@ -604,7 +766,7 @@ In conclusion, the \acl{cl} approach holds the potential to address key challeng
 \section*{Methods}\label{sec:methods}
 
 % ===================================================================================================
-\paragraph*{Modeling the dynamics of skill knowledge}\label{sec:knowledge_dynamics_model}
+\paragraph*{Modeling skill knowledge acquisition dynamics}\label{sec:knowledge_dynamics_model}
 Understanding the energy and time demands represented by a team of $N_\mathrm{r}$ robots learning a skill universe $\mathcal{S}=\left\lbrace s_1,s_2,\ldots s_j,\ldots, s_{N_\mathcal{S}}\right\rbrace$, with $|\mathcal{S}| = N_\mathcal{S}$, requires analizing how skill knowledge is gained and what effect it may have on the acquisition of any new skill knowledge. 
 
 To start, we refer to the \emph{complexity} $c_j$ of skill $ s_j $ as the number of trial episodes $n$ required to successfully learn it, namely, all actions and states visited by an \ac{eai} agent until a predefined stopping criterion is reached. Additionally,
@@ -615,28 +777,29 @@ To start, we refer to the \emph{complexity} $c_j$ of skill $ s_j $ as the number
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent As a consequence of Asm.~\ref{assumption:power_and_episode_time}, and according to Eqs.~\eqref{eq:energy_per_episode},\eqref{eq:energy_per_skill}, and \eqref{eq:total_energy} in Sec.~\ref{sec:power_per_episode}, the energy demand of an \ac{eai} agent learning a skill (or set of skills) is directly proportional to the skill(s) complexity.
+\noindent As a consequence of Asm.~\ref{assumption:power_and_episode_time}, and according to Eqs.~\eqref{eq:energy_per_episode},\eqref{eq:energy_per_skill}, and \eqref{eq:total_energy} in Sec.~\ref{sec:power_per_episode}, the energy demand of an \ac{eai} agent learning a skill (or set of skills) is in first-order directly proportional to the skill(s) complexity.
 
 % ===================================================================================================
 %\paragraph*{Similarity and knowledge}
-Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highly similar skills; that is, a \emph{cluster} of similar skills, see Fig.~\ref{fig:skill_similarity}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes the skills from $\mathcal{Z}_k$ that a given agent has already learned. Furthermore,  
+Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highly similar skills; that is, a \emph{cluster} of similar skills, see Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A} and  Fig.~\ref{fig:skill_similarity}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes the skills from $\mathcal{Z}_k$ that a given agent $i$ has already learned. Furthermore,  
 %---
 \begin{tcolorbox}
-	\begin{assumption}\label{assumption:skill_clustering} if the similarity among a set of skills is significant, exchanging acquired knowledge from these skills expedites the overall learning process.
+	\begin{assumption}\label{assumption:skill_clustering} the effect of a significant similarity among a set of skills is characterized by the acceleration of the overall learning process due to exchange of acquired knowledge from these skills.
 	\end{assumption}
 \end{tcolorbox}
 % ---
-\noindent This implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. Consequently, the more skills in $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ remains to be learned. To model this effect, we introduce the remaining knowledge function $\bar{\sigma}_{j,k}\left(n\right)\in [0,1]$ expressing the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k \setminus \mathcal{\zeta}_k$ that \emph{is not} contained in the knowledge base of $\mathcal{\zeta}_k$. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies
+% \noindent This implies that the $j$-th skill in the $k$-th cluster $s_{j,k} \in \mathcal{Z}_k$ can always benefit from the knowledge contained in $\mathcal{\zeta}_k$. Consequently, the more skills in $\mathcal{\zeta}_k$, the less knowledge about $ s_{j,k} $ remains to be learned. To model this effect, we introduce the remaining knowledge function $\bar{\sigma}_{j,k}\left(n\right)\in [0,1]$ expressing the knowledge about a skill $s_{j,k} \in \mathcal{Z}_k \setminus \mathcal{\zeta}_k$ that \emph{is not} contained in the knowledge base of $\mathcal{\zeta}_k$. The function $\bar{\sigma}_{j,k}(\cdot)$ satisfies
+\noindent This implies that if $s_{j} \in \mathcal{Z}_k$, then agent $i$ can improve the learning of the skill benefiting from the knowledge contained in $\mathcal{\zeta}_k$. Consequently, the more skills in $\mathcal{\zeta}_k$, the less knowledge about $ s_{j} $ remains to be learned. To model this effect, we introduce the remaining knowledge function $\bar{\sigma}_{i,j}\left(n\right)\in [0,1]$ expressing the knowledge about a skill $s_{j} \in \mathcal{Z}_k \setminus \mathcal{\zeta}_k$ that \emph{is not} contained in the knowledge base $\mathcal{\zeta}_k$. The function $\bar{\sigma}_{i,j}(\cdot)$ satisfies
 % ---
 \begin{equation}\label{eq:sigma_bar_conditions}
-	\bar{\sigma}_{j,k}\left(n\right) = 
+	\bar{\sigma}_{i,j}\left(n\right) = 
 	\begin{cases}
 		1 & \text{$\mathcal{\zeta}_k=\emptyset$},\\
-		0 &\text{$\mathcal{\zeta}_k$ has \emph{all} knowledge of $s_{j,k}$}.
+		0 &\text{$\mathcal{\zeta}_k$ has \emph{all} knowledge of $s_{j}$}.
 	\end{cases}
 \end{equation}
 % ---
-Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.
+Conceptually, $\bar{\sigma}_ {i,j}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.
 % ---
 \begin{figure*}[!t]
 	\centering
@@ -651,27 +814,27 @@ Conceptually, $\bar{\sigma}_ {j,k}\left(\cdot\right)$ is the fraction of knowled
 		\includegraphics[width=\textwidth]{remaining_knowledge_dynamics_idealization.png} \label{fig:knowledge_idealization}
 	\end{subfigure}
 	\hspace*{\fill}
-	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Skills in $\mathcal{S}$ inherently group into clusters $\mathcal{Z}_k$ based on their similarity, (\subref{fig:knowledge_idealization}) the remaining knowledge $\bar{\sigma}_{j,k}$ to learn a new skill $s_{j,k}$ has strictly monotonically decreasing behavior.}	
+	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Skills in $\mathcal{S}$ inherently group into clusters $\mathcal{Z}_k$ based on their similarity, (\subref{fig:knowledge_idealization}) the remaining knowledge $\bar{\sigma}_{i,j}$ to learn a new skill $s_{j}$ has strictly monotonically decreasing behavior.}	
 \end{figure*}
 % ---
 
-To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce a hypothetical upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j,k} $, an \ac{eai} agent can access and use the knowledge contained in $\mathcal{\zeta}_k$, then two effects take place:
+To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce a hypothetical upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j} $, the $i$-th \ac{eai} agent accesses and uses its knowledge contained in $\mathcal{\zeta}_k$, then two effects occur:
 % ---
 \begin{enumerate}
-	\item There is less remaining knowledge, reflected in the initial value; i.e., $\bar{\sigma}_{j,k}(0) < 1$
+	\item There is less remaining knowledge, reflected in the initial value; i.e., $\bar{\sigma}_{i,j}(0) < 1$
 	\item The knowledge acquisition rate increases. Equivalently, this may also be interpreted as an increase in the depletion rate of the remaining knowledge.
 \end{enumerate}
 % ---
-These effects signify that the remaining knowledge scales down as a function of the number $N_{\zeta_k}=|\mathcal{\zeta}_k|$ of skills an agent has already learned. Consequently, the complexity $c_{j,k}$ of said skill is smaller than the fundamental complexity $c_0$. Additionally, without loss of generality, under knowledge exchange, we can consider that
+These effects signify that the remaining knowledge scales down as a function of the number $N_{\zeta_k}=|\mathcal{\zeta}_k|$ of skills an agent has already learned. Consequently, the complexity $c_{j}$ of said skill is smaller than the fundamental complexity $c_0$. Additionally, without loss of generality, under knowledge exchange, we can consider that
 % ---
 \begin{tcolorbox}
-	\begin{assumption}\label{assumption:exponential_decrease} the remaining knowledge function $\bar{\sigma}_{j,k}(\cdot)$ has stritctly monotonically decreasing behavior.
+	\begin{assumption}\label{assumption:exponential_decrease} the remaining knowledge function $\bar{\sigma}_{i,j}(\cdot)$ has stritctly monotonically decreasing behavior.
 	\end{assumption}
 \end{tcolorbox} 
 % ---
 \noindent An idealization of the behavior satisfying Asm.~\ref{assumption:exponential_decrease} and Eq.~\eqref{eq:sigma_bar_conditions} can be modeled by a dynamical system depending on the trial episodes $n$ and parameterized by the number of already learned skills $N_{\zeta_k}$. As such,
 % ---
-\begin{definition}\label{assumption:ode_model} the remaining knowledge function $\bar{\sigma}_{j,k}$ is modeled as the first order dynamical system
+\begin{definition}\label{assumption:ode_model} the remaining knowledge function $\bar{\sigma}_{i,j}$ is modeled as the first order dynamical system
 %	\begin{subequations}\label{eq:simple_knowledge_dynamics}
 %		\begin{empheq}[left=\empheqlbrace]{align}
 %			\dot{\bar{\sigma}}_{j,k}\left(n\right) &  = -f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right),\\
@@ -679,25 +842,25 @@ These effects signify that the remaining knowledge scales down as a function of 
 %		\end{empheq}
 %	\end{subequations}
 	\begin{equation}\label{eq:simple_knowledge_dynamics}
-		\dot{\bar{\sigma}}_{j,k}\left(n\right)=\begin{cases}
-			-f_{j,k} \left(N_{\zeta_k} \right) \bar{\sigma}_{j,k}\left(n\right), & \epsilon < \bar{\sigma}_{j,k}\left(n\right) < 1, \\
+		\dot{\bar{\sigma}}_{i,j}\left(n\right)=\begin{cases}
+			-f_{i,j} \left(N_{\zeta_k} \right) \bar{\sigma}_{i,j}\left(n\right), & \epsilon < \bar{\sigma}_{i,j}\left(n\right) < 1, \\
 			0, & \text{otherwise}.
 		\end{cases}
 	\end{equation}	
 \end{definition}
 % * NOTE: the subindex j,k means skill j in cluster k
 % ---
-\noindent Considering its initial condition as $\bar{\sigma}_{j,k}(0) =  g_{j,k} \left(N_{\zeta_k}\right)$, the corresponding solution
+\noindent Considering its initial condition as $\bar{\sigma}_{i,j}(0) =  g_{i,j} \left(N_{\zeta_k}\right)$, the corresponding solution
 % ---
 \begin{equation}\label{eq:knowledge_exponential_form}
-	\bar{\sigma}_{j,k}(n) = g_{j,k}(N_{\zeta_k}) e ^{-f_{j,k}\left(N_{\zeta_k}\right) n} \in (0,1],
+	\bar{\sigma}_{i,j}(n) = g_{i,j}(N_{\zeta_k}) e ^{-f_{i,j}\left(N_{\zeta_k}\right) n} \in (0,1],
 \end{equation}
 % ---
-exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{j,k}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, namely, the reduction in the initial remaining knowledge $\bar{\sigma}_{j,k}(0)$ is controlled by the term $g_{j,k}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$---depicted as the green-shaded area in Fig.~\ref{fig:knowledge_idealization}---indicates when the remaining knowledge is negligible and $s_{j,k}$ is considered to have been learned.
+exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{i,j}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, namely, the reduction in the initial remaining knowledge $\bar{\sigma}_{i,j}(0)$ is controlled by the term $g_{i,j}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$---depicted as the green-shaded area in Fig.~\ref{fig:knowledge_idealization}---indicates when the remaining knowledge is negligible and $s_{j}$ is considered to have been learned.
 
-% ===================================================================================================
-\paragraph*{Knowledge sharing under different learning paradigms}
-We consider an idealized reference system in which many robots coexist, learning numerous skills. Such system exhibits
+% % ===================================================================================================
+% \paragraph*{Knowledge sharing under different learning paradigms}
+In the remainder of our discussion, we consider an idealized reference system in which many robots coexist, learning numerous skills. Such system exhibits
 % ---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:average_behavior}
@@ -761,7 +924,7 @@ We consider an idealized reference system in which many robots coexist, learning
 % ---
 
 % ===================================================================================================
-%\paragraph*{Conventional learning paradigms} 
+\paragraph*{Knowledge sharing under different learning paradigms}
 When an \ac{eai} agent learns in isolation---that is, performs \ac{isl}---it learns every skill from the ground up, disregarding knowledge from already learned skills. In contrast, during \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-learning loops---but also retains the acquired knowledge in its local memory and uses it to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a distant set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the target cluster through \emph{transferable knowledge fraction factor} $\xi_k \in [0,1)$. The latter results from aggregating the available knowledge $\varsigma^{(k)}$ that an agent has in memory about each of the $N_\mathcal{K}$ clusters weighted by the \emph{cluster similarity matrix}
 % ---
 \begin{equation}\label{eq:cluster_similarity_matrix}
@@ -771,7 +934,7 @@ When an \ac{eai} agent learns in isolation---that is, performs \ac{isl}---it lea
 	\end{cases}
 \end{equation}
 % ---
-Here, $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the different clusters (recall the dashed lines in the \textsc{Top} panel of Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}). In general, \ac{il} and \ac{tl} are ideally combined; as such, we consider \ac{til} as the third learning paradigm. A complementary discussion about the effects of these paradigms on the skill complexity is provided in the \nameref{sec:supplementary_materials}.
+Here, $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the different clusters (recall the dashed lines in  Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A}). In general, \ac{il} and \ac{tl} are ideally combined; as such, we consider \ac{til} as the third learning paradigm. A complementary discussion about the effects of these paradigms on the skill complexity is provided in the \nameref{sec:supplementary_materials}.
 
 % In general, \ac{il} and \ac{tl} can always be combined; as such, we consider \ac{til} as the third learning paradigm. A complementary discussion on the effects that these paradigms have on the skill complexity is provided in Sec.~\ref{sec:materials_and_methods} of the \nameref{sec:supplementary_materials}.
 
@@ -779,7 +942,8 @@ Here, $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the di
 \paragraph*{\textbf{\Acl{cl}}}
 This paradigm goes far beyond simple parallelization, understood as learning different skills with different robots at the same time. In \ac{cl} $N_\mathrm{r}$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{N_\mathrm{r}} $ develop and accumulate an emerging common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on, automatically improving knowledge gaps in the skill tree, and horizontally by sharing concurrent experience between agents, to accelerate skill acquisition ``in action''. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable \ac{cl} from a technical standpoint, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allow agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the \ac{cl} paradigm. 
 
-Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a \acl{cl} system (see Fig.~\ref{fig:collective_learning_system}). Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work, we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills in different clusters $j$ and $l$, then $\gamma_{j,l}$ is scaled down by the cluster similarity $\beta_{j,l}$. 
+Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a \acl{cl}.~% system (see Fig.~\ref{fig:collective_learning_system}).
+Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work, we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills in different clusters $j$ and $l$, then $\gamma_{j,l}$ is scaled down by the cluster similarity $\beta_{j,l}$. 
 
 In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
 % ---
@@ -793,49 +957,54 @@ In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by a
 
 % ---
 \begin{equation}\label{eq:collective_knowledge_dynamics}
-	\dot{\bar{\sigma}}^{(\text{CL})}_{j,k} =
-		\overbrace{\left[-\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum\limits_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l} d(\bar{\sigma}_j,\bar{\sigma}_l)\right]}^{f(\cdot)} \bar{\sigma}^{(\text{CL})}_{j,k},
+	\dot{\bar{\sigma}}^{(\text{CL})}_{i,j} =
+		\overbrace{\left[-\alpha_i\:\left( \frac{\eta_i \kappa + 1}{1 - \xi_{i,j}(\bm{B},\bm{\varsigma}_i)} \right)  - \sum\limits_{l \in \mathcal{N}(j)} \bar{\xi}_{i,l}(\bm{B},\bm{v}) \gamma_{i,l} d(\bar{\sigma}_{i,j},\bar{\sigma}_{l,\cdot})\right]}^{\textbf{learning rate}} \bar{\sigma}^{(\text{CL})}_{i,j},
 \end{equation}
 % ---
+\noindent for $\epsilon < \bar{\sigma}_{i,j} < 1$ and with \textbf{initial condition} $\bar{\sigma}^{(\text{CL})}_{i,j}(0) = g_{i,j}\left(\kappa\right)$. Note that $\kappa$ represents the total number of successfully learned skills. Without knowledge sharing, $\kappa= N_{\zeta_k}$, with $N_{\zeta_k}$ being the number of skills already learned in the cluster of skill $s_j$. In \ac{cl}, ideally $\kappa$ is equal to all the skills learned by the robots in the collective up to the current learning cycle. However, it is possible that some agents may fail to successfully learn a given skill.
 
-\noindent for $\epsilon < \bar{\sigma}_{j,k} < 1$ and with initial conditions $\bar{\sigma}^{(\text{CL})}_{j,k}(0) = g_{j,k}\left(\kappa\right)$. Note that $\kappa$ represents the total number of successfully learned skills. Each gain $\gamma_{j,l} \in \mathbb{R} $ weighs the knowledge exchange strength among robots. Since robots may have in-memory skills from different clusters, the transferable knowledge fraction factor
-%% ---
-%\begin{equation}
-%	\beta_{k} = \frac{ rN_{\zeta_k}}{N_\mathcal{S}}, 
-%\end{equation}
-%% ---
-
+Each gain $\gamma_{i,l} \in \mathbb{R} $ weighs the knowledge exchange strength among robots. Since robots may have in-memory skills from different clusters, the transferable knowledge fraction factor is given by
 % ---
-\begin{equation} 
-	\bm{\xi} = [\xi_1 \cdots \xi_k \cdots \xi_{N_\mathcal{K}}]^\intercal = (\bm{B} - \bm{I}) \bm{\varsigma} ,
+\begin{equation}\label{eq:scaled_transferable_knowledge_fraction}
+	{\xi}_{i,j} = \mathbb{1}^\intercal_j\:(\bm{B} - \bm{I})\:\bm{\varsigma}_i ,
 \end{equation}
 % ---
-with $\bm{\varsigma} \in \mathbb{R}^{N_\mathcal{K}}$; accounts for the one-time transfer of knowledge based upon the cluster similarity at the beginning of a learning cycle. Similarly, the term $ \bar{\xi}_{j,l} $ scales the concurrent---that is, during learning---sharing of knowledge coming from the skills currently being learned in different clusters. The functions
-% ---
-%\begin{equation}\label{eq:f_function_collective}
-%	f(\cdot) = \left[-\alpha \left( \frac{\eta r N_{\zeta_k} + 1}{1 - \beta_k} \right)  - \xi_k \sum_{l \in \mathcal{N}(j)}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)\right]
-%\end{equation}
+\noindent~where $\mathbb{1}_j \in \mathbb{R}^{N_\mathcal{K}}$ is a one-hot vector representing the cluster to which skill $s_j$ belongs. In the absence of knowledge sharing, the entries of vector $\bm{\varsigma}_i \in \mathbb{R}^{N_\mathcal{K}}$ are the knowledge fraction from each skill cluster that agent $i$ holds in memory. In contrast, when operating as a collective, $\bm{\varsigma}_i$ contains the aggregated cluster knowledge fraction gathered by all the agents. The expression in Eq.~\eqref{eq:scaled_transferable_knowledge_fraction} accounts for the one-time transfer of knowledge based upon the cluster similarity at the beginning of a learning cycle. Similarly, the term $ \bar{\xi}_{i,l}(\bm{B},\bm{v}) $ downsizes the concurrent---that is, during learning---sharing of knowledge coming from the skills currently being learned in different clusters. The vector $\bm{v} \in \mathbb{R}^{N_\mathrm{r}}$ describes the cluster membership of each of the skills in the current skill batch learned by the $N_\mathrm{r}$ agents. 
 
-\begin{equation}\label{eq:f_function_collective}
-	f(\cdot) = -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)
-\end{equation}
 
-% --- 
-\noindent and 
-% ---
-\begin{equation}%\label{eq:f_function_collective}
-	g(\cdot) = (1-\xi_k) e^{-\delta \kappa}
-\end{equation}
-% ---
-\noindent are dependent on the number of successfully learned skills $ \kappa $ and the $N_\mathrm{r}$ knowledge-exchanging robots. Note that, after a learning cycle, ideally $\kappa= N_\mathrm{r} N_{\zeta_k}$; however, since some agents may fail to successfully learn a given skill, then $\kappa \leq N_\mathrm{r} N_{\zeta_k}$.
+
+
+% In \ac{cl}, after a learning cycle, ideally $\kappa= N_\mathrm{r} N_{\zeta_k}$. However, since some agents may fail to successfully learn a given skill, then $\kappa \leq N_\mathrm{r} N_{\zeta_k}$.
 
 The \emph{knowledge integration function} 
 % ---
 \begin{equation}\label{eq:knowledge_integration_function}
-	d(\bar{\sigma}_j,\bar{\sigma}_l) = e^{-a\left(\bar{\sigma}_l-\bar{\sigma}_j\right)^2}\in [0,1],
+	d(\bar{\sigma}_{i,j},\bar{\sigma}_{l,\cdot}) = e^{-a\:\left(\bar{\sigma}_{l,\cdot}-\bar{\sigma}_{i,j}\right)^2}\in [0,1],
 \end{equation}
 % --- 
 \noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} accounts for the contribution of knowledge from other agents, weighing it according to the relevance (similarity) of the shared knowledge. 
+
+% The functions
+% \begin{equation}\label{eq:f_function_collective}
+% 	f(\cdot) = -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)} \bar{\xi}_{j,l} \gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)
+% \end{equation}
+
+% % --- 
+% \noindent and 
+% % ---
+% \begin{equation}%\label{eq:f_function_collective}
+% 	g(\cdot) = (1-\xi_k) e^{-\delta \kappa}
+% \end{equation}
+% % ---
+% \noindent are dependent on the number of successfully learned skills $ \kappa $ and the $N_\mathrm{r}$ knowledge-exchanging robots. Note that, after a learning cycle, ideally $\kappa= N_\mathrm{r} N_{\zeta_k}$; however, since some agents may fail to successfully learn a given skill, then $\kappa \leq N_\mathrm{r} N_{\zeta_k}$.
+
+% The \emph{knowledge integration function} 
+% % ---
+% \begin{equation}\label{eq:knowledge_integration_function}
+% 	d(\bar{\sigma}_j,\bar{\sigma}_l) = e^{-a\left(\bar{\sigma}_l-\bar{\sigma}_j\right)^2}\in [0,1],
+% \end{equation}
+% % --- 
+% \noindent in Eq.~\eqref{eq:collective_knowledge_dynamics} accounts for the contribution of knowledge from other agents, weighing it according to the relevance (similarity) of the shared knowledge. 
 %% ---
 %\begin{table}[!t]
 %	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
@@ -868,33 +1037,33 @@ The \emph{knowledge integration function}
 %	\end{center}	
 %\end{table}
 %% ---
-% ---
-\begin{table}[!t]
-	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
-	\begin{center}
-		\begin{adjustbox}{width=\textwidth}
-			\begin{tabular}{|l||*{4}{c|}}\hline
-				\textbf{Learning paradigm}
-				&\makebox[3em]{\textbf{\ac{isl}}}&\makebox[3em]{\textbf{\ac{il}}}&\makebox[3em]{\textbf{\ac{til}}}
-				&\makebox[3em]{\textbf{\ac{cl}}}\\\hline\hline
-				Rate $f_{j,k}\left(\cdot \right)$  &$ -\alpha$ & $ -\alpha\left(\eta \kappa + 1 \right)$ & -$\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)$ & $  -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)}\bar{\xi}_{j,l}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)$ \\\hline
-				Initial condition $g_{j,k}\left(\cdot \right)$ &$1$ & $e^{-\delta \kappa}$ & $(1-\xi_k) e^{-\delta \kappa}$ & $(1-\xi_k) e^{-\delta \kappa} $ \\\hline
-			\end{tabular}
-		\end{adjustbox}
-	\end{center}	
-\end{table}
-% ---
+% % ---
+% \begin{table}[!t]
+% 	\caption{The dynamics of the learning paradigms.\label{tab:learning_paradigms_expressions}}
+% 	\begin{center}
+% 		\begin{adjustbox}{width=\textwidth}
+% 			\begin{tabular}{|l||*{4}{c|}}\hline
+% 				\textbf{Learning paradigm}
+% 				&\makebox[3em]{\textbf{\ac{isl}}}&\makebox[3em]{\textbf{\ac{il}}}&\makebox[3em]{\textbf{\ac{til}}}
+% 				&\makebox[3em]{\textbf{\ac{cl}}}\\\hline\hline
+% 				Rate $f_{j,k}\left(\cdot \right)$  &$ -\alpha$ & $ -\alpha\left(\eta \kappa + 1 \right)$ & -$\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)$ & $  -\alpha \left( \frac{\eta \kappa + 1}{1 - \xi_k} \right)  - \sum_{l \in \mathcal{N}(j)}\bar{\xi}_{j,l}\gamma_{j,l}d(\bar{\sigma}_j,\bar{\sigma}_l)$ \\\hline
+% 				Initial condition $g_{j,k}\left(\cdot \right)$ &$1$ & $e^{-\delta \kappa}$ & $(1-\xi_k) e^{-\delta \kappa}$ & $(1-\xi_k) e^{-\delta \kappa} $ \\\hline
+% 			\end{tabular}
+% 		\end{adjustbox}
+% 	\end{center}	
+% \end{table}
+% % ---
 
-More generally, the dynamics of the remaining knowledge for all the considered learning paradigms are captured in Eq.~\eqref{eq:collective_knowledge_dynamics} as described in Table~\ref{tab:learning_paradigms_expressions}. In summary, the model parameters have the following interpretations:
-% ---
-\begin{enumerate}
-	\item The parameter $\alpha \sim \mathcal{U}(\alpha_{\text{min}},\alpha_{\text{max}}) \in \mathbb{R}_+$ accounts for different embodiments and models the \emph{base learning rate} at which a robot in isolation learns any given skill. According to Asm.~\ref{assumption:agent_similarity}, the range $[\alpha_{\text{min}},\alpha_{\text{max}}]$ is rather narrow.
-	\item The parameter $\delta \in (0,\delta_{\text{max}}]$ reflects the intrinsic intelligence of the system and controls the \emph{exponential depletion rate}  of the initial remaining knowledge.
-	\item The parameter $\eta \sim \mathcal{N}(\bar{\eta},\eta_{\Sigma})$ is the \emph{intra-cluster knowledge exchange factor}, it models the efficient use of experience (e.g. accessing memory) and represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$.
-	\item The parameter $\gamma \sim \mathcal{N}(\bar{\gamma},\gamma_\Sigma)$ is the \emph{inter-agent knowledge exchange factor}, it weighs the knowledge exchange between agents and accounts for different embodiments, false communication, and dissimilar knowledge.
-%	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
-\end{enumerate}
-% ---
+% More generally, the dynamics of the remaining knowledge for all the considered learning paradigms are captured in Eq.~\eqref{eq:collective_knowledge_dynamics} as described in Table~\ref{tab:learning_paradigms_expressions}. In summary, the model parameters have the following interpretations:
+% % ---
+% \begin{enumerate}
+% 	\item The parameter $\alpha \sim \mathcal{U}(\alpha_{\text{min}},\alpha_{\text{max}}) \in \mathbb{R}_+$ accounts for different embodiments and models the \emph{base learning rate} at which a robot in isolation learns any given skill. According to Asm.~\ref{assumption:agent_similarity}, the range $[\alpha_{\text{min}},\alpha_{\text{max}}]$ is rather narrow.
+% 	\item The parameter $\delta \in (0,\delta_{\text{max}}]$ reflects the intrinsic intelligence of the system and controls the \emph{exponential depletion rate}  of the initial remaining knowledge.
+% 	\item The parameter $\eta \sim \mathcal{N}(\bar{\eta},\eta_{\Sigma})$ is the \emph{intra-cluster knowledge exchange factor}, it models the efficient use of experience (e.g. accessing memory) and represents the efficiency of knowledge exchange from $\zeta_k$ to $s_{j,k}$.
+% 	\item The parameter $\gamma \sim \mathcal{N}(\bar{\gamma},\gamma_\Sigma)$ is the \emph{inter-agent knowledge exchange factor}, it weighs the knowledge exchange between agents and accounts for different embodiments, false communication, and dissimilar knowledge.
+% %	\item $\beta_k$ is the head start granted by knowledge transfer from other clusters to the skills in $\mathcal{Z}_k$.
+% \end{enumerate}
+% % ---
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -1099,7 +1268,7 @@ Fig.~\ref{fig:power_per_episode} to Fig.~\ref{fig:cobot_watt_per_kg}
 %                                                 |                                                 |
 % ===================================================================================================
 \textbf{Acknowledgments:}
-We thank Carlos Magno C. O. Valle for his feedback and support throughout the research process. \textbf{Funding:} The authors greatly acknowledge the funding of this work by the Alfried Krupp von Bohlen und Halbach Foundation. \textbf{Author contributions:} S. Haddadin developed the fundamental collective learning concept and hypothesized its learning acceleration and minimizing energy consumption effects.  S. Haddadin and F. Díaz Ledezma developed the mathematical framework. F. Díaz Ledezma implemented and conducted all the experiments and analyzed the data. F. Díaz Ledezma and S. Haddadin interpreted the results. S. Haddadin and F. Díaz Ledezma conceptualized, F. Díaz Ledezma wrote, and S. Haddadin revised and edited the manuscript. All of the authors read the paper. \textbf{Competing interests:} The authors declare no potential conflicts of interest. \textbf{Data and materials availability:} All data needed to evaluate the conclusions in the paper are present in the main manuscript or the Supplementary Materials. %The datasets generated and analyzed in the current study are available at \url{https://github.com/mecafdl/pigraphs_body_morphology}. Requests for additional materials should be addressed to S. Haddadin.
+We thank Carlos Magno C. O. Valle for his feedback and support throughout the research process. \textbf{Funding:} The authors greatly acknowledge the funding of this work by the Alfried Krupp von Bohlen und Halbach Foundation. \textbf{Author contributions:} S. Haddadin developed the fundamental collective learning concept and hypothesized its learning acceleration and minimizing energy consumption effects.  S. Haddadin and F. Díaz Ledezma developed the mathematical framework. F. Díaz Ledezma implemented and conducted all the experiments and analyzed the data. F. Díaz Ledezma and S. Haddadin interpreted the results. S. Haddadin and F. Díaz Ledezma conceptualized, F. Díaz Ledezma and S. Haddadin wrote the manuscript. All of the authors read the paper. \textbf{Competing interests:} The authors declare no potential conflicts of interest. \textbf{Data and materials availability:} All data needed to evaluate the conclusions in the paper are present in the main manuscript or the Supplementary Materials. %The datasets generated and analyzed in the current study are available at \url{https://github.com/mecafdl/pigraphs_body_morphology}. Requests for additional materials should be addressed to S. Haddadin.
 
 % ===================================================================================================
 %                                                 |                                                 |
@@ -1114,3 +1283,26 @@ We thank Carlos Magno C. O. Valle for his feedback and support throughout the re
  \input{supplementary.tex}
 
 \end{document}
+
+%The strength of agent-level intra-cluster skill knowledge integration is quantified by the parameter $\eta$, while $\gamma$ captures the quality of inter-agent knowledge exchange. Additional factors such as $\alpha$ (agent's inherent learning capability), $\beta$ (inter-cluster spread), and $N_r$ (number of agents) influence the overall system dynamics.
+
+% The expression in Fig.\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B} formalizes the dynamics of the remaining knowledge about a skill learned by an \ac{eai} agent in a collective, denoted by $\dot{\bar{\sigma}}^{(\mathrm{CL})}_j$, through a set of interpretable components. The governing equation, introduced in Eq.\eqref{eq:collective_knowledge_dynamics}, exhibits dependencies on four main terms. The \emph{agent learning gain} captures the individual agent's ability to acquire knowledge about a skill and is parametrized by $\alpha$. The \emph{intra-cluster knowledge sharing gain} accounts for efficient knowledge propagation between related tasks within the same cluster, modulated by $\eta$. The \emph{inter-cluster similarity gain} reflects the transfer between groups based on structural similarities in the skill manifold, captured by the parameter $\beta$. Finally, the \emph{inter-agent transfer gain} models skill propagation between agents, governed by $\gamma$ and scaled by the number of agents $N_\mathrm{r}$. Together, these components determine whether the remaining knowledge about a skill decays---indicating successful learning---or grows, which signals corruption or forgetting, depending on the interplay of agent-level and collective learning dynamics.
+
+% The expression in Fig.\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B}---discussed in detail in Eq.\eqref{eq:collective_knowledge_dynamics} in \nameref{sec:methods}---formalizes the dynamics of the remaining knowledge about a skill $j$ learned by an \ac{eai} agent $i$ in a collective, denoted by $\dot{\bar{\sigma}}^{(\mathrm{CL})}_{i,j}$. This governing equation exhibits dependencies on four main terms that influence the overall dynamics of the system. The \emph{agent learning gain} $\alpha_i$ captures the inherent capacity of the agent $i$ to acquire knowledge about a skill. The \emph{intra-cluster knowledge sharing gain}  $\eta_i$ accounts for the efficient propagation of knowledge to skill $j$ that comes from the skills in the agent's memory belonging to the same cluster. Pairwise \emph{inter-cluster similarity gains}, contained in vector $\bm{\beta}_i$, weigh the transfer of knowledge from other clusters of skills to skill $j$ based on structural similarities in the skill manifold. Furthermore, each pairwise \emph{inter-agent transfer gain} $\gamma$ contained in matrix $\bm{\Gamma}$ models the concurrent propagation of knowledge from the different skills learned by the $N_\mathrm{r}$ agents in the collective. These parameters, together with the number $kappa_{i,k}$ of skills learned from each $k$ cluster that agent $i$ has in memory, determine whether the remaining knowledge about a skill decays, indicating successful learning, or grows, signaling corruption or forgetting, depending on the interplay of agent level and \ac{ cl} dynamics.
+
+
+% This equation depends on four key terms that govern the behavior of the system:
+% % ---
+% \begin{itemize}
+%     \item \textbf{Agent Learning Gain} ( $\alpha_i$): Represents the inherent ability of agent $i$ to acquire knowledge about skill $j$. The collection of all the agents' gains is contained in the vector $\bm{\alpha}$.
+    
+%     \item \textbf{Intra-Cluster Knowledge Sharing Gain} ($\eta_i$): Quantifies how efficiently agent $i$ can reinforce skill $j$ through related skills in its memory that belong to the same skill cluster. As before, vector $\bm{\eta}$ gathers the gains for all agents.
+    
+%     \item \textbf{Inter-Cluster Similarity Matrix} ($\bm{B} \in \mathbb{R}^{N_\mathcal{K}\times N_\mathcal{K}}$): Weighs the contribution of skills from other clusters to skill $j$, based on structural similarity within the skill manifold. For each agent $i$ learning skill $j$, a corresponding vector $\bm{\beta}_{ij}$ is defined from the entries of $\bm{B}$ and the skills in the agent's memory.
+    
+%     \item \textbf{Inter-Agent Transfer Gains} ($\bm{\Gamma} \in \mathbb{R}^{N_\mathrm{r}\times N_\mathrm{r}} $): The entries $\gamma$ in this matrix model the concurrent transfer of knowledge across the $N_\mathrm{r}$ agents in the collective, through pairwise interactions involving different skills.
+% \end{itemize}
+% % ---
+% Additionally, the number of skills $\kappa_{i,k}$ from each cluster $k$  retained in the $i$-th agent's memory also influences the dynamics. Together, these parameters determine whether the residual knowledge about a skill decreases---indicating successful learning---or increases, which may signal knowledge corruption or forgetting, depending on both agent-level and collective learning dynamics.
+
+% The expression shown in Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{B}---and detailed in Eq.~\eqref{eq:collective_knowledge_dynamics} in \nameref{sec:methods}---describes the dynamics of the remaining knowledge $\dot{\bar{\sigma}}^{(\mathrm{CL})}_{i,j}$ about a skill $j$ learned by an \ac{eai} agent $i$ within a \ac{cl} system. \myhl{This equation depends on four key terms that govern the behavior of the \ac{cl} system: \textbf{Agent Learning Gain} ($\alpha_i$), which represents the inherent ability of agent~$i$ to acquire knowledge about skill~$j$, with the collection of all agents' gains contained in the vector~$\bm{\alpha}$; \textbf{Intra-Cluster Knowledge Sharing Gain} ($\eta_i$), which quantifies how efficiently agent~$i$ can reinforce skill~$j$ through related skills in its memory that belong to the same skill cluster, with vector~$\bm{\eta}$ gathering the gains for all agents; \myhl{\textbf{Inter-Cluster Similarity Matrix} ($\bm{B} \in \mathbb{R}^{N_\mathcal{K} \times N_\mathcal{K}}$), which weighs the contribution of skills from other clusters to skill~$j$ based on structural similarity within the skill manifold---for each agent~$i$ learning skill~$j$, a corresponding vector~$\bm{\beta}{ij}$ is defined from the entries of~$\bm{B}$ and the skills in the agent's memory}; and \textbf{Inter-Agent Transfer Gains} ($\bm{\Gamma} \in \mathbb{R}^{N\mathrm{r} \times N_\mathrm{r}}$), where the entries~$\gamma$ model the concurrent transfer of knowledge across the~$N_\mathrm{r}$ agents in the collective, through pairwise interactions involving different skills. Additionally, the number of skills~$\kappa_{i,k}$ from each cluster~$k$ retained in the $i$-th agent's memory also influences the dynamics. Together, these parameters determine whether the residual knowledge about a skill decreases---indicating successful learning---or increases, which may signal knowledge corruption or forgetting, depending on both agent-level and collective learning dynamics.}
