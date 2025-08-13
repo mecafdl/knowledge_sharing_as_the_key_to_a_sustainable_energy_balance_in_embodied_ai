@@ -304,13 +304,13 @@ As \ac{ai} becomes increasingly embodied in physical agents---robots, vehicles, 
 \paragraph*{The grand challenges in \ac{ai}}
 Rapid advancements driven by \ac{ai} applications come at a substantial energy cost. This constitutes the \underline{\ac{c1}}. Cutting-edge machine learning algorithms require immense computational power to process, analyze, and learn from vast datasets, often requiring numerous iterations to converge \cite{Strubell2019EnergyPolicyConsiderations}. Researchers and companies rely heavily on existing infrastructure or cloud computing services in data centers for these energy-intensive workloads during the learning and deployment phases. This has led to a clear spike in energy consumption in data centers and associated hardware such as GPUs. Training \ac{ai} models in data centers is estimated to consume about three times more energy than traditional cloud tasks, significantly straining resources \cite{Thomas2023cloudusesmassive}.
 
-Consider the latest breakthroughs in generative \ac{ai}, including large language models (LLMs), text-to-image, and text-to-video models. These models, with billions of parameters, require thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more \ac{ai} applications are developed, the demand for \ac{ai} infrastructure surges, leading to a substantial increase in GPU-based \ac{ai} server sales. This escalation directly translates into a parallel increase in data center energy consumption. Globally, data center energy consumption rose from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to the International Energy Agency\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is illustrated in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Left} panel).
+Consider the latest breakthroughs in generative \ac{ai}, including large language models (LLMs), text-to-image, and text-to-video models. These models, with billions of parameters, require thousands of deep learning GPU units and millions of GPU hours for training \cite{Vanian2023ChatGPTgenerativeAI, Corbyn2023Nvidiachipmaker}. As more \ac{ai} applications are developed, the demand for \ac{ai} infrastructure surges, leading to a substantial increase in GPU-based \ac{ai} server sales. This escalation directly translates into a parallel increase in data center energy consumption. Globally, data center energy consumption rose from 200 TWh in 2015 to an estimated 220-320 TWh in 2021, according to the International Energy Agency\footnote{Data from the International Energy Agency, available at \url{https://www.iea.org/reports/data-centres-and-data-transmission-networks}}. This concerning trend is illustrated in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics}~(\textbf{A})).
 
 The \underline{\ac{c2}}, the escalating energy demand of a potential robotic revolution, is amplified by the rise of Industry 4.0, the implementation of smart factories, and the expanding use of robots in service applications. This rapid proliferation has even been dubbed the ``Cambrian explosion'' of robotics \cite{Pratt2015Iscambrianexplosion}. Despite advances in robot technology that have improved energy efficiency, the focus remains predominantly on individual systems, often overlooking the aggregate impact of all active units.
 
-During the past decade, the installed base of industrial robots has undergone a remarkable transformation. According to the International Federation of Robotics (IFR), this base grew from 1.2 million units in 2012 to approximately 4.2 million units in 2023, an astonishing increase of 350\% with an average annual growth rate close to 12\% \cite{IFR2024WorldRobotics2024}. Extrapolating this trend suggests that within the coming years, six million robots will be operational in factories worldwide\footnote{These projections closely align with the slightly more cautious estimates presented by *The Boston Consulting Group* in \cite{Sirkin2015HowRobotsWill}.}. Using this estimated installed base and assuming round-the-clock operation, we can approximate the forthcoming energy demand attributable to industrial robots, termed the World Robot Energy Consumption (WREC), as shown in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Middle} panel). To contextualize the significance of WREC, in 2025, it is projected to constitute 7.2\% of Germany's installed power generation capacity \cite{FraunhoferISENetinstalledelectricity}, one of the most industrialized countries in the world. A detailed description of these estimates is provided in Sec.~\ref{sec:app_robot_ener_consumption}.
+During the past decade, the installed base of industrial robots has undergone a remarkable transformation. According to the International Federation of Robotics (IFR), this base grew from 1.2 million units in 2012 to approximately 4.2 million units in 2023, an astonishing increase of 350\% with an average annual growth rate close to 12\% \cite{IFR2024WorldRobotics2024}. Extrapolating this trend suggests that within the coming years, six million robots will be operational in factories worldwide\footnote{These projections closely align with the slightly more cautious estimates presented by *The Boston Consulting Group* in \cite{Sirkin2015HowRobotsWill}.}. Using this estimated installed base and assuming round-the-clock operation, we can approximate the forthcoming energy demand attributable to industrial robots, termed the World Robot Energy Consumption (WREC), as shown in Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textbf{B}). To contextualize the significance of WREC, in 2025, it is projected to constitute 7.2\% of Germany's installed power generation capacity \cite{FraunhoferISENetinstalledelectricity}, one of the most industrialized countries in the world. A detailed description of these estimates is provided in Sec.~\ref{sec:app_robot_ener_consumption}.
 
-The far-reaching influence of collaborative and even service robots mirrors the significance observed among their industrial counterparts. Collaborative robots (cobots), for instance, have undergone a paradigm shift, rising from a mere 6\% of the market in 2017 to accounting for approximately one-quarter of annual installations \cite{tobe2015}, as illustrated in Fig.~\ref{fig:industrial_cobot_share}. Drawing from analogous assumptions applied to industrial robots, Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textsc{Right} panel) depicts the projected growth trajectory of cobots and their associated energy consumption. Concurrently, the domain of service robots is experiencing an analogous surge. For example, estimates projected that the service robotics market would reach 56 billion euros by 2025 \cite{statista_service_robots}. These robots are used in various fields, including logistics, defense, public relations, and medical applications, aligning with the increasing trends observed among industrial and collaborative robots.
+The far-reaching influence of collaborative and even service robots mirrors the significance observed among their industrial counterparts. Collaborative robots (cobots), for instance, have undergone a paradigm shift, rising from a mere 6\% of the market in 2017 to accounting for approximately one-quarter of annual installations \cite{tobe2015}, as illustrated in Fig.~\ref{fig:industrial_cobot_share}. Drawing from analogous assumptions applied to industrial robots, Fig.~\ref{fig:energy_consumption_trends_ai_and_robotics} (\textbf{C}) depicts the projected growth trajectory of cobots and their associated energy consumption. Concurrently, the domain of service robots is experiencing an analogous surge. For example, estimates projected that the service robotics market would reach 56 billion euros by 2025 \cite{statista_service_robots}. These robots are used in various fields, including logistics, defense, public relations, and medical applications, aligning with the increasing trends observed among industrial and collaborative robots.
 
 The \underline{\ac{c3}}, often overlooked in the realm of \ac{ai}, is the energetic expenditure associated with the actual manufacture of the hardware required for \ac{ai} and robotics. This energy demand encompasses two primary facets. First, it involves the energy expenditure to procure materials for robot manufacturing and associated computational hardware (for example, processors, GPUs, and \ac{ai} servers). Second, it pertains to the intrinsic energy consumption of the manufacturing process itself. Given the direct correlation between energy demand and the number of \ac{ai}-powered robots produced, an exponential increase in the latter directly corresponds to the increase in the energy consumption for their production. Assessment and formulation of strategies to address this aspect are crucial. Although an immediate solution may not be evident and substantial energy savings in the procurement of raw materials may be impractical, significant potential lies in the recycling of electronic components of computer and robot hardware as a means of conserving energy \cite{Ude2025Recycling}.
 
@@ -575,10 +575,20 @@ Equation~\eqref{eq:collective_knowledge_dynamics} encompasses the dynamics of th
 \begin{figure*}[t!]
 	\centering
 	\hspace*{\fill}
-	\includegraphics[width=14cm]{collective_learning_cases_v1.png}
+	\includegraphics[width=14cm]{collective_learning_cases.png}
 	\hspace*{\fill}
 	% \caption[] {\label{fig:collective_learning_cases} \textbf{Different regimes exhibited by a \acl{cl} system.} {Depending on the mean value of $ \eta $ and $ \gamma $, a robot collective will have different behavior and performance in terms of the total number of episodes (correspondingly, energy) required to learn all skills and the associated success rate (percentage of skills successfully learned). Four canonical regimes are discovered: (\textbf{A}) destructive, (\textbf{B}) canceling, (\textbf{C}) ideal, and (\textbf{D}) compensating network behavior. (\textbf{E} The size of the collective impacts the total learning episodes and the success rate of the \ac{cl}.}}
 	\caption[] {\label{fig:collective_learning_cases} \textbf{Canonical regimes of a \acl{cl} system.} Robot collectives exhibit distinct behaviors depending on the mean values of $\eta$ and $\gamma$, affecting the total learning episodes (and thus energy) and success rate. Four principal regimes are identified: (\textbf{A}) destructive, (\textbf{B}) canceling, (\textbf{C}) ideal, and (\textbf{D}) compensating. (\textbf{E}) Collective size influences both learning efficiency and success.}
+\end{figure*}
+% ---
+
+% ---
+\begin{figure*}[t!]
+	\centering
+	\hspace*{\fill}
+	\includegraphics[width=14cm]{cases_point_plot.png}
+	\hspace*{\fill}
+	\caption[] {\label{fig:cases_point_plot} \textbf{Collective size influences both learning efficiency and success.} The size of the robot collective can steer the learning of the skill universe leveraging the positive influence of $\bar{\gamma}$.}
 \end{figure*}
 % ---
 
@@ -646,7 +656,7 @@ In \textbf{Case 4}, both the agents and the collective behave erratically, compo
 
 \textbf{Case 7} presents the worst scenario, with both agents and the network actively destroying knowledge, possibly due to catastrophic forgetting, model collapse, or uncoordinated learning. In \textbf{Case 8}, agents corrupt knowledge individually, but the network offers some structure; with sufficient scale, even this erratic setting can yield learning. Finally, \textbf{Case 9} demonstrates that even when individual agents degrade knowledge, a robust collective can ensure successful learning through strong knowledge sharing.
 
-As already mentioned, we clustered the nine canonical regimes into four principal regimes, as shown in Fig.~\ref{fig:collective_learning_cases}: \textbf{(A)} destructive regimes (Cases 1, 4, 7), \textbf{(B)} canceling regimes (Cases 2, 5), \textbf{(C)} ideal regimes (Cases 3, 6), and \textbf{(D)} compensating regimes (Cases 8, 9). The \textbf{canceling regime} strikes a delicate balance: while all skills can still be learned, the required number of episodes is significantly higher than in the ideal case, implying a higher energy cost. Overall, the performance plots in Fig.~\ref{fig:collective_learning_cases} emphasize that system-wide success in \acl{cl} depends more on robust inter-agent connectivity and shared knowledge dynamics than on isolated learning capabilities. This is particularly evident in compensating cases (8 and 9), where large collectives overcome individual agent weaknesses through stable, redundant communication structures. To also highlight the influence that the size of the collective has in the different regimes, Fig.~\ref{fig:collective_learning_cases}~\textbf{(E)} shows the total learning episodes and the success rate, defined as the percentage of skills successfully learned, for all regimes. Depending of parameters ($\bar{\eta},\bar{\gamma}$) the size of the collective can bring the system from a successful learning state to an entire obliteration of the knowledge capability (as in Case 1), while in Cases 8 and 9, the growing size of the collective drives the system towards successful learning of the skill universe, in spite of the individual learning limitations.
+As already mentioned, we clustered the nine canonical regimes into four principal regimes, as shown in Fig.~\ref{fig:collective_learning_cases}: \textbf{(A)} destructive regimes (Cases 1, 4, 7), \textbf{(B)} canceling regimes (Cases 2, 5), \textbf{(C)} ideal regimes (Cases 3, 6), and \textbf{(D)} compensating regimes (Cases 8, 9). The \textbf{canceling regime} strikes a delicate balance: while all skills can still be learned, the required number of episodes is significantly higher than in the ideal case, implying a higher energy cost. Overall, the performance plots in Fig.~\ref{fig:collective_learning_cases} emphasize that system-wide success in \acl{cl} depends more on robust inter-agent connectivity and shared knowledge dynamics than on isolated learning capabilities. This is particularly evident in compensating cases (8 and 9), where large collectives overcome individual agent weaknesses through stable, redundant communication structures. To also highlight the influence that the size of the collective has in the different regimes, Fig.~\ref{fig:cases_point_plot} shows the total learning episodes and the success rate, defined as the percentage of skills successfully learned, for all regimes. Depending of parameters ($\bar{\eta},\bar{\gamma}$) the size of the collective can bring the system from a successful learning state to an entire obliteration of the knowledge capability (as in Case 1), while in Cases 8 and 9, the growing size of the collective drives the system towards successful learning of the skill universe, in spite of the individual learning limitations.
 
 
 % ===================================================================================================
@@ -781,7 +791,7 @@ To start, we refer to the \emph{complexity} $c_j$ of skill $ s_j $ as the number
 
 % ===================================================================================================
 %\paragraph*{Similarity and knowledge}
-Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highly similar skills; that is, a \emph{cluster} of similar skills, see Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A} and  Fig.~\ref{fig:skill_similarity}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes the skills from $\mathcal{Z}_k$ that a given agent $i$ has already learned. Furthermore,  
+Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highly similar skills; that is, a \emph{cluster} of similar skills, see Fig.~\ref{fig:collective_learning_and_skill_manifold_conceptualization}~\textbf{A} and  Fig.~\ref{fig:skill_similarity_and_knowledge}~\textbf{A}. Furthermore, consider a second set $\mathcal{\zeta}_k \subset \mathcal{Z}_k$ that denotes the skills from $\mathcal{Z}_k$ that a given agent $i$ has already learned. Furthermore,  
 %---
 \begin{tcolorbox}
 	\begin{assumption}\label{assumption:skill_clustering} the effect of a significant similarity among a set of skills is characterized by the acceleration of the overall learning process due to exchange of acquired knowledge from these skills.
@@ -801,22 +811,32 @@ Let $\mathcal{Z}_k \subset \mathcal{S}$ be a subset of $N_{\mathcal{Z}_k}$ highl
 % ---
 Conceptually, $\bar{\sigma}_ {i,j}\left(\cdot\right)$ is the fraction of knowledge from ${\mathcal{Z}_k}$ that remains to be learned.
 % ---
-\begin{figure*}[!t]
-	\centering
-	\hspace*{\fill}
-	\begin{subfigure}[t]{7.5cm}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{skill_similarity.png} \label{fig:skill_similarity}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{7.5cm}	
-		\subcaption{}
-		\includegraphics[width=\textwidth]{remaining_knowledge_dynamics_idealization.png} \label{fig:knowledge_idealization}
-	\end{subfigure}
-	\hspace*{\fill}
-	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Skills in $\mathcal{S}$ inherently group into clusters $\mathcal{Z}_k$ based on their similarity, (\subref{fig:knowledge_idealization}) the remaining knowledge $\bar{\sigma}_{i,j}$ to learn a new skill $s_{j}$ has strictly monotonically decreasing behavior.}	
-\end{figure*}
+%\begin{figure*}[!t]
+%	\centering
+%	\hspace*{\fill}
+%	\begin{subfigure}[t]{7.5cm}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{skill_similarity.png} \label{fig:skill_similarity}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{7.5cm}	
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{remaining_knowledge_dynamics_idealization.png} \label{fig:knowledge_idealization}
+%	\end{subfigure}
+%	\hspace*{\fill}
+%	\caption[] {\label{fig:experimental_results} \textbf{Skill similarity and knowledge.} (\subref{fig:skill_similarity}) Skills in $\mathcal{S}$ inherently group into clusters $\mathcal{Z}_k$ based on their similarity, (\subref{fig:knowledge_idealization}) the remaining knowledge $\bar{\sigma}_{i,j}$ to learn a new skill $s_{j}$ has strictly monotonically decreasing behavior.}	
+%\end{figure*}
+%% ---
+
+
 % ---
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.95\textwidth]{fig/skill_similarity_and_knowledge.png}
+	\caption{\label{fig:skill_similarity_and_knowledge} \textbf{Skill similarity and knowledge.} (\textbf{A}) Skills in $\mathcal{S}$ inherently group into clusters $\mathcal{Z}_k$ based on their similarity, (\textbf{B}) the remaining knowledge $\bar{\sigma}_{i,j}$ to learn a new skill $s_{j}$ has strictly monotonically decreasing behavior.}
+\end{figure}
+% ---
+
 
 To evaluate the effect of knowledge exchange during learning on the complexity of mastering a skill, we introduce a hypothetical upper bound called the skill \textit{fundamental complexity} $c_0$, which describes the maximum number of trial episodes required to learn \emph{any} skill. If, in learning a skill $ s_{j} $, the $i$-th \ac{eai} agent accesses and uses its knowledge contained in $\mathcal{\zeta}_k$, then two effects occur:
 % ---
@@ -856,7 +876,7 @@ These effects signify that the remaining knowledge scales down as a function of 
 	\bar{\sigma}_{i,j}(n) = g_{i,j}(N_{\zeta_k}) e ^{-f_{i,j}\left(N_{\zeta_k}\right) n} \in (0,1],
 \end{equation}
 % ---
-exhibits the desired behavior, shown in Fig.~\ref{fig:knowledge_idealization}. The function $f_{i,j}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, namely, the reduction in the initial remaining knowledge $\bar{\sigma}_{i,j}(0)$ is controlled by the term $g_{i,j}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$---depicted as the green-shaded area in Fig.~\ref{fig:knowledge_idealization}---indicates when the remaining knowledge is negligible and $s_{j}$ is considered to have been learned.
+exhibits the desired behavior, shown in Fig.~\ref{fig:skill_similarity_and_knowledge}~\textbf{B}. The function $f_{i,j}\left(N_{\zeta_k}\right)$ models one of the effects resulting from the exploitation of the knowledge available in $\zeta_k$, namely, the increase of the learning rate. The second effect, namely, the reduction in the initial remaining knowledge $\bar{\sigma}_{i,j}(0)$ is controlled by the term $g_{i,j}\left(N_{\zeta_k}\right)$, which is also dependent on the number of learned skills. The learning threshold $\epsilon$---depicted as the green-shaded area in Fig.~\ref{fig:knowledge_idealization}---indicates when the remaining knowledge is negligible and $s_{j}$ is considered to have been learned.
 
 % % ===================================================================================================
 % \paragraph*{Knowledge sharing under different learning paradigms}
@@ -901,31 +921,39 @@ In the remainder of our discussion, we consider an idealized reference system in
 % ---
 
 % ---
-\begin{figure*}[!t]
+%\begin{figure*}[!t]
+%	\centering
+%	\hspace*{\fill}
+%	\begin{subfigure}[t]{0.32\textwidth}
+%		\subcaption{}
+%		\includegraphics[width= \textwidth]{intra_skill_learning.png} \label{fig:intra_skill_learning}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{0.32\textwidth}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{cluster_to_cluster_knowledge_transfer_parallel.png} \label{fig:cluster_to_cluster_knowledge_transfer_parallel}
+%	\end{subfigure}
+%	\hfill
+%	\begin{subfigure}[t]{0.32\textwidth}
+%		\subcaption{}
+%		\includegraphics[width=\textwidth]{cl_example_figure.png} \label{fig:cl_example_figure}
+%	\end{subfigure}	
+%	\hspace*{\fill}
+%	\caption[] {\label{fig:learning_paradigms_conceptual_figure} \textbf{The different learning paradigms.} (\subref{fig:intra_skill_learning}) \Acl{il} benefits from the significant similarity of skills belonging to the same cluster. (\subref{fig:cluster_to_cluster_knowledge_transfer_parallel}) In \acl{tl}, knowledge is shared from various source clusters to a target cluster. Notice that using many robots (e.g., two robots $r_1$ and $r_2$) without inter-agent knowledge exchange among them only subdivides the problem. (\subref{fig:cl_example_figure}) Exchange of knowledge between \ac{eai} agents enables \acl{cl}.}
+%\end{figure*}
+% ---
+
+% ---
+\begin{figure}[!t]
 	\centering
-	\hspace*{\fill}
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width= \textwidth]{intra_skill_learning.png} \label{fig:intra_skill_learning}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{cluster_to_cluster_knowledge_transfer_parallel.png} \label{fig:cluster_to_cluster_knowledge_transfer_parallel}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.32\textwidth}
-		\subcaption{}
-		\includegraphics[width=\textwidth]{cl_example_figure.png} \label{fig:cl_example_figure}
-	\end{subfigure}	
-	\hspace*{\fill}
-	\caption[] {\label{fig:learning_paradigms_conceptual_figure} \textbf{The different learning paradigms.} (\subref{fig:intra_skill_learning}) \Acl{il} benefits from the significant similarity of skills belonging to the same cluster. (\subref{fig:cluster_to_cluster_knowledge_transfer_parallel}) In \acl{tl}, knowledge is shared from various source clusters to a target cluster. Notice that using many robots (e.g., two robots $r_1$ and $r_2$) without inter-agent knowledge exchange among them only subdivides the problem. (\subref{fig:cl_example_figure}) Exchange of knowledge between \ac{eai} agents enables \acl{cl}.}
-\end{figure*}
+	\includegraphics[width=0.95\textwidth]{fig/learning_paradigms_conceptual_figure.png}
+	\caption{\label{fig:learning_paradigms_conceptual_figure} \textbf{The different learning paradigms.} (\textbf{A}) \Acl{il} benefits from the significant similarity of skills belonging to the same cluster. (\textbf{B}) In \acl{tl}, knowledge is shared from various source clusters to a target cluster. Notice that using many robots (e.g., two robots $r_1$ and $r_2$) without inter-agent knowledge exchange among them only subdivides the problem. (\textbf{C}) Exchange of knowledge between \ac{eai} agents enables \acl{cl}.}
+\end{figure}
 % ---
 
 % ===================================================================================================
 \paragraph*{Knowledge sharing under different learning paradigms}
-When an \ac{eai} agent learns in isolation---that is, performs \ac{isl}---it learns every skill from the ground up, disregarding knowledge from already learned skills. In contrast, during \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-learning loops---but also retains the acquired knowledge in its local memory and uses it to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a distant set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the target cluster through \emph{transferable knowledge fraction factor} $\xi_k \in [0,1)$. The latter results from aggregating the available knowledge $\varsigma^{(k)}$ that an agent has in memory about each of the $N_\mathcal{K}$ clusters weighted by the \emph{cluster similarity matrix}
+When an \ac{eai} agent learns in isolation---that is, performs \ac{isl}---it learns every skill from the ground up, disregarding knowledge from already learned skills. In contrast, during \ac{il}---also known as continual learning \cite{Lesort2020Continuallearningrobotics}---an agent benefits from the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills in virtue of their significant similarity. As depicted in Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{A}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha$---the self-learning loops---but also retains the acquired knowledge in its local memory and uses it to learn subsequent skills. \Ac{tl} alone refers to the use of acquired knowledge about a distant set of skills on a new skill \cite{Hosna2022Transferlearningfriendly,Jaquier2023TransferLearningRobotics}. In particular, it implies the one-time \emph{inter-cluster} exchange of knowledge. \Ac{tl} represents the exchange of knowledge from the skills learned in different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{B}). Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the target cluster through \emph{transferable knowledge fraction factor} $\xi_k \in [0,1)$. The latter results from aggregating the available knowledge $\varsigma^{(k)}$ that an agent has in memory about each of the $N_\mathcal{K}$ clusters weighted by the \emph{cluster similarity matrix}
 % ---
 \begin{equation}\label{eq:cluster_similarity_matrix}
 	\bm{B}\in \mathbb{R}^{N_\mathcal{K} \times N_\mathcal{K}}=\begin{cases}
@@ -943,7 +971,7 @@ Here, $\beta_{i,j} \in [0,1)$ defines the closeness between the skills in the di
 This paradigm goes far beyond simple parallelization, understood as learning different skills with different robots at the same time. In \ac{cl} $N_\mathrm{r}$ robotic agents $ \left\lbrace r_i \right\rbrace_{i=1}^{N_\mathrm{r}} $ develop and accumulate an emerging common mind (body of knowledge) dynamically via networked interactions where individual experience, knowledge, and skills are disseminated to all the other elements in the collective \cite{Garavan2012CollectiveLearning}. Information flows vertically as previous knowledge is passed on, automatically improving knowledge gaps in the skill tree, and horizontally by sharing concurrent experience between agents, to accelerate skill acquisition ``in action''. Knowledge can be replicated, complemented, and further developed via these mechanisms. Moreover, to enable \ac{cl} from a technical standpoint, it is assumed that an inter-agent communication protocol and the appropriate infrastructure are in place that allow agents to concurrently exchange and integrate the self-acquired and incoming knowledge to incrementally speed up the learning of all the agents as a whole. As a result, concurrent intra- and inter-cluster knowledge sharing is possible. Naturally, a complex scheduling problem to determine the optimal skill distribution and inter-agent knowledge-sharing strategy is part of the \ac{cl} paradigm. 
 
 Rather than focusing on specific learning, communication, and scheduling algorithms to make \ac{cl} possible, our primary objective is to illustrate the overarching ideal systemic behavior of a \acl{cl}.~% system (see Fig.~\ref{fig:collective_learning_system}).
-Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work, we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:cl_example_figure} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills in different clusters $j$ and $l$, then $\gamma_{j,l}$ is scaled down by the cluster similarity $\beta_{j,l}$. 
+Grounded on Assumptions~\ref{assumption:average_behavior}, \ref{assumption:agent_similarity},~\ref{assumption:cluster_size}, and~\ref{assumption:cluster_transferability}, in the remainder of this work, we concentrate the discussion on the target knowledge-sharing dynamics of a \ac{cl} system. Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{C} illustrates the \ac{cl} concept, where the self-loop represents the knowledge dynamics of a single robot learning at a rate $\alpha$. The exchange of knowledge across agents is represented via the cross-couplings, weighted by a parameter $\gamma$ that models how efficient the bidirectional pairwise knowledge exchange is between any two agents. Similar to \ac{tl}, if two robots exchange knowledge about skills in different clusters $j$ and $l$, then $\gamma_{j,l}$ is scaled down by the cluster similarity $\beta_{j,l}$. 
 
 In \ac{cl}, the dynamics of the remaining knowledge  about a skill acquired by an agent exchanging knowledge with a set $\mathcal{N}$ of other agents is described by
 % ---
