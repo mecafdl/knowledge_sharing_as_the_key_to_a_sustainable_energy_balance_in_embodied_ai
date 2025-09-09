@@ -45,8 +45,8 @@
 
 classdef RobotCollective < handle
     properties
-        Alpha_max                   = 0.0691;
-        Alpha_min                   = 0.0461;
+        Alpha_max                   = 0.0691;                  % 1.5 alpha_min
+        Alpha_min                   = 0.0461;                  % -log(theCollective.KnowledgeLowerBound)/theCollective.FundamentalComplexity
         AgentMemory                 = [];
         AgentStorage                 = [];
         DISTRIBUTED_COLLECTIVE_LEARNING ...
@@ -57,7 +57,7 @@ classdef RobotCollective < handle
                                     = [];
         ClusterSimilarityMatrix     = [];
         ClusterSimilarityMatrixPerAgent = [];
-        Delta                       = 0.0360;        
+        Delta                       = 0.0360;                  % -log(theCollective.KnowledgeLowerBound)/theCollective.SkillsPerCluster
         ENABLE_COLLECTIVE_LEARNING  = boolean(1);              % Enables collective learning: agent <-> agents knowledge sharing
         ENABLE_INCREMENTAL_LEARNING = boolean(1);              % Enables memory for an agent (incremental learning)
         ENABLE_TRANSFER_LEARNING    = boolean(1);              % Enables knowledge transfer (i.e., transfer learning)
@@ -104,7 +104,7 @@ classdef RobotCollective < handle
                 NameValueArgs.numberOfRobotsPerCluster = []
                 NameValueArgs.maxNumberOfProducts      = 1000;
                 NameValueArgs.repeatingSkills          = false;
-                NameValueArgs.MaxNumberOfSkillsPerProduct
+                NameValueArgs.MaxNumberOfSkillsPerProduct;
             end
             obj.MaxNumberOfSkillsPerProduct = NameValueArgs.MaxNumberOfSkillsPerProduct;
         
@@ -518,51 +518,35 @@ title(gca,['$N_r =',num2str(obj.NumberOfRobots),'~|~\bar{\eta}=',num2str(obj.Eta
                                 isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, initialRemainingKnowledge)); 
                 end
 
-% remainingKnowledge = transpose( ...
-%     ode4_sat(@(n,sigmaBar) ...
-%         obj.collectiveKnowledgeSharingDynamicsEpisodic( ...
-%             agentsRemainingKnowledge = sigmaBar, ...
-%             isolatedLearningRemainingKnowledgeDynamics = Alpha), obj.Episodes, [initialRemainingKnowledge(1);zeros(7,1)])); 
-
-
                 % Plot remaining knowlege curve
                 obj.plotRemainingKnowledgeCurves(remainingKnowledge = remainingKnowledge, skillsBatch = skillsBatch, figureHandle=fig, axisHandle= ax,lineColors=selectedColors);
                 
-                % Determine the complexity for learning the skills in the batch
-                % complexity_jk_CL_Distributed(j) = ...
-                %     ceil( ...
-                %         mean( ...
-                %             obj.Episodes( ...
-                %                 cell2mat( ...
-                %                     arrayfun( ...
-                %                         @(i) ( ...
-                %                             find( ...
-                %                                 remainingKnowledge(i,:)<obj.KnowledgeLowerBound,1,'first')),1:size(remainingKnowledge,1),'UniformOutput',false)))));
-                % 
+                % Determine the AVERAGE complexity for learning the skills in the batch
+                skill_idx = find(initialRemainingKnowledge>obj.KnowledgeLowerBound); % Find the skills in the batch that hadn't yet reached the KnowledgeLowerBound
+                if isempty(skill_idx) % ALL skills have already been learned
+                    complexity_jk_CL_Distributed(j) = 1; % The minimim complexity is 1 trial episode
+                else
+                    skillComplexities = NaN(size(skill_idx));
+                    for idx = 1:numel(skill_idx)
+                        episodeIndexWhenLowerBoundReached = find(remainingKnowledge(skill_idx(idx),:)<obj.KnowledgeLowerBound,1,'first');
+                        % Regardless of successful learning, limit max.
+                        % episodes to FundamentalComplexity
+                        if isempty(episodeIndexWhenLowerBoundReached) || ... % no skill reached the lower bound
+                           isnan(episodeIndexWhenLowerBoundReached) || ...   % same as before
+                           obj.Episodes(episodeIndexWhenLowerBoundReached)>obj.FundamentalComplexity % learned but surpassed the FundamentalComplexity
+                            skillComplexities(idx) = obj.FundamentalComplexity;
+                        else
+                            skillComplexities(idx) = obj.Episodes(episodeIndexWhenLowerBoundReached);
+                        end
+                    end    
+                    complexity_jk_CL_Distributed(j) = ceil(mean(skillComplexities));
+                end
 
-
-% Find skills in the batch that need to be learned
-idx = find(initialRemainingKnowledge>obj.KnowledgeLowerBound);
-if isempty(idx)
-    complexity_jk_CL_Distributed(j) = 1;
-else
-complexity_jk_CL_Distributed(j) = ...
-    ceil( ...
-        mean( ...
-            obj.Episodes( ...
-                cell2mat( ...
-                    arrayfun( ...
-                        @(i) ( ...
-                            find( ...
-                                remainingKnowledge(i,:)<obj.KnowledgeLowerBound,1,'first')),idx,'UniformOutput',false)))));
-end
-
-
-                % For cases where a skill could not be learned, choose the
-                % fundamental complexity as fallback value
-                if isnan(complexity_jk_CL_Distributed(j))
-                    complexity_jk_CL_Distributed(j) = obj.FundamentalComplexity;
-                end                
+                % % For cases where a skill could not be learned, choose the
+                % % fundamental complexity as fallback value
+                % if isnan(complexity_jk_CL_Distributed(j))
+                %     complexity_jk_CL_Distributed(j) = obj.FundamentalComplexity;
+                % end                
                 
                 % Trigger warning if there are unlearned skills
                 if any(remainingKnowledge(:,end)>obj.KnowledgeLowerBound)
@@ -589,9 +573,11 @@ end
                     warning('All skilles learned')
                     % Copy the last complexity to fill the remaining
                     % products
-% complexity_jk_CL_Distributed(j+1:end) = complexity_jk_CL_Distributed(j); 
-% pause(3)
-% break
+                    % complexity_jk_CL_Distributed(j+1:end) = complexity_jk_CL_Distributed(j); 
+                    if (obj.REPEATING_SKILLS ~= 1)
+                        pause(2)
+                        break
+                    end
                 end
             end
               
