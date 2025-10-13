@@ -104,7 +104,7 @@ Similarly, the total trial episodes to learn the universe of skills is simply
 
 % ---------------------------------------------------------------------------------------------------
 \subsection{\textbf{\Acl{il}}}
-It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be leveraged by an  $i$ in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha_i$---the self loops---but also retains and uses the acquired knowledge to learn subsequent skills. The effect of \ac{il} on the knowledge collection rate of skill $s_j$ can be modeled to be directly proportional to the number of learned skills $\kappa$ as
+It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be leveraged by an  $i$ in virtue of their significant similarity. As depicted in Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{A}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha_i$---the self loops---but also retains and uses the acquired knowledge to learn subsequent skills. The effect of \ac{il} on the knowledge collection rate of skill $s_j$ can be modeled to be directly proportional to the number of learned skills $\kappa$ as
 % ---
 \begin{equation}\label{eq:f_function_incremental}
 	f_{i,j}\left(\kappa\right) = -\alpha_i \left(\eta \kappa_i + 1 \right), 
@@ -157,11 +157,11 @@ The total number of trial episodes $ C_k $ that an agent following an incrementa
 	\end{split}
 \end{align}
 % --
-In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems \emph{without adding any additional benefit to the rate at which knowledge is acquired}, as depicted in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{A}. 
+In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems \emph{without adding any additional benefit to the rate at which knowledge is acquired}. 
 
 % ---------------------------------------------------------------------------------------------------
 \subsection{\textbf{Transfer + Incremental Learning (TIL)}}
-\Acl{tl} alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, \ac{tl} represents the exchange of knowledge from agent $i$'s in-memory learned skills from different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). 
+\Acl{tl} alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, \ac{tl} represents the exchange of knowledge from agent $i$'s in-memory learned skills from different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{B}). 
 
 Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the target cluster through transferable knowledge fraction factor $\xi_k \in [0,1)$---defined in Eq.~\ref{eq:scaled_transferable_knowledge_fraction}; that is
 % ---
@@ -217,7 +217,7 @@ and the total number of episodes  $ C_k $ that an agent requires to learn the $N
 	\end{split}
 \end{align}
 % ---
-This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}, where two robots $ r_1$ and $r_2$ learn skills in four different clusters. The shaded areas are the subclusters of skills learned by each robot. Since they do not share knowledge between them, each robot has access only to the knowledge it has collected and cannot benefit from one another. 
+This case is depicted on Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{B}, where two robots $ r_1$ and $r_2$ learn skills in four different clusters. The shaded areas are the subclusters of skills learned by each robot. Since they do not share knowledge between them, each robot has access only to the knowledge it has collected and cannot benefit from one another. 
 
 
 % ===================================================================================================
