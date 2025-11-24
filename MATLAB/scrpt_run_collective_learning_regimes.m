@@ -11,7 +11,9 @@ addpath(genpath(fullfile(mainPath,'supporting_files')));
 % *************************************************************************
 
 try
+    clc
     load("./paper_results/collective_learning_regimes_results.mat")
+    cprintf('g', 'Successfully loaded file\n')
     RUN_CL = 0;
 catch
     warning('File not found')
@@ -90,8 +92,9 @@ success_cmap = colormap('jet');
 success_colorIndices = linspace(0, size(success_cmap, 1), 100);
 
 % myVar = NaN(6,2,9);
-myVar = NaN(125,2,9);
+myVar = NaN(125,3,9);
 aux_index = 1;
+energyPerEpisode = 105000;
 for index = [7,8,9,4,5,6,1,2,3] % The indices match the order of the above legends
     ax = subplot(3,3,aux_index);
     
@@ -103,6 +106,11 @@ for index = [7,8,9,4,5,6,1,2,3] % The indices match the order of the above legen
 
     % Compute the total number of episodes used for learning the skills (even if unsuccessful)
     totalLearningEpisodes   = arrayfun(@(r) sum(cl_scenarios_results{index,r}.c_jk_cl_dist_episodes),1:numel(robotCollectivesSize));
+    
+    
+    totalLearningEnergy     = (energyPerEpisode + 0.8*robotCollectivesSize.*(robotCollectivesSize-1)).*totalLearningEpisodes;
+    
+    
     totalLearnedSkills      = arrayfun(@(r) mean(cl_scenarios_results{index,r}.learnedSkillsStorage),1:numel(robotCollectivesSize));
     learnedSkillsPercentage = 100*totalLearnedSkills./theCollective.TotalSkills;
     
@@ -111,9 +119,10 @@ for index = [7,8,9,4,5,6,1,2,3] % The indices match the order of the above legen
     % Auxiliary code to color the line with a smooth color gradient corresponding to the success rate
     xx                       = 4:1:128;
     yy                       = interp1(robotCollectivesSize, totalLearningEpisodes, xx,"pchip");
+    zz                       = interp1(robotCollectivesSize, totalLearningEnergy, xx,"pchip");
     learnedSkillsPercentage2 = interp1(robotCollectivesSize, learnedSkillsPercentage, xx);
 
-myVar(:,:,index) = [yy', learnedSkillsPercentage2'];
+myVar(:,:,index) = [yy', learnedSkillsPercentage2', zz'];
 
     upperBound  =  12800*ones(size(xx))';
     upperBound  = upperBound(:);
@@ -175,14 +184,14 @@ myVar(:,:,index) = [yy', learnedSkillsPercentage2'];
 end
 
 %% If desired export the figure
-EXPORT_FIG = false
+EXPORT_FIG = false;
 if(EXPORT_FIG)
     f = gcf;
     exportgraphics(f,'Peppers300.png','Resolution',600)
 end
 
 %% ************************************************************************
-% Plot of the CL greater regimes
+% Plot of the CL greater regimes (ALT 1: y-axis = episodes)
 % *************************************************************************
 
 clc
@@ -235,10 +244,90 @@ for regime = 1:4
     box on
     
     % Export figure
+    % EXPORT_FIG = true;
+    % if(EXPORT_FIG)
+    %     f = gcf;
+    %     name =  sprintf("supra_regimes_%s.pdf",strrep(num2str(supraRegimes{regime}),' ',''));
+    %     exportgraphics(f,name,'Resolution',600)
+    % end
+    % pause(1)
+end
+
+%% ************************************************************************
+% Plot of the CL greater regimes (ALT 2: y-axis = energy)
+% *************************************************************************
+
+
+%     yy                       = interp1(robotCollectivesSize, totalLearningEpisodes, xx,"pchip");
+%     learnedSkillsPercentage2 = interp1(robotCollectivesSize, learnedSkillsPercentage, xx);
+% 
+% myVar(:,:,index) = [yy', learnedSkillsPercentage2'];
+% 
+% 
+% % totalLearningEpisodes = (105000 + 0.8*robotCollectivesSize.*(robotCollectivesSize-1)).*totalLearningEpisodes;      
+
+clc
+close all
+
+theMarkers = {"o","square","diamond","^","v",">","<","pentagram","hexagram"};
+alphaRange = linspace(0.5,1,125);
+clc
+theColors  = distinguishable_colors(9);
+close all
+
+for regime = 1:4
+    fig = figure('Color','w');
+    ax = gca;
+    xlim(ax,[0,100])
+    ylim(ax,[1,10^10])
+    axis square
+    xlabel('Success rate [%]','FontSize',11)
+    ylabel('Total learning energy (J)','FontSize',11)
+    % zlabel('Size of the collective','FontSize',11)
+    % view([45 35])
+    hold on
+    
+    p = [];
+    
+    theCases  = [7,8,9,4,5,6,1,2,3];
+    
+    supraRegimes = {[8,9],[1,4,7],[2,5],[3,6]};
+
+    for k = theCases(supraRegimes{regime})
+        interval = 20;
+        plot(myVar(:,2,k),myVar(:,3,k),'-','Color',theColors(k,:),'LineWidth',1);
+        aux = scatter(myVar(1:interval:end,2,k),myVar(1:interval:end,3,k),50,'Marker',theMarkers{k},'MarkerFaceColor',theColors(k,:),'MarkerEdgeColor','k');
+        p = [p,aux];
+
+% p   = plot3(myVar(:,2,k),myVar(:,1,k),xx,'-','Color',theColors(k,:),'LineWidth',1);
+% aux = scatter3(myVar(1:interval:end,2,k),myVar(1:interval:end,1,k),xx(1:interval:end),50,'Marker',theMarkers{k},'MarkerFaceColor',theColors(k,:),'MarkerEdgeColor','k');        
+% p = [p,aux];
+
+    end
+    
+    ax.YAxis.Exponent = 3;
+    theCasesLabels = {'Case 7','Case 8','Case 9','Case 4','Case 5','Case 6','Case 1','Case 2','Case 3'};
+    leg = legend(p,theCasesLabels{theCases(supraRegimes{regime})});
+    % set(gca,'XScale','log')
+    set(gca,'YScale','log')
+    % ax = gca;
+ax.YTick = [1E0 1E3 1E6 1E10];
+ax.YTickLabel = {'10^0', '10^3' '10^6', '10^{10}'};
+    % ax.YTicklabel  = {'10^0','10^1', '10^2', '10^3', '10^4'};
+    fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 8.5, 1, 1)
+    % yticks(ax,[1E0 1E1 1E2 1E3 1E4])   
+    % ax.YTickLabel = {'1E0', '1E1' '1E2', '1E3', '1E4'};
+    grid off
+    % yticklabels({'','$\epsilon$', '', '1'})
+    axis square
+    box on
+    
+    % Export figure
     EXPORT_FIG = true;
     if(EXPORT_FIG)
         f = gcf;
-        name =  sprintf("supra_regimes_%s.pdf",strrep(num2str(supraRegimes{regime}),' ',''));
+        % name =  sprintf("supra_regimes_%s.pdf",strrep(num2str(supraRegimes{regime}),' ',''));
+        name =  sprintf("energy_in_supra_regimes_%s.pdf",strrep(num2str(supraRegimes{regime}),' ',''));
         exportgraphics(f,name,'Resolution',600)
     end
     pause(1)

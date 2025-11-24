@@ -37,14 +37,14 @@ function fcn_scrpt_prepare_graph_science_std(fig, ax, plt, leg, tx, text_width, 
 
     %% set default figure configurations
 
-    % Figure config
-    if exist('fig','var')
-        set(fig,'Units','centimeters');
-        set(fig,'Position',[0 0 width height]); %[1.7727 0 35.1896 23.3098]);
-%         set(fig,'Position',[1.7727 0 35.1896 23.3098]); %);
-        set(fig,'PaperPositionMode','auto');
-        set(fig,'color','w');
-    end
+%     % Figure config
+%     if exist('fig','var')
+%         set(fig,'Units','centimeters');
+%         set(fig,'Position',[0 0 width height]); %[1.7727 0 35.1896 23.3098]);
+% %         set(fig,'Position',[1.7727 0 35.1896 23.3098]); %);
+%         set(fig,'PaperPositionMode','auto');
+%         set(fig,'color','w');
+%     end
 
     % Plot config
     if exist('plt','var')
@@ -92,5 +92,15 @@ function fcn_scrpt_prepare_graph_science_std(fig, ax, plt, leg, tx, text_width, 
         set(leg,'Location','southeast');
         set(leg,'Box','off');
         set(leg,'Orientation','vertical');
+    end
+
+
+    % Figure config
+    if exist('fig','var')
+        set(fig,'Units','centimeters');
+        set(fig,'Position',[0 0 width height]); %[1.7727 0 35.1896 23.3098]);
+%         set(fig,'Position',[1.7727 0 35.1896 23.3098]); %);
+        set(fig,'PaperPositionMode','auto');
+        set(fig,'color','w');
     end
 end
