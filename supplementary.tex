@@ -104,7 +104,7 @@ Similarly, the total trial episodes to learn the universe of skills is simply
 
 % ---------------------------------------------------------------------------------------------------
 \subsection{\textbf{\Acl{il}}}
-It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be leveraged by an  $i$ in virtue of their significant similarity. As depicted in Fig.~\ref{fig:intra_skill_learning}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha_i$---the self loops---but also retains and uses the acquired knowledge to learn subsequent skills. The effect of \ac{il} on the knowledge collection rate of skill $s_j$ can be modeled to be directly proportional to the number of learned skills $\kappa$ as
+It corresponds to the continuous aggregation and exchange of knowledge from \emph{intra-cluster} skills. Referring back to Asm.~\ref{assumption:skill_clustering}, the knowledge from skills belonging to a cluster ${\mathcal{Z}_k}$ can be leveraged by an  $i$ in virtue of their significant similarity. As depicted in Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{A}, a robot ($r_1$ in this case) learns every skill in $\mathcal{Z}_1$ with a rate $\alpha_i$---the self loops---but also retains and uses the acquired knowledge to learn subsequent skills. The effect of \ac{il} on the knowledge collection rate of skill $s_j$ can be modeled to be directly proportional to the number of learned skills $\kappa$ as
 % ---
 \begin{equation}\label{eq:f_function_incremental}
 	f_{i,j}\left(\kappa\right) = -\alpha_i \left(\eta \kappa_i + 1 \right), 
@@ -157,11 +157,11 @@ The total number of trial episodes $ C_k $ that an agent following an incrementa
 	\end{split}
 \end{align}
 % --
-In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems \emph{without adding any additional benefit to the rate at which knowledge is acquired}, as depicted in Fig.~\ref{fig:learning_paradigms_and_size_of_collective}~\textbf{A}. 
+In essence, using $m$ robots without exchanging knowledge only subdivides the learning in every cluster into $m$ smaller problems \emph{without adding any additional benefit to the rate at which knowledge is acquired}. 
 
 % ---------------------------------------------------------------------------------------------------
 \subsection{\textbf{Transfer + Incremental Learning (TIL)}}
-\Acl{tl} alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, \ac{tl} represents the exchange of knowledge from agent $i$'s in-memory learned skills from different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}). 
+\Acl{tl} alone refers to the one-time \emph{inter-cluster} exchange of knowledge. Considering $\mathcal{K} = \{ \mathcal{Z}_k \}^{N_\mathcal{K}}_{k=1}$ to be the set of all available skill clusters, \ac{tl} represents the exchange of knowledge from agent $i$'s in-memory learned skills from different \emph{origin} clusters $\mathcal{O} = \{ \mathcal{Z}_1,\mathcal{Z}_2,\ldots,\mathcal{Z}_{k-1} \}$ to the skills that will be learned in a \emph{destination} cluster $\mathcal{Z}_k$ (see Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{B}). 
 
 Concretely, the effect that \ac{tl} has on the skills of the destination cluster is the reduction of the initial remaining knowledge and the increase of the initial learning rate for all the skills in the target cluster through transferable knowledge fraction factor $\xi_k \in [0,1)$---defined in Eq.~\ref{eq:scaled_transferable_knowledge_fraction}; that is
 % ---
@@ -217,7 +217,51 @@ and the total number of episodes  $ C_k $ that an agent requires to learn the $N
 	\end{split}
 \end{align}
 % ---
-This case is depicted on Fig.~\ref{fig:cluster_to_cluster_knowledge_transfer_parallel}, where two robots $ r_1$ and $r_2$ learn skills in four different clusters. The shaded areas are the subclusters of skills learned by each robot. Since they do not share knowledge between them, each robot has access only to the knowledge it has collected and cannot benefit from one another. 
+This case is depicted on Fig.~\ref{fig:learning_paradigms_conceptual_figure}~\textbf{B}, where two robots $ r_1$ and $r_2$ learn skills in four different clusters. The shaded areas are the subclusters of skills learned by each robot. Since they do not share knowledge between them, each robot has access only to the knowledge it has collected and cannot benefit from one another. 
+
+
+% ===================================================================================================
+%                                                 |                                                 |
+%                                                 |                                                 |
+% -------------------------------------------- SECTION ---------------------------------------------|
+%                                                 |                                                 |
+%                                                 |                                                 |
+% ===================================================================================================
+\newpage
+\section{Definition comparison between the learning paradigms}
+The conceptual distinction between our framework and the conventional understanding of incremental and transfer learning in the machine learning community is summarized in Table~\ref{tab:IL_TL}. While standard approaches emphasize procedural aspects such as sequential model updates and domain adaptation, our formulation reinterprets these paradigms structurally, in terms of how knowledge is reused within and across skill clusters. This comparison clarifies the progressive transition from isolated learning to collective learning as a continuum of knowledge reuse and integration.
+
+\begin{table}[ht]
+    \centering
+    \scriptsize % reduces font size to ~10 pt
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Incremental vs.\ Transfer Learning in the ML Community vs.\ Our Framework}
+    \label{tab:IL_TL}
+    \begin{adjustbox}{width=\textwidth}
+        \begin{tabularx}{\textwidth}{lXX}
+            \toprule
+            \textbf{Concept} & \textbf{ML Research Community (Standard Use)} & \textbf{In Our Framework} \\
+            \midrule
+            \textbf{Incremental Learning (IL)} &
+            Continual or lifelong learning; models are updated sequentially with new data or tasks. The focus is on preventing catastrophic forgetting. &
+            \textit{Intra-cluster reuse.} Knowledge from similar skills within the same cluster accelerates learning. Learning rate scales with $\eta_i(\kappa+1)$, depending on the number of already learned skills. \\
+            \addlinespace
+            \textbf{Transfer Learning (TL)} &
+            Knowledge reuse from a source domain or task to a related target, typically via pretraining and fine-tuning. &
+            \textit{Inter-cluster reuse.} Transferable fractions $\xi_k, \bar{\xi}_k$ weighted by the similarity matrix $\bm{B}$ govern how knowledge moves across clusters, reducing initial remaining knowledge and accelerating cross-cluster acquisition. \\
+            \addlinespace
+            \textbf{Combined (TIL)} &
+            Not a standard category; sometimes refers to sequential transfer or multitask learning. &
+            \textit{Transfer with incremental learning.} Exploits both intra-cluster and inter-cluster reuse. More efficient than IL or TL alone but still lacks inter-agent sharing. \\
+            \addlinespace
+            \textbf{Collective Learning (CL)} &
+            Rarely addressed in mainstream ML beyond federated or swarm approaches. &
+            \textit{System-wide accumulation, integration, and composition.} Inter-agent transfer gains $\gamma_{i,l}$ enable horizontal sharing across agents, yielding exponential efficiency and energy gains compared to IL and TL. \\
+            \bottomrule
+        \end{tabularx}
+    \end{adjustbox}
+\end{table}
+
 
 % \textbf{Multi-agent case.} If $m$ robots are used in parallel to divide the load of learning the tasks then, the transfer of knowledge from cluster to cluster is also divided by the number of robots, this implies that \eqref{eq:beta_k_transfer} changes to
 % % ---
@@ -564,14 +608,14 @@ Figure~\ref{fig:smart_factory_case_study} compares \ac{isl}, \ac{il}, \ac{til}, 
 \newpage
 \section{Technical data and references}\label{sec:technical_data_and_references}
 %In this section, we compile reference data and assumptions used throughout the manuscript to support our arguments.
-This section expands on the quantitative data and industry trends underlying the three grand challenges (C1–C3) discussed in the main text. We provide extended statistics, historical growth curves, and technical sources for data center energy use, industrial and collaborative robot deployment, and the manufacturing-related energy footprint of AI-capable machines. The intent is to give readers a deeper factual foundation for the scale of the problem and its projected evolution.
+This section expands on the quantitative data and industry trends underlying the three grand energy challenges (C1–C3) discussed in the main text. We provide extended statistics, historical growth curves, and technical sources for data center energy use, industrial and collaborative robot deployment, and the manufacturing-related energy footprint of AI-capable machines. The intent is to give readers a deeper factual foundation for the scale of the problem and its projected evolution.
 
 % ===================================================================================================
 \subsection{World Robot Energy Consumption (WREC) estimation}\label{sec:app_robot_ener_consumption}
 
 % ===================================================================================================
 \paragraph{Industrial and cobot installations}\label{sec:robot_statistics}
-According to the International Federation of Robotics (IFR) the unit sales of collaborative robots in relation to conventional industrial robots has been constantly increasing in the past years \cite{statista_ir_cobot_share}. Recent data, see Fig.~\ref{fig:industrial_cobot_share}, shows that cobots now make almost 15 \% of the sales.
+According to the International Federation of Robotics (IFR) the unit sales of collaborative robots in relation to conventional industrial robots has been constantly increasing in the past years \cite{statista_ir_cobot_share}. Recent data, see Fig.~\ref{fig:industrial_cobot_share}, suggest that cobots now make almost 15~\% of the sales.
 %---
 \begin{figure}[!h]
 	\centering
