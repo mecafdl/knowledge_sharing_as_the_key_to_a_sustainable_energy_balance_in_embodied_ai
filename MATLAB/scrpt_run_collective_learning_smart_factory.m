@@ -11,13 +11,17 @@ addpath(genpath(fullfile(mainPath,'supporting_files')));
 % *************************************************************************
 
 try
+    clc
     load("./paper_results/collective_learning_smart_factory_results.mat")
+    cprintf('g', 'Successfully loaded file\n')
     RUN_CL = 0;
 catch
     warning('File not found')
     RUN_CL = 1;
 end
+%%
 
+RUN_CL = 1;
 if RUN_CL == 1
     close all
     clc
@@ -39,10 +43,13 @@ if RUN_CL == 1
     seeds = randperm(numberOfScenarios,numberOfScenarios);
     % NOTE: Goal of the many scenarios is to find the mean values across
     %       simulations
-    for scenario = 1%1:numberOfScenarios
+    %for scenario = 1%1:numberOfScenarios
+    for scenario = 1:numberOfScenarios
         theSeed = randi(100);
-        for learningCaseIndex = 4%1:size(learningCases,1)
-            for robotArrayIndex = 1%1:numel(robotArray)
+        % for learningCaseIndex = 4%1:size(learningCases,1)
+        for learningCaseIndex = 1:size(learningCases,1)
+            % for robotArrayIndex = 1%1:numel(robotArray)
+            for robotArrayIndex = 1:numel(robotArray)
                 close all
                 cprintf('green',sprintf('[INFO] %s with collective of size %2i...\n', learningCasesLabels{learningCaseIndex},robotArray(robotArrayIndex)))
                 pause(3)
@@ -102,9 +109,35 @@ p = [];
 for learningCaseIndex = 1:size(learningCases,1)
     for robotArrayIndex = 1%:numel(robotArray)
         aux      = (cell2mat(arrayfun(@(k) (cl_results{learningCaseIndex,robotArrayIndex,k}.c_jk_cl_dist_episodes),1:50,'UniformOutput',false)));
-        learningEpisodes      = mean(aux,2);
-        totalLearningEpisodes(learningCaseIndex) = sum(learningEpisodes);
-        p = [p loglog(ax, smooth(learningEpisodes,10))];
+        
+        learningEpisodes      = aux;
+
+        [~,mu,sigma] = zscore(learningEpisodes');
+        meanCurve = mu;
+        stdCurve  = sigma;
+        
+        % Define the upper and lower bounds of the shaded region
+        upperBound = meanCurve + stdCurve;
+        lowerBound = max(1,meanCurve - stdCurve);
+        patch(ax, [1:500, fliplr(1:500)], [upperBound, fliplr(lowerBound)], selectedColors(learningCaseIndex,:), ...
+            'EdgeColor', 'none', 'FaceAlpha', 0.1);
+        if learningCaseIndex<4
+            plot(ax, smooth(meanCurve,10), 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:));
+        else
+            plot(ax, meanCurve, 'b-', 'LineWidth', 1,'Color',selectedColors(learningCaseIndex,:));
+        end
+        totalLearningEpisodes(learningCaseIndex) = sum(mu);
+
+
+        % loglog(ax, mu + sigma,'k')
+        % loglog(ax, mu - sigma,'k')
+        % p = [p loglog(ax, mu,'-','Color',selectedColors(learningCaseIndex,:))];
+
+        % p = [p loglog(ax, smooth(mu,10))];
+
+        % learningEpisodes      = mean(aux,2);
+        % totalLearningEpisodes(learningCaseIndex) = sum(learningEpisodes);
+        % p = [p loglog(ax, smooth(learningEpisodes,10))];
     end
 end
 p1  = plot(NaN,'-','Color',selectedColors(1,:));
@@ -115,6 +148,7 @@ leg = legend([p1 p2 p3 p4], learningCasesLabels);
 grid off
 ax1 = gca;
 fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 6, 1, 1)
+box on
 
 %% ************************************************************************
 % Bar plot of the energy consumed by each learning paradigm
@@ -123,6 +157,8 @@ fcn_scrpt_prepare_graph_science_std(fig, ax, p, leg, [], 6, 1, 1)
 close all
 fig = figure('Color','w');
     learningEnergy  = 105000*totalLearningEpisodes;
+
+    learningEnergy(end) = learningEnergy(end) + theCollective.NumberOfRobots*(theCollective.NumberOfRobots-1)*0.8;
     bp = bar(learningEnergy,'facecolor', 'flat');
     bp.CData = selectedColors(1:4,:);
     set(gca,'xticklabel',learningCasesLabels)
@@ -131,4 +167,4 @@ fig = figure('Color','w');
     fcn_scrpt_prepare_graph_science_std(fig, gca, bp, [], [], 6, 1, 1)
     grid off
     axis square
-    box off
+    box on
